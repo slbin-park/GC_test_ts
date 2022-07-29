@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express';
 import { Container } from 'typedi';
 import 'reflect-metadata';
 import { check_req } from '../../middlewares/validations/userValidation';
-import { User } from './user.dto';
+import { User } from './dto/user.dto';
+import { Kakao_User } from './dto/kakao_user.dto';
 
 import UserService from '../../services/user.service';
 
@@ -12,9 +13,15 @@ import UserService from '../../services/user.service';
 const UserController = {
   post_user: async (req: Request, res: Response) => {
     try {
-      const user = new User(req.body);
       const userServiceInstance: UserService = Container.get(UserService);
-      const response = await userServiceInstance.Save(user);
+      let user, response;
+      if (req.body.register == 'KAKAO') {
+        user = new Kakao_User(req.body);
+        response = await userServiceInstance.Save_Kakao(user);
+      } else if (req.body.register == 'SELF') {
+        user = new User(req.body);
+        response = await userServiceInstance.Save(user);
+      }
       res.status(200).json(response);
     } catch (err) {
       res.status(500).send({ success: 'false', err });

@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
-import User from '../controllers/user/user.dto';
+import User from '../controllers/user/dto/user.dto';
 import UserRepository from '../datamanager/user/user.dm';
 
 const bcrypt = require('bcrypt');
@@ -36,7 +36,17 @@ class UserService {
       throw err;
     }
   }
-
+  async Save_Kakao(user: any) {
+    try {
+      console.log('서비스 실행');
+      console.log(user.social_id);
+      const response = await this.userRepository.save_kakao(user);
+      return { response, success: true };
+    } catch (err: any) {
+      console.log(err);
+      throw err;
+    }
+  }
   async Find() {
     try {
       const response = await this.userRepository.find();

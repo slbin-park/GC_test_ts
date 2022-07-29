@@ -7,4 +7,9 @@ FROM user;`;
 const FINDBYID = `SELECT user_name , phone_number , name , birthday , register , user_status, accept_date
 FROM user
 WHERE user_name = ?;`;
-export { SAVE, FIND, FINDBYID };
+
+const SAVE_KAKAO = `INSERT INTO 
+user(user_name , phone_number , name  , birthday , register , user_status ,accept_date ,refresh_token , social_id) 
+VALUES( ? , ? , ? ,  ? , ? , ? , ? , ? , ? );`;
+
+export { SAVE, FIND, FINDBYID, SAVE_KAKAO };

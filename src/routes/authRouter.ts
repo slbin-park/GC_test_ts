@@ -2,11 +2,6 @@ import express, { Request, Response } from 'express';
 import '../config/env';
 import AuthController from '../controllers/auth/auth.controller';
 import { check_toekn, check_code } from '../middlewares/validations/authValidation';
-const fetch = require('node-fetch');
-const axios = require('axios');
-const KAKAO_DATA_URL = 'https://kapi.kakao.com/v2/user/me';
-const KAKAO_REFRESH_TOKEN = 'https://kauth.kakao.com/oauth/token';
-const KAKAO_REDIRECT_URI = 'http://localhost:8080/api/auth/kakao/callback';
 
 const router = express.Router();
 
