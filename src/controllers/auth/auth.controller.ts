@@ -31,6 +31,7 @@ const AuthController = {
   kakao_get_access_token: async (req: Request, res: Response) => {
     try {
       const AuthServiceInstance: AuthService = Container.get(AuthService);
+      const a = req.headers.Authorization;
       const response = await AuthServiceInstance.kakao_get_access_token(req.headers.authorization);
       res.send(response);
     } catch (err: any) {

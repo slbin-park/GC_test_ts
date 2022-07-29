@@ -21,6 +21,8 @@
     "mysql2": "^2.3.3",
     "node-fecth": "^0.0.1-security",
     "reflect-metadata": "^0.1.13",
+    "swagger-autogen": "^2.21.5",
+    "swagger-ui-express": "^4.5.0",
     "typedi": "^0.10.0"
   },
   "devDependencies": {
