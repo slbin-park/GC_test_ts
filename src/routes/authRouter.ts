@@ -1,110 +1,22 @@
 import express, { Request, Response } from 'express';
 import '../config/env';
+import AuthController from '../controllers/auth/auth.controller';
+import { check_toekn, check_code } from '../middlewares/validations/authValidation';
 const fetch = require('node-fetch');
 const axios = require('axios');
 const KAKAO_DATA_URL = 'https://kapi.kakao.com/v2/user/me';
 const KAKAO_REFRESH_TOKEN = 'https://kauth.kakao.com/oauth/token';
+const KAKAO_REDIRECT_URI = 'http://localhost:8080/api/auth/kakao/callback';
+
 const router = express.Router();
 
-type Config = {
-  client_id: any;
-  redirect_uri: string;
-  response_type: string;
-};
 // 스케쥴 관련 요청을 scrouter로 이동
-router.get('/kakao', (req: Request, res: Response) => {
-  console.log('실행됨');
-  const baseUrl = 'https://kauth.kakao.com/oauth/authorize';
-  const config: Config = {
-    client_id: process.env.KAKAO_CLIENT_ID,
-    redirect_uri: 'http://localhost:8080/api/auth/kakao/callback',
-    response_type: 'code',
-  };
-  const params = new URLSearchParams(config).toString();
 
-  const finalUrl = `${baseUrl}?${params}`;
-  //   console.log(finalUrl);
-  return res.redirect(finalUrl);
-});
+router.get('/kakao', AuthController.kakao_login);
 
-router.get('/kakao/callback', async (req: Request, res: Response) => {
-  const baseUrl = 'https://kauth.kakao.com/oauth/token';
-  const config: any = {
-    client_id: process.env.KAKAO_CLIENT_ID,
-    grant_type: 'authorization_code',
-    redirect_uri: 'http://localhost:8080/api/auth/kakao/callback',
-    code: req.query.code,
-  };
-  const params = new URLSearchParams(config).toString();
-  const finalUrl = `${baseUrl}?${params}`;
-  const kakaoTokenRequest = await fetch(finalUrl, {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json', // 이 부분을 명시하지않으면 text로 응답을 받게됨
-    },
-  });
+router.get('/kakao/callback', check_code, AuthController.kakao_login_callback);
+// 프론트에서 query.code 에 받은 코드 넣어서 보내야함
 
-  const json = await kakaoTokenRequest.json();
-  const access_token = json.access_token.toString();
-
-  const get_data = await axios({
-    method: 'get',
-    url: KAKAO_DATA_URL,
-    headers: {
-      'Authorization': `Bearer ${access_token}`,
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-  });
-
-  // 리프레시 토큰으로 access 재발급
-  console.log(json.refresh_token);
-
-  const data = {
-    grant_type: 'refresh_token',
-    client_id: `${process.env.KAKAO_CLIENT_ID}`,
-    refresh_token: `${json.refresh_token}`,
-  };
-
-  const ref_params = new URLSearchParams(data).toString();
-  const ref_finalUrl = `${KAKAO_REFRESH_TOKEN}?${ref_params}`;
-
-  axios
-    .post(ref_finalUrl)
-    .then((res: any) => {
-      console.log(res.data);
-    })
-    .catch((err: any) => {
-      console.log(err);
-    });
-
-  // console.log(get_access);
-
-  // console.log(json);
-  // console.log('------------------');
-  // console.log(access_token);
-  // console.log('------------------');
-  // console.log(get_data);
-
-  res.send(get_data.data); // 프론트엔드에서 확인하려고
-
-  // const code = req.query.code;
-  // if (code != undefined) {
-  //   // 엑세스 토큰이 있는 경우 API에 접근
-  //   const access_token = code;
-  //   const userRequest = await axios('https://kapi.kakao.com/v2/user/me', {
-  //     headers: {
-  //       'Authorization': `Bearer ${access_token}`,
-  //       'Content-type': 'application/json',
-  //     },
-  //   });
-  //   console.log(userRequest);
-  // } else {
-  //   // 엑세스 토큰이 없으면 로그인페이지로 리다이렉트
-  //   return res.redirect('/login');
-  // }
-  // res.send(req.query.code);
-});
+router.post('/kakao/access_token', check_toekn, AuthController.kakao_get_access_token);
 
 export default router;
-
-module.exports = router;
