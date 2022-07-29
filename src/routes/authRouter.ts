@@ -3,6 +3,7 @@ import '../config/env';
 const fetch = require('node-fetch');
 const axios = require('axios');
 const KAKAO_DATA_URL = 'https://kapi.kakao.com/v2/user/me';
+const KAKAO_REFRESH_TOKEN = 'https://kauth.kakao.com/oauth/token';
 const router = express.Router();
 
 type Config = {
@@ -42,8 +43,10 @@ router.get('/kakao/callback', async (req: Request, res: Response) => {
       'Content-type': 'application/json', // 이 부분을 명시하지않으면 text로 응답을 받게됨
     },
   });
+
   const json = await kakaoTokenRequest.json();
   const access_token = json.access_token.toString();
+
   const get_data = await axios({
     method: 'get',
     url: KAKAO_DATA_URL,
@@ -52,6 +55,29 @@ router.get('/kakao/callback', async (req: Request, res: Response) => {
       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     },
   });
+
+  // 리프레시 토큰으로 access 재발급
+  console.log(json.refresh_token);
+
+  const data = {
+    grant_type: 'refresh_token',
+    client_id: `${process.env.KAKAO_CLIENT_ID}`,
+    refresh_token: `${json.refresh_token}`,
+  };
+
+  const ref_params = new URLSearchParams(data).toString();
+  const ref_finalUrl = `${KAKAO_REFRESH_TOKEN}?${ref_params}`;
+
+  axios
+    .post(ref_finalUrl)
+    .then((res: any) => {
+      console.log(res.data);
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
+
+  // console.log(get_access);
 
   // console.log(json);
   // console.log('------------------');
