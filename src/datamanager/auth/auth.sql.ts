@@ -2,4 +2,9 @@ const FINDBY_KAKAOID = `SELECT *
 FROM user
 WHERE social_id = '?'`;
 
-export { FINDBY_KAKAOID };
+const UPDATE_REFRESH_TOKEN = `
+UPDATE user 
+SET refresh_token = ? 
+WHERE user_name = ? ;
+`;
+export { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN };

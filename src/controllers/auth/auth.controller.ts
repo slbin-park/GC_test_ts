@@ -21,7 +21,7 @@ const AuthController = {
   kakao_login_callback: async (req: Request, res: Response) => {
     try {
       const AuthServiceInstance: AuthService = Container.get(AuthService);
-      const response = await AuthServiceInstance.kakao_login_callback(req, res);
+      const response = await AuthServiceInstance.kakao_login_callback(req.query.code);
       res.send(response);
     } catch (err) {
       res.status(500).send({ success: 'false', err });

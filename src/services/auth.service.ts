@@ -45,7 +45,7 @@ class AuthService {
     }
   }
 
-  async kakao_login_callback(req: Request, res: Response) {
+  async kakao_login_callback(code: any) {
     // 받은 코드로 access , refresh token을 받음
     try {
       const baseUrl = 'https://kauth.kakao.com/oauth/token';
@@ -53,7 +53,7 @@ class AuthService {
         client_id: process.env.KAKAO_CLIENT_ID,
         grant_type: 'authorization_code',
         redirect_uri: 'http://localhost:8080/api/auth/kakao/callback',
-        code: req.query.code,
+        code,
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;

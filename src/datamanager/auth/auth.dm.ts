@@ -1,10 +1,10 @@
 import db from '../../config/db';
-import { FINDBY_KAKAOID } from './auth.sql';
+import { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN } from './auth.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 
 @Service()
-class UserRepository {
+class AuthRepository {
   async get_kakao_user(userInfo: any) {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
@@ -16,6 +16,17 @@ class UserRepository {
       });
     });
   }
+  async update_refresh_token(id: any, refresh_token: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(UPDATE_REFRESH_TOKEN, [refresh_token, id], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
 }
 
-export default UserRepository;
+export default AuthRepository;
