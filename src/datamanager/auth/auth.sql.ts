@@ -7,4 +7,9 @@ UPDATE user
 SET refresh_token = ? 
 WHERE user_name = ? ;
 `;
-export { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN };
+
+const FINDBYUSERNAME = `
+SELECT *
+FROM user
+WHERE user_name = ?;`;
+export { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN, FINDBYUSERNAME };

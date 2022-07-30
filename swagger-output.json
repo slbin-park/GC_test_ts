@@ -252,12 +252,6 @@
                 "properties": {
                   "user_name": {
                     "example": "any"
-                  },
-                  "board_id": {
-                    "example": "any"
-                  },
-                  "reply_content": {
-                    "example": "any"
                   }
                 }
               }

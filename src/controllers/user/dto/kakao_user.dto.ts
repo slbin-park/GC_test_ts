@@ -4,8 +4,8 @@ export default class Kakao_User {
   private name;
   private birthday;
   private register;
-  private refresh_token;
   private social_id;
+  public refresh_token;
   public user_status;
   public accept_date;
 

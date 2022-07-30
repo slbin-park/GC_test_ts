@@ -3,6 +3,11 @@ import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 import AuthRepository from '../datamanager/auth/auth.dm';
 import '../config/env';
+import jwt from '../middlewares/auth/jwt';
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const axios = require('axios');
 const fetch = require('node-fetch');
 
@@ -24,6 +29,43 @@ class AuthService {
   private readonly authRepository: AuthRepository;
   constructor() {
     this.authRepository = Container.get(AuthRepository);
+  }
+
+  async login(user_name: any, password: any, social_id?: any) {
+    try {
+      const user_data: any = await this.authRepository.get_user_data(user_name);
+      // 로그인 성공 체크 변수
+      let check;
+      let access_token;
+      let refresh_token;
+      if (user_data.length == 0) {
+        return '존재하지 않는 아이디';
+      }
+      // 자체 로그인일 경우 비밀번호 확인함
+      if (user_data.register == 'SELF') {
+        // 해쉬 알고리즘으로 비밀번호 같은지 체크함
+        check = await bcrypt.compare(password, user_data.password);
+      }
+      // 카카오 일 경우 유저 아이디만 확인함
+      if (user_data.register == 'KAKAO') {
+        check = social_id == user_data.social_id ? true : false;
+      }
+      // 로그인 성공시
+      if (check) {
+        access_token = await jwt.create_access_token(user_name);
+        console.log(access_token);
+        refresh_token = await jwt.create_refresh_token();
+        // 리프레시 토큰 디비에 저장
+        await jwt.save_refresh_token(user_name, refresh_token);
+        return { access_token, refresh_token };
+      } else {
+        return { success: false };
+      }
+      // console.log(user_data);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
   async kakao_login() {
@@ -73,13 +115,17 @@ class AuthService {
       } else {
         return 'access_token 없음';
       }
-      console.log(res_data);
+      console.log(res_data.id);
       // res_data 에서 userid 뽑아서 db에서 검색 후
       // 가입하지않았으면 login fail 넣어주고
       // 가입했으면 login success
       // access , refresh token 을 보내줌
 
-      return res_data; // 프론트엔드에서 확인하려고
+      return {
+        id: res_data.id,
+        access_token: json.access_token,
+        refresh_token: json.refresh_token,
+      }; // 프론트엔드에서 확인하려고
     } catch (err) {
       console.log(err);
     }

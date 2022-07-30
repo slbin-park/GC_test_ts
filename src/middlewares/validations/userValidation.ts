@@ -42,7 +42,6 @@ const check_req = (req: Request, res: Response, next: NextFunction) => {
     res.send('가입경로 유효성 검사 실패');
     return;
   }
-
   next();
 };
 

@@ -1,5 +1,5 @@
 import db from '../../config/db';
-import { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN } from './auth.sql';
+import { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN, FINDBYUSERNAME } from './auth.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 
@@ -22,6 +22,18 @@ class AuthRepository {
         conn.query(UPDATE_REFRESH_TOKEN, [refresh_token, id], (err: any, data: any) => {
           if (err) reject(`${err}`);
           resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  async get_user_data(id: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(FINDBYUSERNAME, [id], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data[0]);
         });
         conn.release();
       });

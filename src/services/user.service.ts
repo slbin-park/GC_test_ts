@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
-import User from '../controllers/user/dto/user.dto';
-import UserRepository from '../datamanager/user/user.dm';
 
+import UserRepository from '../datamanager/user/user.dm';
+import jwt from '../middlewares/auth/jwt';
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -25,28 +25,39 @@ class UserService {
 
   async Save(user: any) {
     try {
-      console.log('서비스 실행');
-      user.refresh_token = '';
+      let access_token;
+      let refresh_token;
+      let response;
+      access_token = await jwt.create_access_token(user.user_name);
+      refresh_token = await jwt.create_refresh_token();
+      user.refresh_token = refresh_token;
       user.password = await bcrypt.hash(user.password, saltRounds);
-      console.log('password = ', user.password);
-      const response = await this.userRepository.save(user);
-      return { response, success: true };
+      response = await this.userRepository.save(user);
+      await jwt.save_refresh_token(user.user_name, refresh_token);
+
+      console.log('서비스 실행');
+      return { user_name: user.user_name, access_token, refresh_token, success: true };
     } catch (err) {
       console.log(err);
       throw err;
     }
   }
+
   async Save_Kakao(user: any) {
     try {
-      console.log('서비스 실행');
-      console.log(user.social_id);
+      let access_token;
+      let refresh_token;
+      access_token = await jwt.create_access_token(user.user_name);
+      refresh_token = await jwt.create_refresh_token();
+      user.refresh_token = refresh_token;
       const response = await this.userRepository.save_kakao(user);
-      return { response, success: true };
+      return { user_name: user.user_name, access_token, refresh_token, success: true };
     } catch (err: any) {
       console.log(err);
       throw err;
     }
   }
+
   async Find() {
     try {
       const response = await this.userRepository.find();

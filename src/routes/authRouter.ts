@@ -7,6 +7,8 @@ const router = express.Router();
 
 // 스케쥴 관련 요청을 scrouter로 이동
 
+router.post('/login', AuthController.login);
+
 router.get('/kakao', AuthController.kakao_login);
 
 router.get('/kakao/callback', check_code, AuthController.kakao_login_callback);

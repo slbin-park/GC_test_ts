@@ -8,6 +8,16 @@ import AuthService from '../../services/auth.service';
 // 서비스 레이어와 상호작용만 하도록
 // 유효성 검사가 끝난 후 req가 넘어옴
 const AuthController = {
+  login: async (req: Request, res: Response) => {
+    try {
+      const AuthServiceInstance: AuthService = Container.get(AuthService);
+      const response = await AuthServiceInstance.login(req.body.user_name, req.body.password);
+      res.send({ success: true, response });
+    } catch (err) {
+      res.status(500).send({ success: 'false', err });
+    }
+  },
+
   kakao_login: async (req: Request, res: Response) => {
     try {
       const AuthServiceInstance: AuthService = Container.get(AuthService);
