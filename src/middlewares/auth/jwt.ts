@@ -45,12 +45,9 @@ const check_access_token = async (req: Request, res: Response, next: NextFunctio
     // check 가 true면 Access , false면 Refresh
     // const payload = jwt.decode(token, secret_key);
     const token = await jwt.verify(access_token, secret_key);
-    console.log(token);
-    if (token.user_name != req.body.user_name) {
-      res.send('토큰 정보 일치하지않음');
-    } else {
-      next();
-    }
+    // body에 user_name 을 넣어서 보내줌
+    req.body.user_name = token.user_name;
+    next();
   } catch (error: any) {
     console.log(error.name);
     // 유효기간이 초과된 경우

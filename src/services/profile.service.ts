@@ -5,9 +5,6 @@ import 'reflect-metadata';
 
 import UserRepository from '../datamanager/user/user.dm';
 import ProfileRepository from '../datamanager/profile/profile.dm';
-import jwt from '../middlewares/auth/jwt';
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 // datamanager 에서 데이틀 가져와
 // 컨트롤러로 반환해주는 역할
@@ -27,20 +24,24 @@ class ProfileService {
     this.profileRepository = Container.get(ProfileRepository);
   }
 
-  async Save(user: any) {
+  async profile(username: any) {
     try {
-      let access_token;
-      let refresh_token;
-      let response;
-      access_token = await jwt.create_access_token(user.user_name);
-      refresh_token = await jwt.create_refresh_token();
-      user.refresh_token = refresh_token;
-      user.password = await bcrypt.hash(user.password, saltRounds);
-      response = await this.userRepository.save(user);
-      await jwt.save_refresh_token(user.user_name, refresh_token);
-
-      console.log('서비스 실행');
-      return { user_name: user.user_name, access_token, refresh_token, success: true };
+      const check_id: any = await this.profileRepository.checkbyid(username);
+      if (check_id.count == 0) {
+        return { msg: '존재하지 않는 유저' };
+      }
+      const count_following: any = await this.profileRepository.get_following_count(username);
+      const count_follower: any = await this.profileRepository.get_follower_count(username);
+      const count_board: any = await this.profileRepository.get_board_count(username);
+      const name: any = await this.profileRepository.get_name(username);
+      return {
+        following: count_following.count,
+        follower: count_follower.count,
+        board: count_board.count,
+        name: name.name,
+        username,
+        success: '성공',
+      };
     } catch (err) {
       console.log(err);
       throw err;
@@ -82,6 +83,26 @@ class ProfileService {
         return { msg: '팔로우 변경함 ' };
       }
       return { success: true, msg: '팔로우 신청 성공' };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async feed(username: any, last_board_id: any) {
+    try {
+      const response: any = await this.profileRepository.get_feed(username, last_board_id);
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async follow_feed(username: any, last_board_id: any) {
+    try {
+      const response: any = await this.profileRepository.get_follow_feed(username, last_board_id);
+      return response;
     } catch (err) {
       console.log(err);
       throw err;

@@ -15,11 +15,36 @@ const BoardController = {
       res.send(response);
     } catch (err: any) {}
   },
+
   save_reply: async (req: Request, res: Response) => {
     try {
       const replyInfo = req.body;
       const boardServiceInstance: BoardService = Container.get(BoardService);
       const response = await boardServiceInstance.Save_reply(replyInfo);
+      res.send({ response });
+    } catch (err: any) {}
+  },
+
+  save_board_like: async (req: Request, res: Response) => {
+    try {
+      const replyInfo = req.body;
+      const boardServiceInstance: BoardService = Container.get(BoardService);
+      const response = await boardServiceInstance.Save_board_like(
+        req.params.board_id,
+        replyInfo.user_name
+      );
+      res.send({ response });
+    } catch (err: any) {}
+  },
+
+  cancel_board_like: async (req: Request, res: Response) => {
+    try {
+      const replyInfo = req.body;
+      const boardServiceInstance: BoardService = Container.get(BoardService);
+      const response = await boardServiceInstance.Cancel_board_like(
+        req.params.board_id,
+        req.body.user_name
+      );
       res.send({ response });
     } catch (err: any) {}
   },

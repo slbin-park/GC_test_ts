@@ -1,10 +1,19 @@
 import db from '../../config/db';
-import { SAVE, SAVE_IMAGE, GET_BY_ID, SAVE_REPLY } from './board.sql';
+import {
+  SAVE,
+  SAVE_IMAGE,
+  GET_BY_ID,
+  SAVE_REPLY,
+  SAVE_BOARD_LIKE,
+  GET_BY_ID_BOARD_LIKE,
+  UPDATE_BOARD_LIKE,
+} from './board.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 
 @Service()
 class BoardRepository {
+  // 게시글 저장 ( 이미지는 따로 저장 )
   async save(boardInfo: any) {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
@@ -21,6 +30,7 @@ class BoardRepository {
     });
   }
 
+  // 피드 등록시 이미지 등록
   async save_image(board_id: any, image_address: any) {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
@@ -33,6 +43,7 @@ class BoardRepository {
     });
   }
 
+  // id로 게시글 조회
   async get_by_id(board_id: any) {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
@@ -45,10 +56,55 @@ class BoardRepository {
     });
   }
 
+  // 댓글 저장
   async save_reply(board_id: any, user_name_fk: any, reply_content: any) {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
         conn.query(SAVE_REPLY, [board_id, user_name_fk, reply_content], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 게시글 좋아요 저장
+  async save_board_like(board_id: any, board_like_status: any, user_name: any) {
+    console.log(board_id, board_like_status, user_name);
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(
+          SAVE_BOARD_LIKE,
+          [board_id, board_like_status, user_name],
+          (err: any, data: any) => {
+            if (err) reject(`${err}`);
+            resolve(data);
+          }
+        );
+        conn.release();
+      });
+    });
+  }
+
+  // 게시글 좋아요 취소
+  async update_board_like(board_like_id: any, board_like_status: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(UPDATE_BOARD_LIKE, [board_like_status, board_like_id], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 게시글 좋아요 눌렀는지 체크
+  async get_by_id_board_like(board_id: any, user_name: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(GET_BY_ID_BOARD_LIKE, [board_id, user_name], (err: any, data: any) => {
           if (err) reject(`${err}`);
           resolve(data);
         });

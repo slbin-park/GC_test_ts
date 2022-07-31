@@ -6,7 +6,6 @@ import '../config/env';
 import jwt from '../middlewares/auth/jwt';
 
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 const axios = require('axios');
 const fetch = require('node-fetch');

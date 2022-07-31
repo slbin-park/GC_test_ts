@@ -12,8 +12,10 @@ import ProfileService from '../../services/profile.service';
 const ProfileController = {
   get_profile: async (req: Request, res: Response) => {
     try {
-      const userServiceInstance: UserService = Container.get(UserService);
-      res.status(200).json('asdf');
+      const profileServiceInstance: ProfileService = Container.get(ProfileService);
+
+      const response = await profileServiceInstance.profile(req.params.user_name);
+      res.status(200).send(response);
     } catch (err) {
       res.status(500).send({ success: 'false', err });
     }
@@ -25,6 +27,31 @@ const ProfileController = {
         req.body.user_name,
         req.params.follow_user_name
       );
+      res.status(200).send(response);
+    } catch (err) {
+      res.status(500).send({ success: 'false', err });
+    }
+  },
+  get_feed: async (req: Request, res: Response) => {
+    try {
+      const profileServiceInstance: ProfileService = Container.get(ProfileService);
+      const response = await profileServiceInstance.feed(
+        req.params.user_name,
+        req.body.last_board_id
+      );
+      res.status(200).send(response);
+    } catch (err) {
+      res.status(500).send({ success: 'false', err });
+    }
+  },
+  get_follow_feed: async (req: Request, res: Response) => {
+    try {
+      const profileServiceInstance: ProfileService = Container.get(ProfileService);
+      const response = await profileServiceInstance.follow_feed(
+        req.body.user_name,
+        req.body.last_board_id
+      );
+      console.log('요청했냐');
       res.status(200).send(response);
     } catch (err) {
       res.status(500).send({ success: 'false', err });

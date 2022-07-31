@@ -8,11 +8,14 @@ const router = express.Router();
 
 // 스케쥴 관련 요청을 scrouter로 이동
 
-router.get('/:user_name', (req: Request, res: Response) => {
-  console.log(req.params.user_name);
-  console.log('프로필 정보');
-  res.send('프로필 정보 요청');
-});
+// 메인화면 피드 가져오기
+router.get('/feed/follow', jwt.check_access_token, ProfileController.get_follow_feed);
+
+// 프로필 피드 가져오기
+router.get('/feed/:user_name', jwt.check_access_token, ProfileController.get_feed);
+
+// 프로필 정보 가져오기
+router.get('/user/:user_name', jwt.check_access_token, ProfileController.get_profile);
 
 router.post(
   '/follow/:follow_user_name',
