@@ -1,5 +1,5 @@
 import './env';
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
   // mysql 접속 설정
@@ -9,14 +9,5 @@ const pool = mysql.createPool({
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
 });
-// console.log(pool)
 
-function getConnection(callback: any) {
-  pool.getConnection((err: Error, conn: any) => {
-    if (!err) {
-      callback(conn);
-    }
-  });
-}
-
-export default getConnection;
+export default pool;

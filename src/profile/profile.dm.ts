@@ -1,4 +1,4 @@
-import db from '../../config/db';
+import db from '../config/db';
 import {
   FINDBYID,
   CHECKID,
@@ -17,146 +17,69 @@ import 'reflect-metadata';
 
 @Service()
 class ProfileRepository {
-  async findById(id: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FINDBYID, [id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async findById(conn: any, id: any) {
+    const profile_data = await conn.query(FINDBYID, id);
+    return profile_data;
   }
 
-  async checkbyid(id: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(CHECKID, [id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async checkbyid(conn: any, id: any) {
+    const profile_check = await conn.query(CHECKID, id);
+    return profile_check;
   }
 
-  async follow(user_name: any, follow_user_name: any, follow_status: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FOLLOW, [follow_user_name, user_name, follow_status], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async follow(conn: any, user_name: any, follow_user_name: any, follow_status: any) {
+    const follow_save = await conn.query(FOLLOW, [follow_user_name, user_name, follow_status]);
+    return follow_save;
   }
 
-  async check_follow(user_name: any, follow_user_name: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(CHECKFOLLOW, [follow_user_name, user_name], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async check_follow(conn: any, user_name: any, follow_user_name: any) {
+    const follow_check = await conn.query(CHECKFOLLOW, [follow_user_name, user_name]);
+    return follow_check;
   }
 
-  async update_follow(user_name: any, follow_user_name: any, follow_status: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(
-          UPDATEFOLLOW,
-          [follow_status, follow_user_name, user_name],
-          (err: any, data: any) => {
-            if (err) reject(`${err}`);
-            resolve(data);
-          }
-        );
-        conn.release();
-      });
-    });
+  async update_follow(conn: any, user_name: any, follow_user_name: any, follow_status: any) {
+    const follow_update = await conn.query(UPDATEFOLLOW, [
+      follow_status,
+      follow_user_name,
+      user_name,
+    ]);
+    return follow_update;
   }
 
   // 팔로워 개수
-  async get_follower_count(user_name: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FOLLOWEDCOUNT, [user_name], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async get_follower_count(conn: any, user_name: any) {
+    const follower_count = await conn.query(FOLLOWEDCOUNT, user_name);
+    return follower_count;
   }
 
   // 팔로잉 개수
-  async get_following_count(user_name: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FOLLOWCOUNT, [user_name], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async get_following_count(conn: any, user_name: any) {
+    const following_count = await conn.query(FOLLOWCOUNT, user_name);
+    return following_count;
   }
 
   // 게시글 개수
-  async get_board_count(user_name: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(BOARDCOUNT, [user_name], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async get_board_count(conn: any, user_name: any) {
+    const board_count = await conn.query(BOARDCOUNT, user_name);
+    return board_count;
   }
 
   // 이름 가져오기
-  async get_name(user_name: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(USERNAME, [user_name], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async get_name(conn: any, user_name: any) {
+    const get_name = conn.query(USERNAME, user_name);
+    return get_name;
   }
 
   // 프로필 피드 가져오기
-  async get_feed(user_name: any, last_board_id: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FEED, [user_name, last_board_id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async get_feed(conn: any, user_name: any, last_board_id: any) {
+    const feed_data = await conn.query(FEED, [user_name, last_board_id]);
+    return feed_data;
   }
 
   // 팔로우한 사람들 피드
-  async get_follow_feed(user_name: any, last_board_id: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(GETALLFEED, [user_name, last_board_id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async get_follow_feed(conn: any, user_name: any, last_board_id: any) {
+    const follow_feed_data = await conn.query(GETALLFEED, [user_name, last_board_id]);
+    return follow_feed_data;
   }
 }
 

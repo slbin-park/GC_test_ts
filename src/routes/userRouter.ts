@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import UserController from '../controllers/user/user.controller';
+import UserController from '../user/user.controller';
 import { check_req } from '../middlewares/validations/userValidation';
 const router = express.Router();
 

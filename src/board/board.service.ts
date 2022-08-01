@@ -3,7 +3,8 @@ import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 import BoardRepository from './board.dm';
 import '../config/env';
-import db from '../config/db';
+import pool from '../config/db';
+
 // datamanager 에서 데이틀 가져와
 // 컨트롤러로 반환해주는 역할
 
@@ -20,47 +21,67 @@ class BoardService {
   }
 
   async Save_board(boardInfo: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
     try {
-      const response = await this.boardRepository.save(boardInfo);
+      await conn.beginTransaction();
+      const response = await this.boardRepository.save(conn, boardInfo);
       const save_image = this.boardRepository.save_image;
       if (boardInfo.image != undefined) {
         boardInfo.image.map(async (data: any) => {
-          await save_image(response, data);
+          await save_image(conn, response, data);
         });
       }
+      await conn.commit();
       return { response, success: true };
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 
   async Save_reply(replyInfo: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
     try {
+      await conn.beginTransaction();
+
       const { board_id, user_name, reply_content } = replyInfo;
-      const check_board_id: any = await this.boardRepository.get_by_id(board_id);
+      const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
       if (check_board_id.length == 0) {
         return { success: false, msg: '없는 게시글 입니다.' };
       }
-      const save_reply = await this.boardRepository.save_reply(board_id, user_name, reply_content);
+      const save_reply = await this.boardRepository.save_reply(
+        conn,
+        board_id,
+        user_name,
+        reply_content
+      );
       return { success: true, save_reply };
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 
   async Save_board_like(board_id: any, user_name: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+
     try {
+      await conn.beginTransaction();
+
       const board_like_status = 'LIKE';
       // 게시글이 있는지 체크함
-      const check_board_id: any = await this.boardRepository.get_by_id(board_id);
+      const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
       if (check_board_id.length == 0) {
         return { success: false, msg: '없는 게시글 입니다.' };
       }
       // 문제점 자기가 눌렀는지 누가 눌렀는지 모름
       // FIX user_name 도 같이 눌러서 자기가 누른건지 확인함
       const check_board_like_id: any = await this.boardRepository.get_by_id_board_like(
+        conn,
         board_id,
         user_name
       );
@@ -72,6 +93,7 @@ class BoardService {
         //좋아요 취소를 했을경우 LIKE로 바꿔줌
         if (board_like_status_check == 'UNLIKE') {
           const response: any = await this.boardRepository.update_board_like(
+            conn,
             board_like_id,
             board_like_status
           );
@@ -80,6 +102,7 @@ class BoardService {
         return { success: false, msg: '이미 좋아요 누른 게시글' };
       }
       const response = await this.boardRepository.save_board_like(
+        conn,
         board_id,
         board_like_status,
         user_name
@@ -88,18 +111,25 @@ class BoardService {
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 
   async Cancel_board_like(board_id: any, user_name: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+
     try {
+      await conn.beginTransaction();
+
       const board_like_status = 'UNLIKE';
-      const check_board_id: any = await this.boardRepository.get_by_id(board_id);
+      const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
       if (check_board_id.length == 0) {
         return { success: false, msg: '없는 게시글 입니다.' };
       }
       // 자신이 좋아요를 누른 기록이 있는지 확인
       const check_board_like_id: any = await this.boardRepository.get_by_id_board_like(
+        conn,
         board_id,
         user_name
       );
@@ -111,6 +141,7 @@ class BoardService {
         // LIKE 일 경우에 취소로 바꿔버림
         if (board_like_status_check == 'LIKE') {
           const response: any = await this.boardRepository.update_board_like(
+            conn,
             board_like_id,
             board_like_status
           );
@@ -125,18 +156,25 @@ class BoardService {
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 
   async Save_reply_like(reply_id: any, user_name: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+
     try {
+      await conn.beginTransaction();
+
       const reply_like_status = 'LIKE';
-      const check_board_id: any = await this.boardRepository.get_by_id_reply(reply_id);
+      const check_board_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
       if (check_board_id.length == 0) {
         return { success: false, msg: '없는 댓글 입니다.' };
       }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
       const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
+        conn,
         reply_id,
         user_name
       );
@@ -148,6 +186,7 @@ class BoardService {
         // UNLIKE 일 경우에 LIKE 로 바꿈
         if (reply_like_status_check == 'UNLIKE') {
           const response: any = await this.boardRepository.update_reply_like(
+            conn,
             reply_like_status,
             reply_like_id
           );
@@ -157,6 +196,7 @@ class BoardService {
         return { success: false, msg: '이미 좋아요한 댓글 ' };
       } else {
         const response = await this.boardRepository.save_reply_like(
+          conn,
           reply_id,
           reply_like_status,
           user_name
@@ -166,18 +206,22 @@ class BoardService {
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 
   async Cancel_reply_like(reply_id: any, user_name: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const reply_like_status = 'UNLIKE';
-      const check_board_id: any = await this.boardRepository.get_by_id_reply(reply_id);
+      const check_board_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
       if (check_board_id.length == 0) {
         return { success: false, msg: '없는 댓글 입니다.' };
       }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
       const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
+        conn,
         reply_id,
         user_name
       );
@@ -190,6 +234,7 @@ class BoardService {
         console.log(reply_like_status_check);
         if (reply_like_status_check == 'LIKE') {
           const response: any = await this.boardRepository.update_reply_like(
+            conn,
             reply_like_status,
             reply_like_id
           );
@@ -203,6 +248,8 @@ class BoardService {
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 }
