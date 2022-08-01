@@ -1,4 +1,4 @@
-import db from '../../config/db';
+import db from '../config/db';
 import {
   SAVE,
   SAVE_IMAGE,
@@ -7,6 +7,10 @@ import {
   SAVE_BOARD_LIKE,
   GET_BY_ID_BOARD_LIKE,
   UPDATE_BOARD_LIKE,
+  GET_BY_ID_REPLY,
+  GET_BY_ID_REPLY_LIKE,
+  SAVE_REPLY_LIKE,
+  UPDATE_REPLY_LIKE,
 } from './board.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
@@ -105,6 +109,58 @@ class BoardRepository {
     return new Promise(async (resolve, reject) => {
       db((conn: any) => {
         conn.query(GET_BY_ID_BOARD_LIKE, [board_id, user_name], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 댓글이 존재하는지 체크
+  async get_by_id_reply(reply_id: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(GET_BY_ID_REPLY, [reply_id], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 댓글을 좋아요를 눌렀는지 체크
+  async get_by_id_reply_like(reply_id: any, user_name: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(GET_BY_ID_REPLY_LIKE, [reply_id, user_name], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 댓글을 좋아요를 저장
+  async save_reply_like(reply_id: any, reply_status: any, user_name: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(SAVE_REPLY_LIKE, [reply_id, reply_status, user_name], (err: any, data: any) => {
+          if (err) reject(`${err}`);
+          resolve(data);
+        });
+        conn.release();
+      });
+    });
+  }
+
+  // 댓글을 좋아요를 수정
+  async update_reply_like(reply_status: any, reply_like_id: any) {
+    return new Promise(async (resolve, reject) => {
+      db((conn: any) => {
+        conn.query(UPDATE_REPLY_LIKE, [reply_status, reply_like_id], (err: any, data: any) => {
           if (err) reject(`${err}`);
           resolve(data);
         });

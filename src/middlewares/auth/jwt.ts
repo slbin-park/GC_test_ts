@@ -4,7 +4,7 @@
 // access 토큰 검증
 // 카카오껀지
 import '../../config/env';
-import AuthRepository from '../../datamanager/auth/auth.dm';
+import AuthRepository from '../../auth/auth.dm';
 import { Container, Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
@@ -40,7 +40,7 @@ const create_refresh_token = () => {
 
 const check_access_token = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const access_token = req.headers.authorization;
+    const access_token = req.headers.authorization?.split(' ')[1];
     const secret_key = process.env.JWT_ACCESS_SECRET;
     // check 가 true면 Access , false면 Refresh
     // const payload = jwt.decode(token, secret_key);
@@ -52,10 +52,10 @@ const check_access_token = async (req: Request, res: Response, next: NextFunctio
     console.log(error.name);
     // 유효기간이 초과된 경우
     if (error.name === 'TokenExpiredError') {
-      res.send({ success: false, msg: '토큰이 만료되었습니다.' }); // 419 추가예정
+      res.status(419).send({ success: false, msg: '토큰이 만료되었습니다.' }); // 419 추가예정
     }
     // 토큰의 비밀키가 일치하지 않는 경우
-    res.send({ success: false, msg: '유효하지 않은 토큰입니다.' }); // 401 추가예정
+    res.status(401).send({ success: false, msg: '유효하지 않은 토큰입니다.' }); // 401 추가예정
   }
 };
 

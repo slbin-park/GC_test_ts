@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import { Container } from 'typedi';
 import 'reflect-metadata';
 
-import UserService from '../../services/user.service';
-import ProfileService from '../../services/profile.service';
+import UserService from '../user/user.service';
+import ProfileService from './profile.service';
 
 // 컨트롤러에는 유효성 검사 , 데이터 컨버팅 후
 // 서비스 레이어와 상호작용만 하도록

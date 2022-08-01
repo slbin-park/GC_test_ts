@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { check_profile, check_follow } from '../middlewares/validations/profileValidation';
 import jwt from '../middlewares/auth/jwt';
 import '../config/env';
-import ProfileController from '../controllers/profile/profile.controller';
+import ProfileController from '../profile/profile.controller';
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ router.get('/feed/:user_name', jwt.check_access_token, ProfileController.get_fee
 // 프로필 정보 가져오기
 router.get('/user/:user_name', jwt.check_access_token, ProfileController.get_profile);
 
+// 팔로우 하기
 router.post(
   '/follow/:follow_user_name',
   jwt.check_access_token,

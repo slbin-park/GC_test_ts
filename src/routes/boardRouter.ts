@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import '../config/env';
-import BoardController from '../controllers/board/board.controller';
+import BoardController from '../board/board.controller';
 import jwt from '../middlewares/auth/jwt';
 import { check_reply } from '../middlewares/validations/boardValidation';
 const router = express.Router();
@@ -20,9 +20,9 @@ router.put('/:board_id/unlike', jwt.check_access_token, BoardController.cancel_b
 router.post('/reply', jwt.check_access_token, check_reply, BoardController.save);
 
 // 댓글 좋아요 눌렀을경우
-router.post('/reply/:reply_id/like', jwt.check_access_token, BoardController.save_board_like);
+router.post('/reply/:reply_id/like', jwt.check_access_token, BoardController.save_reply_like);
 
 // 댓글 좋아요 취소
-router.put('/reply/:reply_id/unlike', jwt.check_access_token, BoardController.cancel_board_like);
+router.put('/reply/:reply_id/unlike', jwt.check_access_token, BoardController.cancel_reply_like);
 
 export default router;

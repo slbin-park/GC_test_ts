@@ -3,7 +3,7 @@ import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
 
-import UserRepository from '../datamanager/user/user.dm';
+import UserRepository from './user.dm';
 import jwt from '../middlewares/auth/jwt';
 const bcrypt = require('bcrypt');
 const saltRounds = 10;

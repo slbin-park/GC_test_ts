@@ -3,8 +3,8 @@ import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
 
-import UserRepository from '../datamanager/user/user.dm';
-import ProfileRepository from '../datamanager/profile/profile.dm';
+import UserRepository from '..//user/user.dm';
+import ProfileRepository from './profile.dm';
 
 // datamanager 에서 데이틀 가져와
 // 컨트롤러로 반환해주는 역할

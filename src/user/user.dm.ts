@@ -1,4 +1,4 @@
-import db from '../../config/db';
+import db from '../config/db';
 import { SAVE, FIND, FINDBYID, SAVE_KAKAO } from './user.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';

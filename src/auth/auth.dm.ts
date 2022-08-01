@@ -1,4 +1,4 @@
-import db from '../../config/db';
+import db from '../config/db';
 import { FINDBY_KAKAOID, UPDATE_REFRESH_TOKEN, FINDBYUSERNAME } from './auth.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';

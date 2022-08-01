@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
-import BoardRepository from '../datamanager/board/board.dm';
+import BoardRepository from './board.dm';
 import '../config/env';
-
+import db from '../config/db';
 // datamanager 에서 데이틀 가져와
 // 컨트롤러로 반환해주는 역할
 
@@ -121,6 +121,84 @@ class BoardService {
       } else {
         // 좋아요 누른적이 없는데 취소를 했을경우
         return { success: false, msg: '좋아요 누른적 없는 게시글' };
+      }
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async Save_reply_like(reply_id: any, user_name: any) {
+    try {
+      const reply_like_status = 'LIKE';
+      const check_board_id: any = await this.boardRepository.get_by_id_reply(reply_id);
+      if (check_board_id.length == 0) {
+        return { success: false, msg: '없는 댓글 입니다.' };
+      }
+      // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
+      const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
+        reply_id,
+        user_name
+      );
+      // 좋아요 누른적이 있을경우에
+      if (check_reply_like.length) {
+        const reply_like = check_reply_like[0];
+        const reply_like_status_check = reply_like.reply_status;
+        const reply_like_id = reply_like.reply_like_id;
+        // UNLIKE 일 경우에 LIKE 로 바꿈
+        if (reply_like_status_check == 'UNLIKE') {
+          const response: any = await this.boardRepository.update_reply_like(
+            reply_like_status,
+            reply_like_id
+          );
+          return { success: true, msg: '댓글 좋아요 수정 성공', response };
+        }
+        // 아닐경우에는 이미 취소된 게시글
+        return { success: false, msg: '이미 좋아요한 댓글 ' };
+      } else {
+        const response = await this.boardRepository.save_reply_like(
+          reply_id,
+          reply_like_status,
+          user_name
+        );
+        return { response, success: '댓글 좋아요 저장 성공' };
+      }
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async Cancel_reply_like(reply_id: any, user_name: any) {
+    try {
+      const reply_like_status = 'UNLIKE';
+      const check_board_id: any = await this.boardRepository.get_by_id_reply(reply_id);
+      if (check_board_id.length == 0) {
+        return { success: false, msg: '없는 댓글 입니다.' };
+      }
+      // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
+      const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
+        reply_id,
+        user_name
+      );
+      // 좋아요 누른적이 있을경우에
+      if (check_reply_like.length) {
+        const reply_like = check_reply_like[0];
+        const reply_like_status_check = reply_like.reply_status;
+        const reply_like_id = reply_like.reply_like_id;
+        // LIKE 일 경우에 UNLIKE 로 바꿈
+        console.log(reply_like_status_check);
+        if (reply_like_status_check == 'LIKE') {
+          const response: any = await this.boardRepository.update_reply_like(
+            reply_like_status,
+            reply_like_id
+          );
+          return { success: true, msg: '댓글 좋아요 취소 성공', response };
+        }
+        // 아닐경우에는 이미 취소된 게시글
+        return { success: false, msg: '이미 좋아요 취소한  댓글 ' };
+      } else {
+        return { success: '댓글 좋아요 누른적 없음' };
       }
     } catch (err) {
       console.log(err);

@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
-import AuthRepository from '../datamanager/auth/auth.dm';
+import AuthRepository from './auth.dm';
 import '../config/env';
 import jwt from '../middlewares/auth/jwt';
 

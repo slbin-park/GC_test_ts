@@ -40,6 +40,33 @@ UPDATE board_like
 SET board_like_status = ? 
 WHERE board_like_id = ?;
 `;
+
+const GET_BY_ID_REPLY = `
+SELECT *
+FROM board_reply
+WHERE reply_id = ?;
+`;
+
+const GET_BY_ID_REPLY_LIKE = `
+SELECT *
+FROM reply_like
+WHERE reply_id_fk = ?
+AND
+user_name_fk = ? ;
+`;
+
+const SAVE_REPLY_LIKE = `
+INSERT INTO
+reply_like(reply_id_fk, reply_status , user_name_fk)
+VALUES(? , ? , ? );
+`;
+
+const UPDATE_REPLY_LIKE = `
+UPDATE reply_like
+SET reply_status = ?
+WHERE reply_like_id = ?
+`;
+
 export {
   SAVE,
   SAVE_IMAGE,
@@ -48,4 +75,8 @@ export {
   SAVE_BOARD_LIKE,
   GET_BY_ID_BOARD_LIKE,
   UPDATE_BOARD_LIKE,
+  GET_BY_ID_REPLY,
+  GET_BY_ID_REPLY_LIKE,
+  SAVE_REPLY_LIKE,
+  UPDATE_REPLY_LIKE,
 };
