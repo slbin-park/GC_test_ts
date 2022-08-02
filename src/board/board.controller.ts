@@ -12,9 +12,15 @@ const BoardController = {
     try {
       const boardInfo = req.body;
       const boardServiceInstance: BoardService = Container.get(BoardService);
-      const response = await boardServiceInstance.Save_board(boardInfo);
+      const response = await boardServiceInstance.Save_board(
+        req.body.user_name,
+        req.body.board_content,
+        req.body.images
+      );
       res.send(response);
-    } catch (err: any) {}
+    } catch (err: any) {
+      res.status(400).send(err);
+    }
   },
 
   save_reply: async (req: Request, res: Response) => {
@@ -72,6 +78,23 @@ const BoardController = {
       );
       res.send({ response });
     } catch (err: any) {}
+  },
+
+  save_reply_report: async (req: Request, res: Response) => {
+    try {
+      const { user_name, report_content } = req.body;
+      console.log(user_name, report_content);
+      // reply_id: any, user_name: any, report_content: any
+      const boardServiceInstance: BoardService = Container.get(BoardService);
+      const response = await boardServiceInstance.Save_reply_report(
+        req.params.reply_id,
+        user_name,
+        report_content
+      );
+      res.send({ response });
+    } catch (err: any) {
+      console.log(err);
+    }
   },
 };
 

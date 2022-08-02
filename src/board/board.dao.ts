@@ -11,6 +11,7 @@ import {
   GET_BY_ID_REPLY_LIKE,
   SAVE_REPLY_LIKE,
   UPDATE_REPLY_LIKE,
+  SAVE_REPLY_REPORT,
 } from './board.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
@@ -19,11 +20,7 @@ import 'reflect-metadata';
 class BoardRepository {
   // 게시글 저장 ( 이미지는 따로 저장 )
   async save(conn: any, boardInfo: any) {
-    const save_board = await conn.query(SAVE, [
-      boardInfo.user_name,
-      boardInfo.board_status,
-      boardInfo.board_content,
-    ]);
+    const save_board = await conn.query(SAVE, boardInfo);
     return save_board;
   }
 
@@ -40,33 +37,26 @@ class BoardRepository {
   }
 
   // 댓글 저장
-  async save_reply(conn: any, board_id: any, user_name_fk: any, reply_content: any) {
-    const save_reply = await conn.query(SAVE_REPLY, [board_id, user_name_fk, reply_content]);
+  async save_reply(conn: any, reply_info: any) {
+    const save_reply = await conn.query(SAVE_REPLY, reply_info);
     return save_reply;
   }
 
   // 게시글 좋아요 저장
-  async save_board_like(conn: any, board_id: any, board_like_status: any, user_name: any) {
-    const save_board_like = await conn.query(SAVE_BOARD_LIKE, [
-      board_id,
-      board_like_status,
-      user_name,
-    ]);
+  async save_board_like(conn: any, save_board_like_info: any) {
+    const save_board_like = await conn.query(SAVE_BOARD_LIKE, save_board_like_info);
     return save_board_like;
   }
 
   // 게시글 좋아요 취소
-  async update_board_like(conn: any, board_like_id: any, board_like_status: any) {
-    const update_board_like = await conn.query(UPDATE_BOARD_LIKE, [
-      board_like_status,
-      board_like_id,
-    ]);
+  async update_board_like(conn: any, board_like_const: any) {
+    const update_board_like = await conn.query(UPDATE_BOARD_LIKE, board_like_const);
     return update_board_like;
   }
 
   // 게시글 좋아요 눌렀는지 체크
-  async get_by_id_board_like(conn: any, board_id: any, user_name: any) {
-    const get_board_like = await conn.query(GET_BY_ID_BOARD_LIKE, [board_id, user_name]);
+  async get_by_id_board_like(conn: any, board_like_info: any) {
+    const get_board_like = await conn.query(GET_BY_ID_BOARD_LIKE, board_like_info);
     return get_board_like;
   }
 
@@ -77,21 +67,26 @@ class BoardRepository {
   }
 
   // 댓글을 좋아요를 눌렀는지 체크
-  async get_by_id_reply_like(conn: any, reply_id: any, user_name: any) {
-    const get_reply_like = await conn.query(GET_BY_ID_REPLY_LIKE, [reply_id, user_name]);
+  async get_by_id_reply_like(conn: any, get_reply_like_info: any) {
+    const get_reply_like = await conn.query(GET_BY_ID_REPLY_LIKE, get_reply_like_info);
     return get_reply_like;
   }
 
   // 댓글을 좋아요를 저장
-  async save_reply_like(conn: any, reply_id: any, reply_status: any, user_name: any) {
-    const save_reply_like = await conn.query(SAVE_REPLY_LIKE, [reply_id, reply_status, user_name]);
+  async save_reply_like(conn: any, reply_like_info: any) {
+    const save_reply_like = await conn.query(SAVE_REPLY_LIKE, reply_like_info);
     return save_reply_like;
   }
 
   // 댓글을 좋아요를 수정
-  async update_reply_like(conn: any, reply_status: any, reply_like_id: any) {
-    const update_reply_like = await conn.query(UPDATE_REPLY_LIKE, [reply_status, reply_like_id]);
+  async update_reply_like(conn: any, update_reply_like_info: any) {
+    const update_reply_like = await conn.query(UPDATE_REPLY_LIKE, update_reply_like_info);
     return update_reply_like;
+  }
+
+  async save_reply_report(conn: any, save_reply_report_info: any) {
+    const save_reply_report = await conn.query(SAVE_REPLY_REPORT, save_reply_report_info);
+    return save_reply_report;
   }
 }
 

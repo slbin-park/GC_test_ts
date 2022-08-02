@@ -76,6 +76,8 @@ class UserService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const response = await this.userRepository.find(conn);
+      console.log(response);
+      await conn.commit();
       return { response, success: true };
     } catch (err) {
       console.log(err);
@@ -89,10 +91,11 @@ class UserService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const response = await this.userRepository.findById(conn, id);
+      await conn.commit();
       return { response, success: true };
     } catch (err) {
       console.log(err);
-      // throw err;
+      throw err;
     } finally {
       conn.release();
     }

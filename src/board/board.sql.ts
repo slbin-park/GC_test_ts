@@ -67,6 +67,12 @@ SET reply_status = ?
 WHERE reply_like_id = ?
 `;
 
+const SAVE_REPLY_REPORT = `
+INSERT INTO
+reply_report (reply_id_Fk , report_content , user_name_fk , reply_report_status)
+VALUES( ? , ? , ? , ?);
+`;
+
 export {
   SAVE,
   SAVE_IMAGE,
@@ -79,4 +85,5 @@ export {
   GET_BY_ID_REPLY_LIKE,
   SAVE_REPLY_LIKE,
   UPDATE_REPLY_LIKE,
+  SAVE_REPLY_REPORT,
 };

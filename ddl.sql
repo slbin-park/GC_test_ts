@@ -187,12 +187,13 @@ ALTER TABLE board_report
 -- reply_report Table Create SQL
 CREATE TABLE reply_report
 (
-    `reply_report_id`  INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 신고 아이디', 
-    `reply_id_fk`      INT             NOT NULL    COMMENT '신고 댓글 아이디', 
-    `report_content`   VARCHAR(100)    NOT NULL    COMMENT '신고 사유', 
-    `user_name_fk`     VARCHAR(45)     NOT NULL    COMMENT '신고 유저 아이디', 
+    `reply_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 신고 아이디', 
+    `reply_id_fk`          INT             NOT NULL    COMMENT '신고 댓글 아이디', 
+    `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고 사유', 
+    `user_name_fk`         VARCHAR(45)     NOT NULL    COMMENT '신고 유저 아이디', 
     `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
     `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `reply_report_status`  VARCHAR(20)     NOT NULL    COMMENT '댓글 신고 상태', 
      PRIMARY KEY (reply_report_id)
 );
 
@@ -205,5 +206,3 @@ ALTER TABLE reply_report
 ALTER TABLE reply_report
     ADD CONSTRAINT FK_reply_report_reply_id_fk_board_reply_reply_id FOREIGN KEY (reply_id_fk)
         REFERENCES board_reply (reply_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-

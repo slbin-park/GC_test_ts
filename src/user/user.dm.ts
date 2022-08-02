@@ -6,7 +6,7 @@ import 'reflect-metadata';
 @Service()
 class UserRepository {
   async save(conn: any, userInfo: any) {
-    const user = await conn.query(SAVE, [
+    const [user] = await conn.query(SAVE, [
       userInfo.user_name,
       userInfo.phone_number,
       userInfo.name,
@@ -20,7 +20,7 @@ class UserRepository {
     return user;
   }
   async save_kakao(conn: any, userInfo: any) {
-    const user_kakao = await conn.query(SAVE_KAKAO, [
+    const [user_kakao] = await conn.query(SAVE_KAKAO, [
       userInfo.user_name,
       userInfo.phone_number,
       userInfo.name,
@@ -35,12 +35,12 @@ class UserRepository {
   }
 
   async find(conn: any) {
-    const user_data = await conn.query(FIND);
+    const [user_data] = await conn.query(FIND);
     return user_data;
   }
 
   async findById(conn: any, id: any) {
-    const user_data_id = await conn.query(FINDBYID, id);
+    const [user_data_id] = await conn.query(FINDBYID, id);
     return user_data_id;
   }
 }

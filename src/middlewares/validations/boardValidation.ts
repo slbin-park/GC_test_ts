@@ -21,4 +21,13 @@ const check_reply = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { check_reply };
+const check_reply_report = (req: Request, res: Response, next: NextFunction) => {
+  const { report_content } = req.body;
+  if (report_content == undefined) {
+    res.send('신고 내용 없음');
+  } else {
+    next();
+  }
+};
+
+export { check_reply, check_reply_report };
