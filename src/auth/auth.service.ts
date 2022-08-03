@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import AuthRepository from './auth.dm';
 import '../config/env';
 import jwt from '../middlewares/auth/jwt';
-
+import pool from '../config/db';
 const bcrypt = require('bcrypt');
 
 const axios = require('axios');
@@ -31,31 +31,33 @@ class AuthService {
   }
 
   async login(user_name: any, password: any, social_id?: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
     try {
-      const user_data: any = await this.authRepository.get_user_data(user_name);
+      const user_data: any = await this.authRepository.get_user_data(conn, user_name);
       // 로그인 성공 체크 변수
       let check;
       let access_token;
       let refresh_token;
-      if (user_data.length == 0) {
+      if (user_data[0].length == 0) {
         return '존재하지 않는 아이디';
       }
       // 자체 로그인일 경우 비밀번호 확인함
-      if (user_data.register == 'SELF') {
+      if (user_data[0][0].register == 'SELF') {
         // 해쉬 알고리즘으로 비밀번호 같은지 체크함
-        check = await bcrypt.compare(password, user_data.password);
+        check = await bcrypt.compare(password, user_data[0][0].password);
       }
       // 카카오 일 경우 유저 아이디만 확인함
-      if (user_data.register == 'KAKAO') {
-        check = social_id == user_data.social_id ? true : false;
+      if (user_data[0][0].register == 'KAKAO') {
+        check = social_id == user_data[0][0].social_id ? true : false;
       }
       // 로그인 성공시
       if (check) {
         access_token = await jwt.create_access_token(user_name);
-        console.log(access_token);
         refresh_token = await jwt.create_refresh_token();
         // 리프레시 토큰 디비에 저장
         await jwt.save_refresh_token(user_name, refresh_token);
+        await conn.commit();
+
         return { access_token, refresh_token };
       } else {
         return { success: false };
@@ -64,6 +66,8 @@ class AuthService {
     } catch (err) {
       console.log(err);
       throw err;
+    } finally {
+      conn.release();
     }
   }
 

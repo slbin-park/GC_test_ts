@@ -7,6 +7,7 @@ import '../../config/env';
 import AuthRepository from '../../auth/auth.dm';
 import { Container, Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
+import pool from '../../config/db';
 const jwt = require('jsonwebtoken');
 
 const create_access_token = (user_name: any) => {
@@ -78,11 +79,18 @@ const check_refresh_token = (refresh_token: any) => {
 };
 
 const save_refresh_token = async (id: string, refresh_token: any) => {
+  const conn = await pool.getConnection(async (conn: any) => conn);
+
   try {
     const authRepository = Container.get(AuthRepository);
-    return await authRepository.update_refresh_token(id, refresh_token);
+    const refresh_info = [id, refresh_token];
+    const a = await authRepository.update_refresh_token(conn, refresh_info);
+    conn.commit();
+    return a;
   } catch (err) {
     console.log(err);
+  } finally {
+    conn.release();
   }
 };
 

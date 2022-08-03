@@ -30,4 +30,21 @@ const check_reply_report = (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export { check_reply, check_reply_report };
+const check_board_report = (req: Request, res: Response, next: NextFunction) => {
+  const { report_content } = req.body;
+  if (report_content == undefined) {
+    res.send('신고 내용 없음');
+  } else {
+    next();
+  }
+};
+
+const check_board_edit = (req: Request, res: Response, next: NextFunction) => {
+  const { board_content } = req.body;
+  if (board_content == undefined) {
+    res.send('수정 내용 없음');
+  } else {
+    next();
+  }
+};
+export { check_reply, check_reply_report, check_board_report, check_board_edit };

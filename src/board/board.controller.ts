@@ -41,7 +41,9 @@ const BoardController = {
         replyInfo.user_name
       );
       res.send({ response });
-    } catch (err: any) {}
+    } catch (err: any) {
+      throw err;
+    }
   },
 
   cancel_board_like: async (req: Request, res: Response) => {
@@ -90,6 +92,38 @@ const BoardController = {
         req.params.reply_id,
         user_name,
         report_content
+      );
+      res.send({ response });
+    } catch (err: any) {
+      console.log(err);
+    }
+  },
+
+  save_board_report: async (req: Request, res: Response) => {
+    try {
+      const { user_name, report_content } = req.body;
+      // reply_id: any, user_name: any, report_content: any
+      const boardServiceInstance: BoardService = Container.get(BoardService);
+      const response = await boardServiceInstance.Save_board_report(
+        req.params.board_id,
+        user_name,
+        report_content
+      );
+      res.send({ response });
+    } catch (err: any) {
+      console.log(err);
+    }
+  },
+
+  edit_board: async (req: Request, res: Response) => {
+    try {
+      const { user_name, board_content } = req.body;
+      // reply_id: any, user_name: any, report_content: any
+      const boardServiceInstance: BoardService = Container.get(BoardService);
+      const response = await boardServiceInstance.Update_board(
+        req.params.board_id,
+        user_name,
+        board_content
       );
       res.send({ response });
     } catch (err: any) {

@@ -97,13 +97,13 @@ class BoardService {
         board_like_info
       );
       // 자신이 누른적이 있을경우
-      if (check_board_like_id.length) {
-        const board_like = check_board_like_id[0];
+      if (check_board_like_id[0].length) {
+        const board_like = check_board_like_id[0][0];
         const board_like_status_check = board_like.board_like_status;
         const board_like_id = board_like.board_like_id;
         //좋아요 취소를 했을경우 LIKE로 바꿔줌
         if (board_like_status_check == 'UNLIKE') {
-          const board_like_const = [board_like_id, board_like_status];
+          const board_like_const = [board_like_status, board_like_id];
           const response: any = await this.boardRepository.update_board_like(
             conn,
             board_like_const
@@ -131,7 +131,7 @@ class BoardService {
       await conn.beginTransaction();
       const board_like_status = 'UNLIKE';
       const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
-      if (check_board_id.length == 0) {
+      if (check_board_id[0].length == 0) {
         return { success: false, msg: '없는 게시글 입니다.' };
       }
       // 자신이 좋아요를 누른 기록이 있는지 확인
@@ -141,13 +141,13 @@ class BoardService {
         get_board_like_info
       );
       // 좋아요 누른적이 있을경우에
-      if (check_board_like_id.length) {
-        const board_like = check_board_like_id[0];
+      if (check_board_like_id[0].length) {
+        const board_like = check_board_like_id[0][0];
         const board_like_status_check = board_like.board_like_status;
         const board_like_id = board_like.board_like_id;
         // LIKE 일 경우에 취소로 바꿔버림
         if (board_like_status_check == 'LIKE') {
-          const update_board_like_info = [board_like_id, board_like_status];
+          const update_board_like_info = [board_like_status, board_like_id];
           const response: any = await this.boardRepository.update_board_like(
             conn,
             update_board_like_info
@@ -157,10 +157,10 @@ class BoardService {
           return { success: true, msg: '좋아요 취소 성공' };
         }
         // 아닐경우에는 이미 취소된 게시글
-        return { success: false, msg: '이미 좋아요 취소한게시글' };
+        return { success: true, msg: '이미 좋아요 취소한게시글' };
       } else {
         // 좋아요 누른적이 없는데 취소를 했을경우
-        return { success: false, msg: '좋아요 누른적 없는 게시글' };
+        return { success: true, msg: '좋아요 누른적 없는 게시글' };
       }
     } catch (err) {
       console.log(err);
@@ -178,7 +178,7 @@ class BoardService {
 
       const reply_like_status = 'LIKE';
       const check_board_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
-      if (check_board_id.length == 0) {
+      if (check_board_id[0].length == 0) {
         return { success: false, msg: '없는 댓글 입니다.' };
       }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
@@ -188,8 +188,8 @@ class BoardService {
         get_reply_like_info
       );
       // 좋아요 누른적이 있을경우에
-      if (check_reply_like.length) {
-        const reply_like = check_reply_like[0];
+      if (check_reply_like[0].length) {
+        const reply_like = check_reply_like[0][0];
         const reply_like_status_check = reply_like.reply_status;
         const reply_like_id = reply_like.reply_like_id;
         // UNLIKE 일 경우에 LIKE 로 바꿈
@@ -199,14 +199,16 @@ class BoardService {
             conn,
             update_reply_like_info
           );
-          return { success: true, msg: '댓글 좋아요 수정 성공', response };
+          conn.commit();
+          return { success: true, msg: '댓글 좋아요 수정 성공', response: response[0] };
         }
         // 아닐경우에는 이미 취소된 게시글
         return { success: false, msg: '이미 좋아요한 댓글 ' };
       } else {
         const reply_like_info = [reply_id, reply_like_status, user_name];
         const response = await this.boardRepository.save_reply_like(conn, reply_like_info);
-        return { response, success: '댓글 좋아요 저장 성공' };
+        conn.commit();
+        return { response: response[0], success: '댓글 좋아요 저장 성공' };
       }
     } catch (err) {
       console.log(err);
@@ -265,13 +267,13 @@ class BoardService {
       // reply_id_Fk , report_content , user_name_fk , reply_report_status
       const check_reply_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
       if (check_reply_id[0].length == 0) {
-        return { success: true, msg: '없는 댓글 입니다.' };
+        return { success: true, msg: '없는 게시글 입니다.' };
       }
       // 자신이 단 댓글 신고 불가 로직
       // 신고를 여러번도 가능? 한듯
       // 좋아요 누른적이 있을경우에
       if (check_reply_id[0][0].user_name_fk == user_name) {
-        return { success: true, msg: '자신의 댓글에는 신고 불가합니다.' };
+        return { success: true, msg: '자신의 게시글 에는 신고 불가합니다.' };
       }
       const reply_report_info = [reply_id, report_content, user_name, reply_report_status];
       const save_reply_report = await this.boardRepository.save_reply_report(
@@ -279,7 +281,57 @@ class BoardService {
         reply_report_info
       );
       return { response: save_reply_report, success: true };
-      return { response: '성공' };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    } finally {
+      conn.release();
+    }
+  }
+
+  async Save_board_report(board_id: any, user_name: any, report_content: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const report_status = 'ACTIVE';
+      // reply_id_Fk , report_content , user_name_fk , reply_report_status
+      const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
+      if (check_board_id[0].length == 0) {
+        return { success: true, msg: '없는 게시글 입니다.' };
+      }
+      // 자신이 단 댓글 신고 불가 로직
+      // 신고를 여러번도 가능? 한듯
+      // 좋아요 누른적이 있을경우에
+      if (check_board_id[0][0].user_name_fk == user_name) {
+        return { success: true, msg: '자신의 게시글 에는 신고 불가합니다.' };
+      }
+      const board_report_info = [board_id, report_content, user_name, report_status];
+      const save_board_report = await this.boardRepository.save_board_report(
+        conn,
+        board_report_info
+      );
+      return { response: save_board_report, success: true };
+    } catch (err) {
+      console.log(err);
+      throw err;
+    } finally {
+      conn.release();
+    }
+  }
+
+  async Update_board(board_id: any, user_name: any, board_content: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const check_board_id = await this.boardRepository.get_by_id(conn, board_id);
+      if (check_board_id[0].length == 0) {
+        return { success: true, msg: '없는 게시글 입니다.' };
+      } else if (check_board_id[0][0].user_name_fk != user_name) {
+        return { success: true, msg: '게시글 작성자가 아닙니다.' };
+      } else {
+        const update_board_info = [board_content, board_id];
+        const update_board: any = await this.boardRepository.update_board(conn, update_board_info);
+        conn.commit();
+        return { success: true, update_board: update_board[0], msg: '게시글 수정에 성공했습니다.' };
+      }
     } catch (err) {
       console.log(err);
       throw err;

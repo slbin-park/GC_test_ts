@@ -12,6 +12,8 @@ import {
   SAVE_REPLY_LIKE,
   UPDATE_REPLY_LIKE,
   SAVE_REPLY_REPORT,
+  SAVE_BOARD_REPORT,
+  UPDATE_BOARD,
 } from './board.sql';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
@@ -87,6 +89,16 @@ class BoardRepository {
   async save_reply_report(conn: any, save_reply_report_info: any) {
     const save_reply_report = await conn.query(SAVE_REPLY_REPORT, save_reply_report_info);
     return save_reply_report;
+  }
+
+  async save_board_report(conn: any, save_board_report_info: any) {
+    const save_board_report = await conn.query(SAVE_BOARD_REPORT, save_board_report_info);
+    return save_board_report;
+  }
+
+  async update_board(conn: any, board_info: any) {
+    const update_board = await conn.query(UPDATE_BOARD, board_info);
+    return update_board;
   }
 }
 

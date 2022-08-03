@@ -12,9 +12,12 @@ CREATE TABLE user
     `user_status`    VARCHAR(20)     NOT NULL    COMMENT '유저 상태', 
     `accept_date`    DATE            NULL        COMMENT '약관 동의 날짜', 
     `refresh_token`  TEXT            NULL        COMMENT '토큰 저장', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `social_id`      VARCHAR(45)     NULL        COMMENT '소셜 아이디', 
+    `profileUrl`     TEXT            NULL        COMMENT '프로필 사진', 
+    `websit`         VARCHAR(45)     NULL        COMMENT '웹사이트', 
+    `inrtoduction`   VARCHAR(450)    NULL        COMMENT '소개', 
      PRIMARY KEY (user_name)
 );
 
@@ -28,8 +31,8 @@ CREATE TABLE board
     `board_content`  TEXT           NULL        COMMENT '게시글 내용', 
     `user_name_fk`   VARCHAR(45)    NOT NULL    COMMENT '사용자 이름', 
     `board_status`   VARCHAR(45)    NOT NULL    COMMENT '게시글 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (board_id)
 );
 
@@ -48,8 +51,8 @@ CREATE TABLE board_reply
     `user_name_fk`   VARCHAR(45)    NOT NULL    COMMENT '작성자 아이디', 
     `reply_content`  VARCHAR(45)    NOT NULL    COMMENT '댓글 내용', 
     `reply_status`   VARCHAR(45)    NOT NULL    COMMENT '댓글 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (reply_id)
 );
 
@@ -71,8 +74,8 @@ CREATE TABLE follow
     `follow_user_fk`    VARCHAR(45)    NOT NULL    COMMENT '팔로우 할 유저', 
     `followed_user_fk`  VARCHAR(45)    NOT NULL    COMMENT '팔로우 한 유저', 
     `follow_status`     VARCHAR(45)     NOT NULL    COMMENT '팔로우 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`         TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`         TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (follow_id)
 );
 
@@ -94,8 +97,8 @@ CREATE TABLE chatting
     `user_name_fk`      VARCHAR(45)    NOT NULL    COMMENT '채팅 유저 아이디', 
     `chatting_content`  TEXT           NOT NULL    COMMENT '채팅 내용', 
     `chatting_status`   VARCHAR(45)    NOT NULL    COMMENT '채팅 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`         TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`         TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (chatting_id)
 );
 
@@ -112,8 +115,8 @@ CREATE TABLE board_like
     `board_like_id`      INT            NOT NULL    AUTO_INCREMENT COMMENT '게시글 좋아요 아이디', 
     `board_id_fk`        INT            NOT NULL    COMMENT '게시글 아이디', 
     `board_like_status`  VARCHAR(45)    NOT NULL    COMMENT '게시글 좋아요 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`          TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`          TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `user_name_fk`       VARCHAR(45)    NOT NULL    COMMENT '게시글 좋아요한 아이디', 
      PRIMARY KEY (board_like_id)
 );
@@ -135,8 +138,8 @@ CREATE TABLE reply_like
     `reply_like_id`  INT            NOT NULL    AUTO_INCREMENT COMMENT '댓글 좋아요 아이디', 
     `reply_id_fk`    INT            NOT NULL    COMMENT '댓글 아이디', 
     `reply_status`   VARCHAR(45)    NOT NULL    COMMENT '댓글 상태', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (reply_like_id)
 );
 
@@ -153,8 +156,8 @@ CREATE TABLE board_image
     `image_id`       INT          NOT NULL    AUTO_INCREMENT COMMENT '이미지 아이디', 
     `board_id_fk`    INT          NOT NULL    COMMENT '게시글 아이디', 
     `image_address`  TEXT         NOT NULL    COMMENT '이미지 주소', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (image_id)
 );
 
@@ -168,12 +171,13 @@ ALTER TABLE board_image
 -- board_report Table Create SQL
 CREATE TABLE board_report
 (
-    `board_report_id`  INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 신고 아이디', 
-    `board_id`         INT             NOT NULL    COMMENT '신고 게시글 아이디', 
-    `report_content`   VARCHAR(100)    NOT NULL    COMMENT '신고사유', 
-    `user_name_fk`     VARCHAR(45)     NOT NULL    COMMENT '신고 유저', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `board_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 신고 아이디', 
+    `board_id`             INT             NOT NULL    COMMENT '신고 게시글 아이디', 
+    `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고사유', 
+    `user_name_fk`         VARCHAR(45)     NOT NULL    COMMENT '신고 유저', 
+    `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `board_report_status`  VARCHAR(20)     NOT NULL    COMMENT '게시글 신고 상태', 
      PRIMARY KEY (board_report_id)
 );
 
@@ -183,6 +187,10 @@ ALTER TABLE board_report
     ADD CONSTRAINT FK_board_report_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
         REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE board_report
+    ADD CONSTRAINT FK_board_report_board_id_board_board_id FOREIGN KEY (board_id)
+        REFERENCES board (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 
 -- reply_report Table Create SQL
 CREATE TABLE reply_report
@@ -191,8 +199,8 @@ CREATE TABLE reply_report
     `reply_id_fk`          INT             NOT NULL    COMMENT '신고 댓글 아이디', 
     `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고 사유', 
     `user_name_fk`         VARCHAR(45)     NOT NULL    COMMENT '신고 유저 아이디', 
-    `create_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP      NOT NULL    COMMENT '만든 날짜',
-    `update_at`      DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP      NOT NULL    COMMENT '수정 날짜',
+    `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `reply_report_status`  VARCHAR(20)     NOT NULL    COMMENT '댓글 신고 상태', 
      PRIMARY KEY (reply_report_id)
 );
@@ -206,3 +214,5 @@ ALTER TABLE reply_report
 ALTER TABLE reply_report
     ADD CONSTRAINT FK_reply_report_reply_id_fk_board_reply_reply_id FOREIGN KEY (reply_id_fk)
         REFERENCES board_reply (reply_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+

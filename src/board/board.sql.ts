@@ -73,6 +73,18 @@ reply_report (reply_id_Fk , report_content , user_name_fk , reply_report_status)
 VALUES( ? , ? , ? , ?);
 `;
 
+const SAVE_BOARD_REPORT = `
+INSERT INTO
+board_report (board_id, report_content, user_name_fk, board_report_status)
+VALUES( ? , ? , ? , ?);
+`;
+
+const UPDATE_BOARD = `
+UPDATE board 
+SET board_content = ?
+WHERE board_id = ?
+`;
+
 export {
   SAVE,
   SAVE_IMAGE,
@@ -86,4 +98,6 @@ export {
   SAVE_REPLY_LIKE,
   UPDATE_REPLY_LIKE,
   SAVE_REPLY_REPORT,
+  SAVE_BOARD_REPORT,
+  UPDATE_BOARD,
 };

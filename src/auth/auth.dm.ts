@@ -5,39 +5,18 @@ import 'reflect-metadata';
 
 @Service()
 class AuthRepository {
-  async get_kakao_user(userInfo: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FINDBY_KAKAOID, [], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async get_kakao_user(conn: any) {
+    const get_kakao_user = await conn.query(FINDBY_KAKAOID);
+    return get_kakao_user;
   }
-  async update_refresh_token(id: any, refresh_token: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(UPDATE_REFRESH_TOKEN, [refresh_token, id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data);
-        });
-        conn.release();
-      });
-    });
+  async update_refresh_token(conn: any, update_refresh_info: any) {
+    const update_refresh_token = await conn.query(UPDATE_REFRESH_TOKEN, update_refresh_info);
+    return update_refresh_token;
   }
 
-  async get_user_data(id: any) {
-    return new Promise(async (resolve, reject) => {
-      db((conn: any) => {
-        conn.query(FINDBYUSERNAME, [id], (err: any, data: any) => {
-          if (err) reject(`${err}`);
-          resolve(data[0]);
-        });
-        conn.release();
-      });
-    });
+  async get_user_data(conn: any, id: any) {
+    const get_user_date = await conn.query(FINDBYUSERNAME, id);
+    return get_user_date;
   }
 }
 
