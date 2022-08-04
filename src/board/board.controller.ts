@@ -11,7 +11,7 @@ const BoardController = {
     const boardInfo = req.body;
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Save_board(
-      req.body.user_name,
+      req.body.user_id,
       req.body.board_content,
       req.body.images
     );
@@ -30,7 +30,7 @@ const BoardController = {
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Save_board_like(
       req.params.board_id,
-      replyInfo.user_name
+      replyInfo.user_id
     );
     res.send({ response });
   },
@@ -40,7 +40,7 @@ const BoardController = {
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Cancel_board_like(
       req.params.board_id,
-      replyInfo.user_name
+      replyInfo.user_id
     );
     res.send({ response });
   },
@@ -50,7 +50,7 @@ const BoardController = {
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Save_reply_like(
       req.params.reply_id,
-      replyInfo.user_name
+      replyInfo.user_id
     );
     res.send({ response });
   },
@@ -60,43 +60,39 @@ const BoardController = {
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Cancel_reply_like(
       req.params.reply_id,
-      replyInfo.user_name
+      replyInfo.user_id
     );
     res.send({ response });
   },
 
   save_reply_report: async (req: Request, res: Response) => {
-    const { user_name, report_content } = req.body;
-    console.log(user_name, report_content);
-    // reply_id: any, user_name: any, report_content: any
+    const { user_id, report_content } = req.body;
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Save_reply_report(
       req.params.reply_id,
-      user_name,
+      user_id,
       report_content
     );
     res.send({ response });
   },
 
   save_board_report: async (req: Request, res: Response) => {
-    const { user_name, report_content } = req.body;
-    // reply_id: any, user_name: any, report_content: any
+    const { user_id, report_content } = req.body;
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Save_board_report(
       req.params.board_id,
-      user_name,
+      user_id,
       report_content
     );
     res.send({ response });
   },
 
   edit_board: async (req: Request, res: Response) => {
-    const { user_name, board_content } = req.body;
-    // reply_id: any, user_name: any, report_content: any
+    const { user_id, board_content } = req.body;
     const boardServiceInstance: BoardService = Container.get(BoardService);
     const response = await boardServiceInstance.Update_board(
       req.params.board_id,
-      user_name,
+      user_id,
       board_content
     );
     res.send({ response });

@@ -43,7 +43,7 @@ class AuthService {
       let access_token;
       let refresh_token;
       if (user_data.length == 0) {
-        return response(baseResponse.USER_NOTHING);
+        return response(baseResponse.LOGIN_FAIL);
       }
       // 자체 로그인일 경우 비밀번호 확인함
       if (user_data[0].register == 'SELF') {
@@ -56,10 +56,10 @@ class AuthService {
       }
       // 로그인 성공시
       if (check) {
-        access_token = await jwt.create_access_token(user_name);
+        access_token = await jwt.create_access_token(user_data[0].user_id);
         refresh_token = await jwt.create_refresh_token();
         // 리프레시 토큰 디비에 저장
-        await jwt.save_refresh_token(user_name, refresh_token);
+        await jwt.save_refresh_token(user_data[0].user_id, refresh_token);
         await conn.commit();
 
         return { access_token, refresh_token };

@@ -6,7 +6,7 @@ const post_board_vali = (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.headers);
   // 필요 정보
   // board_id 게시글 아이디
-  // user_name 댓글 작성자 아이디
+  // GET_USER_ID 댓글 작성자 아이디
   // reply_content 댓글 내용
   // reply_status 는 처음에 visible 고정
   if (!board_content) {
@@ -21,7 +21,7 @@ const post_reply_vali = (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.headers);
   // 필요 정보
   // board_id 게시글 아이디
-  // user_name 댓글 작성자 아이디
+  // GET_USER_ID 댓글 작성자 아이디
   // reply_content 댓글 내용
   // reply_status 는 처음에 visible 고정
   if (!board_id) {

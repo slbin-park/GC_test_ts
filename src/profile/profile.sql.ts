@@ -1,7 +1,7 @@
-const GET_USER_NAME = `
+const GET_USER_ID = `
 SELECT user_name,name
 FROM user
-WHERE user_name = ?;`;
+WHERE user_id = ?;`;
 
 const SAVE_FOLLOW = `INSERT INTO 
 follow(follow_user_fk , followed_user_fk , follow_status) 
@@ -38,7 +38,7 @@ WHERE follow_user_fk = ?;
 const GET_BOARD_COUNT = `
 SELECT COUNT(*) as count
 FROM board
-WHERE user_name_fk = ?;
+WHERE user_id_fk = ?;
 `;
 
 // 피드 가져오기
@@ -46,7 +46,7 @@ const GET_FEED = `
 SELECT board_id , image_address
 FROM board b
 INNER JOIN (SELECT image_address FROM board_image ORDER BY board_id_fk ASC LIMIT 1) bi
-WHERE b.user_name_fk = ?
+WHERE b.user_id_fk = ?
 AND b.board_id < ?
 ORDER BY board_id DESC
 LIMIT 9;
@@ -70,7 +70,7 @@ SELECT board_id_fk,group_concat(image_address) as image_addresses
 FROM board_image bi1
 GROUP BY board_id_fk) bi
 ON b.board_id = bi.board_id_fk
-WHERE b.user_name_fk IN (
+WHERE b.user_id_fk IN (
     SELECT follow_user_fk
     FROM follow
     WHERE followed_user_fk = ?
@@ -83,7 +83,7 @@ LIMIT 10;
 `;
 
 export {
-  GET_USER_NAME,
+  GET_USER_ID,
   SAVE_FOLLOW,
   GET_FOLOW_USER,
   UPDATE_FOLLOW,

@@ -42,7 +42,6 @@ class UserService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
-      const access_token = await jwt.create_access_token(user_name);
       const refresh_token = await jwt.create_refresh_token();
       password = await bcrypt.hash(password, saltRounds);
       const SaveData = [
@@ -56,11 +55,13 @@ class UserService {
         accept_date,
         refresh_token,
       ];
-      await this.userRepository.save(conn, SaveData);
+      const user_id = await this.userRepository.save(conn, SaveData);
+      const access_token = await jwt.create_access_token(user_id.insertId);
+
       // save 에 필요함
       await conn.commit();
       return response(baseResponse.SUCCESS, {
-        user_name,
+        user_id: user_id.insertId,
         access_token,
         refresh_token,
       });
@@ -88,7 +89,6 @@ class UserService {
     try {
       await conn.beginTransaction();
 
-      const access_token = await jwt.create_access_token(user_name);
       const refresh_token = await jwt.create_refresh_token();
       const SaveUserKakaoData = [
         user_name,
@@ -102,9 +102,11 @@ class UserService {
         social_id,
         refresh_token,
       ];
-      await this.userRepository.save_kakao(conn, SaveUserKakaoData);
+      const user_id = await this.userRepository.save_kakao(conn, SaveUserKakaoData);
+      const access_token = await jwt.create_access_token(user_id.insertId);
       await conn.commit();
       return response(baseResponse.SUCCESS, {
+        user_id: user_id.insertId,
         user_name,
         access_token,
         refresh_token,

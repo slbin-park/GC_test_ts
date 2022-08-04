@@ -10,12 +10,12 @@ import { NextFunction, Request, Response } from 'express';
 import pool from '../../config/db';
 const jwt = require('jsonwebtoken');
 
-const create_access_token = (user_name: any) => {
+const create_access_token = (user_id: any) => {
   return new Promise(async (resolve, reject) => {
     resolve(
       jwt.sign(
         {
-          user_name,
+          user_id,
         },
         process.env.JWT_ACCESS_SECRET,
         {
@@ -46,8 +46,8 @@ const check_access_token = async (req: Request, res: Response, next: NextFunctio
     // check 가 true면 Access , false면 Refresh
     // const payload = jwt.decode(token, secret_key);
     const token = await jwt.verify(access_token, secret_key);
-    // body에 user_name 을 넣어서 보내줌
-    req.body.user_name = token.user_name;
+    // body에 GET_USER_ID 을 넣어서 보내줌
+    req.body.user_id = token.user_id;
     next();
   } catch (error: any) {
     console.log(error.name);

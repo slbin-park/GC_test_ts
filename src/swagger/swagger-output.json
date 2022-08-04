@@ -61,9 +61,6 @@
                   },
                   "user_status": {
                     "example": "any"
-                  },
-                  "refresh_token": {
-                    "example": "any"
                   }
                 }
               }
@@ -110,9 +107,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         },
         "requestBody": {
@@ -138,11 +132,7 @@
       "get": {
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/auth/kakao/callback": {
@@ -160,14 +150,11 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/auth/access_token": {
+    "/api/auth/access-token": {
       "post": {
         "description": "",
         "parameters": [
@@ -189,9 +176,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -225,7 +209,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   },
                   "board_content": {
@@ -278,7 +262,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   }
                 }
@@ -325,7 +309,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   }
                 }
@@ -372,7 +356,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   },
                   "board_content": {
@@ -422,7 +406,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   },
                   "report_content": {
@@ -464,7 +448,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   },
                   "board_id": {
@@ -517,7 +501,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   }
                 }
@@ -564,7 +548,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   }
                 }
@@ -611,7 +595,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   },
                   "report_content": {
@@ -645,19 +629,16 @@
           },
           "419": {
             "description": ""
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/profile/feed/{user_name}": {
+    "/api/profile/feed/{user_id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "user_name",
+            "name": "user_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -681,19 +662,16 @@
           },
           "419": {
             "description": ""
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/profile/user/{user_name}": {
+    "/api/profile/user/{user_id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "user_name",
+            "name": "user_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -717,19 +695,16 @@
           },
           "419": {
             "description": ""
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/profile/follow/{follow_user_name}": {
+    "/api/profile/follow/{user_id}": {
       "post": {
         "description": "",
         "parameters": [
           {
-            "name": "follow_user_name",
+            "name": "user_id",
             "in": "path",
             "required": true,
             "schema": {
@@ -753,9 +728,6 @@
           },
           "419": {
             "description": ""
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         },
         "requestBody": {
@@ -764,7 +736,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "user_name": {
+                  "user_id": {
                     "example": "any"
                   }
                 }

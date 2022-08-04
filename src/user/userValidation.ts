@@ -3,7 +3,7 @@ import { response } from '../config/response';
 import baseResponse from '../config/baseResponse';
 
 const post_user_vali = (req: Request, res: Response, next: NextFunction) => {
-  const { social_id, register, user_name, phone_number, password, birthday, accept_date } =
+  const { social_id, register, user_name, phone_number, password, birthday, accept_date, name } =
     req.body;
   const user_psword_regex = new RegExp(/[`~!@#$%^&*|\\\'\";:\/?]/gi);
   if (!register) {
@@ -15,6 +15,9 @@ const post_user_vali = (req: Request, res: Response, next: NextFunction) => {
       res.send(baseResponse.SIGNUP_SOCIALID_EMPTY);
       return;
     }
+  }
+  if (!name) {
+    res.send(baseResponse.SIGNUP_NAME_EMPTY);
   }
   if (!user_name) {
     res.send(baseResponse.SIGNUP_USERNAME_EMPTY);

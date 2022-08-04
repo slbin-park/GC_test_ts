@@ -12,14 +12,14 @@ const router = express.Router();
 router.get('/feed/follow', jwt.check_access_token, ProfileController.get_follow_feed);
 
 // 프로필 피드 가져오기
-router.get('/feed/:user_name', jwt.check_access_token, ProfileController.get_feed);
+router.get('/feed/:user_id', jwt.check_access_token, ProfileController.get_feed);
 
 // 프로필 정보 가져오기
-router.get('/user/:user_name', jwt.check_access_token, ProfileController.get_profile);
+router.get('/user/:user_id', jwt.check_access_token, ProfileController.get_profile);
 
 // 팔로우 하기
 router.post(
-  '/follow/:follow_user_name',
+  '/follow/:user_id',
   jwt.check_access_token,
   Profilevalidation.pose_follow_vali,
   ProfileController.follow_user

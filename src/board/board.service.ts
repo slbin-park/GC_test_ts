@@ -24,14 +24,14 @@ class BoardService {
     this.boardRepository = Container.get(BoardRepository);
   }
 
-  async Save_board(user_name: any, board_content: any, images: any) {
+  async Save_board(user_id: any, board_content: any, images: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     const board_status = 'ACTIVE';
     try {
       await conn.beginTransaction();
-      const boardInfo = [user_name, board_status, board_content];
-      const response = await this.boardRepository.save(conn, boardInfo);
-      const insertId = response[0].insertId;
+      const boardInfo = [user_id, board_status, board_content];
+      const res_Save_board = await this.boardRepository.save(conn, boardInfo);
+      const insertId = res_Save_board.insertId;
       const save_image = this.boardRepository.save_image;
 
       if (images != undefined) {
@@ -56,8 +56,8 @@ class BoardService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
-      const { board_id, user_name, reply_content } = replyInfo;
-      const reply_info = [board_id, user_name, reply_content];
+      const { board_id, user_id, reply_content } = replyInfo;
+      const reply_info = [board_id, user_id, reply_content];
       const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
 
       if (check_board_id.length == 0) {
@@ -79,7 +79,7 @@ class BoardService {
     }
   }
 
-  async Save_board_like(board_id: any, user_name: any) {
+  async Save_board_like(board_id: any, user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
@@ -92,8 +92,8 @@ class BoardService {
         return response(baseResponse.BOARD_NOTHING);
       }
       // 문제점 자기가 눌렀는지 누가 눌렀는지 모름
-      // FIX user_name 도 같이 보내서 자기가 누른건지 확인함
-      const board_like_info = [board_id, user_name];
+      // FIX GET_USER_ID 도 같이 보내서 자기가 누른건지 확인함
+      const board_like_info = [board_id, user_id];
       const check_board_like_id: any = await this.boardRepository.get_by_id_board_like(
         conn,
         board_like_info
@@ -113,7 +113,7 @@ class BoardService {
         // 이미 좋아요를 누른 게시글
         return response(baseResponse.BOARD_ALREADY_LIKE);
       }
-      const save_board_like_info = [board_id, board_like_status, user_name];
+      const save_board_like_info = [board_id, board_like_status, user_id];
       this.boardRepository.save_board_like(conn, save_board_like_info);
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
@@ -126,7 +126,7 @@ class BoardService {
     }
   }
 
-  async Cancel_board_like(board_id: any, user_name: any) {
+  async Cancel_board_like(board_id: any, user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
@@ -137,7 +137,7 @@ class BoardService {
         return response(baseResponse.BOARD_NOTHING);
       }
       // 자신이 좋아요를 누른 기록이 있는지 확인
-      const get_board_like_info = [board_id, user_name];
+      const get_board_like_info = [board_id, user_id];
       const check_board_like_id: any = await this.boardRepository.get_by_id_board_like(
         conn,
         get_board_like_info
@@ -171,7 +171,7 @@ class BoardService {
     }
   }
 
-  async Save_reply_like(reply_id: any, user_name: any) {
+  async Save_reply_like(reply_id: any, user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
@@ -183,7 +183,7 @@ class BoardService {
         return response(baseResponse.REPLY_NOTHING);
       }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
-      const get_reply_like_info = [reply_id, user_name];
+      const get_reply_like_info = [reply_id, user_id];
       const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
         conn,
         get_reply_like_info
@@ -203,8 +203,8 @@ class BoardService {
         // 아닐경우에는 이미 좋아요한 댓글
         return response(baseResponse.REPLY_ALREADY_LIKE);
       } else {
-        const reply_like_info = [reply_id, reply_like_status, user_name];
-        const response = await this.boardRepository.save_reply_like(conn, reply_like_info);
+        const reply_like_info = [reply_id, reply_like_status, user_id];
+        await this.boardRepository.save_reply_like(conn, reply_like_info);
         conn.commit();
         return response(baseResponse.SUCCESS);
       }
@@ -218,7 +218,7 @@ class BoardService {
     }
   }
 
-  async Cancel_reply_like(reply_id: any, user_name: any) {
+  async Cancel_reply_like(reply_id: any, user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const reply_like_status = 'UNLIKE';
@@ -227,7 +227,7 @@ class BoardService {
         return response(baseResponse.BOARD_NOTHING);
       }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
-      const get_reply_like_info = [reply_id, user_name];
+      const get_reply_like_info = [reply_id, user_id];
       const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(
         conn,
         get_reply_like_info
@@ -238,13 +238,9 @@ class BoardService {
         const reply_like_status_check = reply_like.reply_status;
         const reply_like_id = reply_like.reply_like_id;
         // LIKE 일 경우에 UNLIKE 로 바꿈
-        console.log(reply_like_status_check);
         if (reply_like_status_check == 'LIKE') {
           const update_reply_like_info = [reply_like_status, reply_like_id];
-          const response: any = await this.boardRepository.update_reply_like(
-            conn,
-            update_reply_like_info
-          );
+          await this.boardRepository.update_reply_like(conn, update_reply_like_info);
           return response(baseResponse.SUCCESS);
         }
         // 아닐경우에는 이미 취소된 댓글
@@ -262,11 +258,10 @@ class BoardService {
     }
   }
 
-  async Save_reply_report(reply_id: any, user_name: any, report_content: any) {
+  async Save_reply_report(reply_id: any, user_id: any, report_content: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const reply_report_status = 'ACTIVE';
-      // reply_id_Fk , report_content , user_name_fk , reply_report_status
       const check_reply_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
       if (check_reply_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
@@ -274,10 +269,10 @@ class BoardService {
       // 자신이 단 댓글 신고 불가 로직
       // 신고를 여러번도 가능? 한듯
       // 좋아요 누른적이 있을경우에
-      if (check_reply_id[0].user_name_fk == user_name) {
+      if (check_reply_id[0].user_id_fk == user_id) {
         return response(baseResponse.REPLY_REPORT_SELF);
       }
-      const reply_report_info = [reply_id, report_content, user_name, reply_report_status];
+      const reply_report_info = [reply_id, report_content, user_id, reply_report_status];
       await this.boardRepository.save_reply_report(conn, reply_report_info);
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
@@ -290,7 +285,7 @@ class BoardService {
     }
   }
 
-  async Save_board_report(board_id: any, user_name: any, report_content: any) {
+  async Save_board_report(board_id: any, user_id: any, report_content: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const report_status = 'ACTIVE';
@@ -302,10 +297,10 @@ class BoardService {
       // 자신이 단 댓글 신고 불가 로직
       // 신고를 여러번도 가능? 한듯
       // 좋아요 누른적이 있을경우에
-      if (check_board_id[0].user_name_fk == user_name) {
+      if (check_board_id[0].user_id_fk == user_id) {
         return response(baseResponse.BOARD_REPORT_SELF);
       }
-      const board_report_info = [board_id, report_content, user_name, report_status];
+      const board_report_info = [board_id, report_content, user_id, report_status];
       this.boardRepository.save_board_report(conn, board_report_info);
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
@@ -318,13 +313,13 @@ class BoardService {
     }
   }
 
-  async Update_board(board_id: any, user_name: any, board_content: any) {
+  async Update_board(board_id: any, user_id: any, board_content: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const check_board_id = await this.boardRepository.get_by_id(conn, board_id);
       if (check_board_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
-      } else if (check_board_id[0].user_name_fk != user_name) {
+      } else if (check_board_id[0].user_id_fk != user_id) {
         return response(baseResponse.BOARD_EDIT_NOT_SELF);
       } else {
         const update_board_info = [board_content, board_id];

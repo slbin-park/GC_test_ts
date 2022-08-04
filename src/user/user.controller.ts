@@ -20,7 +20,6 @@ const UserController = {
       register,
       user_status,
       accept_date,
-      refresh_token,
       social_id,
     } = req.body;
     if (req.body.register == 'KAKAO') {

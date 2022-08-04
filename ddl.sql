@@ -18,7 +18,8 @@ CREATE TABLE user
     `profileUrl`     TEXT            NULL        COMMENT '프로필 사진', 
     `websit`         VARCHAR(45)     NULL        COMMENT '웹사이트', 
     `inrtoduction`   VARCHAR(450)    NULL        COMMENT '소개', 
-     PRIMARY KEY (user_name)
+    `user_id`        INT             NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
+     PRIMARY KEY (user_id)
 );
 
 ALTER TABLE user COMMENT '유저 도메인';
@@ -29,7 +30,7 @@ CREATE TABLE board
 (
     `board_id`       INT            NOT NULL    AUTO_INCREMENT COMMENT '게시글 아이디', 
     `board_content`  TEXT           NULL        COMMENT '게시글 내용', 
-    `user_name_fk`   VARCHAR(45)    NOT NULL    COMMENT '사용자 이름', 
+    `user_id_fk`     INT            NOT NULL    COMMENT '사용자 이름', 
     `board_status`   VARCHAR(45)    NOT NULL    COMMENT '게시글 상태', 
     `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
@@ -39,8 +40,8 @@ CREATE TABLE board
 ALTER TABLE board COMMENT '보드 도메인';
 
 ALTER TABLE board
-    ADD CONSTRAINT FK_board_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_board_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- board_reply Table Create SQL
@@ -48,7 +49,7 @@ CREATE TABLE board_reply
 (
     `reply_id`       INT            NOT NULL    AUTO_INCREMENT COMMENT '댓글 아이디', 
     `board_id_fk`    INT            NOT NULL    COMMENT '게시글 아이디', 
-    `user_name_fk`   VARCHAR(45)    NOT NULL    COMMENT '작성자 아이디', 
+    `user_id_fk`     INT            NOT NULL    COMMENT '작성자 아이디', 
     `reply_content`  VARCHAR(45)    NOT NULL    COMMENT '댓글 내용', 
     `reply_status`   VARCHAR(45)    NOT NULL    COMMENT '댓글 상태', 
     `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
@@ -59,42 +60,42 @@ CREATE TABLE board_reply
 ALTER TABLE board_reply COMMENT '게시글 댓글 테이블';
 
 ALTER TABLE board_reply
-    ADD CONSTRAINT FK_board_reply_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE board_reply
     ADD CONSTRAINT FK_board_reply_board_id_fk_board_board_id FOREIGN KEY (board_id_fk)
         REFERENCES board (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE board_reply
+    ADD CONSTRAINT FK_board_reply_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- follow Table Create SQL
 CREATE TABLE follow
 (
-    `follow_id`         INT             NOT NULL    AUTO_INCREMENT COMMENT '팔로우 아이디', 
-    `follow_user_fk`    VARCHAR(45)    NOT NULL    COMMENT '팔로우 할 유저', 
-    `followed_user_fk`  VARCHAR(45)    NOT NULL    COMMENT '팔로우 한 유저', 
-    `follow_status`     VARCHAR(45)     NOT NULL    COMMENT '팔로우 상태', 
-    `create_at`         TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
-    `update_at`         TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `follow_id`         INT            NOT NULL    AUTO_INCREMENT COMMENT '팔로우 아이디', 
+    `follow_user_fk`    INT            NOT NULL    COMMENT '팔로우 할 유저', 
+    `followed_user_fk`  INT            NOT NULL    COMMENT '팔로우 한 유저', 
+    `follow_status`     VARCHAR(45)    NOT NULL    COMMENT '팔로우 상태', 
+    `create_at`         TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`         TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
      PRIMARY KEY (follow_id)
 );
 
 ALTER TABLE follow COMMENT '팔로우 테이블';
 
 ALTER TABLE follow
-    ADD CONSTRAINT FK_follow_follow_user_fk_user_user_name FOREIGN KEY (follow_user_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_follow_follow_user_fk_user_user_id FOREIGN KEY (follow_user_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE follow
-    ADD CONSTRAINT FK_follow_followed_user_fk_user_user_name FOREIGN KEY (followed_user_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_follow_followed_user_fk_user_user_id FOREIGN KEY (followed_user_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- chatting Table Create SQL
 CREATE TABLE chatting
 (
     `chatting_id`       INT            NOT NULL    AUTO_INCREMENT COMMENT '채팅 아이디', 
-    `user_name_fk`      VARCHAR(45)    NOT NULL    COMMENT '채팅 유저 아이디', 
+    `user_id_fk`        INT            NOT NULL    COMMENT '채팅 유저 아이디', 
     `chatting_content`  TEXT           NOT NULL    COMMENT '채팅 내용', 
     `chatting_status`   VARCHAR(45)    NOT NULL    COMMENT '채팅 상태', 
     `create_at`         TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
@@ -105,8 +106,8 @@ CREATE TABLE chatting
 ALTER TABLE chatting COMMENT '채팅 테이블';
 
 ALTER TABLE chatting
-    ADD CONSTRAINT FK_chatting_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_chatting_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- board_like Table Create SQL
@@ -117,7 +118,7 @@ CREATE TABLE board_like
     `board_like_status`  VARCHAR(45)    NOT NULL    COMMENT '게시글 좋아요 상태', 
     `create_at`          TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`          TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
-    `user_name_fk`       VARCHAR(45)    NOT NULL    COMMENT '게시글 좋아요한 아이디', 
+    `user_id_fk`         INT            NOT NULL    COMMENT '게시글 좋아요한 아이디', 
      PRIMARY KEY (board_like_id)
 );
 
@@ -128,8 +129,8 @@ ALTER TABLE board_like
         REFERENCES board (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE board_like
-    ADD CONSTRAINT FK_board_like_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_board_like_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- reply_like Table Create SQL
@@ -140,6 +141,7 @@ CREATE TABLE reply_like
     `reply_status`   VARCHAR(45)    NOT NULL    COMMENT '댓글 상태', 
     `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `user_id_fk`     INT            NOT NULL    COMMENT '좋아요 요청 아이디', 
      PRIMARY KEY (reply_like_id)
 );
 
@@ -148,6 +150,10 @@ ALTER TABLE reply_like COMMENT '댓글 좋아요 테이블';
 ALTER TABLE reply_like
     ADD CONSTRAINT FK_reply_like_reply_id_fk_board_reply_reply_id FOREIGN KEY (reply_id_fk)
         REFERENCES board_reply (reply_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE reply_like
+    ADD CONSTRAINT FK_reply_like_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- board_image Table Create SQL
@@ -174,7 +180,7 @@ CREATE TABLE board_report
     `board_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 신고 아이디', 
     `board_id`             INT             NOT NULL    COMMENT '신고 게시글 아이디', 
     `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고사유', 
-    `user_name_fk`         VARCHAR(45)     NOT NULL    COMMENT '신고 유저', 
+    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저', 
     `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `board_report_status`  VARCHAR(20)     NOT NULL    COMMENT '게시글 신고 상태', 
@@ -184,12 +190,12 @@ CREATE TABLE board_report
 ALTER TABLE board_report COMMENT '게시글 신고 테이블';
 
 ALTER TABLE board_report
-    ADD CONSTRAINT FK_board_report_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE board_report
     ADD CONSTRAINT FK_board_report_board_id_board_board_id FOREIGN KEY (board_id)
         REFERENCES board (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE board_report
+    ADD CONSTRAINT FK_board_report_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- reply_report Table Create SQL
@@ -198,7 +204,7 @@ CREATE TABLE reply_report
     `reply_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 신고 아이디', 
     `reply_id_fk`          INT             NOT NULL    COMMENT '신고 댓글 아이디', 
     `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고 사유', 
-    `user_name_fk`         VARCHAR(45)     NOT NULL    COMMENT '신고 유저 아이디', 
+    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저 아이디', 
     `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `reply_report_status`  VARCHAR(20)     NOT NULL    COMMENT '댓글 신고 상태', 
@@ -208,11 +214,26 @@ CREATE TABLE reply_report
 ALTER TABLE reply_report COMMENT '댓글 신고 테이블';
 
 ALTER TABLE reply_report
-    ADD CONSTRAINT FK_reply_report_user_name_fk_user_user_name FOREIGN KEY (user_name_fk)
-        REFERENCES user (user_name) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE reply_report
     ADD CONSTRAINT FK_reply_report_reply_id_fk_board_reply_reply_id FOREIGN KEY (reply_id_fk)
         REFERENCES board_reply (reply_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE reply_report
+    ADD CONSTRAINT FK_reply_report_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- change_user_name Table Create SQL
+CREATE TABLE change_user_name
+(
+    `id`                INT            NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
+    `update_timestamp`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '변경 날짜', 
+    `user_id_fk`        INT            NOT NULL    COMMENT '유저 아이디', 
+    `prev_user_name`    VARCHAR(45)    NOT NULL    COMMENT '변경전 이름', 
+     PRIMARY KEY (id)
+);
+
+ALTER TABLE change_user_name
+    ADD CONSTRAINT FK_change_user_name_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
+        REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 

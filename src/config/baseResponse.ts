@@ -144,16 +144,18 @@ export = {
     msg: '존재하지 않는 유저입니다.',
   },
 
+  SIGNUP_NAME_EMPTY: { isSuccess: false, code: 2030, msg: '이름을 입력해주세요.' },
+
   // Response error
   REFRESH_TOKEN_NOTHING: {
     isSuccess: false,
     code: 3001,
-    message: 'Refresh_Token 이 없습니다.',
+    msg: 'Refresh_Token 이 없습니다.',
   },
   LOGIN_FAIL: {
     isSuccess: false,
     code: 3002,
-    message: '아이디 혹은 비밀번호를 확인해주세요.',
+    msg: '아이디 혹은 비밀번호를 확인해주세요.',
   },
 
   SIGNUP_REDUNDANT_EMAIL: { isSuccess: false, code: 3001, message: '중복된 이메일입니다.' },

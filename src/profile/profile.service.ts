@@ -53,13 +53,13 @@ class ProfileService {
     }
   }
 
-  async Save_follow(user_name: any, follow_user_name: any) {
+  async Save_follow(user_id: any, follow_user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
       const follow_status = 'FOLLOW';
       // 대상유저가 존재하는 아이디 인지 체크
-      const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_name);
+      const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_id);
       if (check_id.length == 0) {
         return response(baseResponse.USER_NOTHING);
       }
@@ -68,21 +68,16 @@ class ProfileService {
       // 요청한 적이 있으면 status를 FOLLOW로 바꿈
       const check_follow: any = await this.profileRepository.get_follow(
         conn,
-        user_name,
-        follow_user_name
+        user_id,
+        follow_user_id
       );
 
       if (check_follow.length == 0) {
         //   팔로우 함
-        await this.profileRepository.save_follow(conn, user_name, follow_user_name, follow_status);
+        await this.profileRepository.save_follow(conn, user_id, follow_user_id, follow_status);
       } else {
         // 팔로우 한적이 있으면 업데이트
-        await this.profileRepository.update_follow(
-          conn,
-          user_name,
-          follow_user_name,
-          follow_status
-        );
+        await this.profileRepository.update_follow(conn, user_id, follow_user_id, follow_status);
       }
       await conn.commit();
       return response(baseResponse.SUCCESS);

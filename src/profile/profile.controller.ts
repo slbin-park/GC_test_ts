@@ -13,15 +13,15 @@ const ProfileController = {
   get_profile: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
 
-    const response = await profileServiceInstance.Get_profile(req.params.user_name);
+    const response = await profileServiceInstance.Get_profile(req.params.user_id);
     res.status(200).send(response);
   },
 
   follow_user: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Save_follow(
-      req.body.user_name,
-      req.params.follow_user_name
+      req.body.user_id,
+      req.params.follow_user_id
     );
     res.status(200).send(response);
   },
@@ -29,16 +29,16 @@ const ProfileController = {
   get_feed: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Get_feed(
-      req.params.user_name,
+      req.params.user_id,
       req.body.last_board_id
     );
     res.status(200).send(response);
   },
 
   get_follow_feed: async (req: Request, res: Response) => {
-    const { user_name, last_board_id } = req.body;
+    const { user_id, last_board_id } = req.body;
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
-    const response = await profileServiceInstance.Get_feed_follow(user_name, last_board_id);
+    const response = await profileServiceInstance.Get_feed_follow(user_id, last_board_id);
     res.status(200).send(response);
   },
 };

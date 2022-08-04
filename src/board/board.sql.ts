@@ -1,6 +1,6 @@
 const SAVE = `
 INSERT INTO 
-board(  user_name_fk , board_status , board_content ) 
+board(  user_id_fk , board_status , board_content ) 
 VALUES(  ? , ? , ? );
 `;
 
@@ -17,13 +17,13 @@ WHERE board_id = ?
 
 const SAVE_REPLY = `
 INSERT INTO 
-board_reply( board_id_fk , user_name_fk , reply_content , reply_status ) 
+board_reply( board_id_fk , user_id_fk , reply_content , reply_status ) 
 VALUES( ? , ? , ? , 'VISIBLE' );
 `;
 
 const SAVE_BOARD_LIKE = `
 INSERT INTO
-board_like(board_id_fk, board_like_status, user_name_fk)
+board_like(board_id_fk, board_like_status, user_id_fk)
 VALUES(? , ?, ? )
 `;
 
@@ -32,7 +32,7 @@ SELECT *
 FROM board_like
 WHERE board_id_fk = ?
 AND
-user_name_fk = ?
+user_id_fk = ?
 `;
 
 const UPDATE_BOARD_LIKE = `
@@ -52,12 +52,12 @@ SELECT *
 FROM reply_like
 WHERE reply_id_fk = ?
 AND
-user_name_fk = ? ;
+user_id_fk = ? ;
 `;
 
 const SAVE_REPLY_LIKE = `
 INSERT INTO
-reply_like(reply_id_fk, reply_status , user_name_fk)
+reply_like(reply_id_fk, reply_status , user_id_fk)
 VALUES(? , ? , ? );
 `;
 
@@ -69,13 +69,13 @@ WHERE reply_like_id = ?
 
 const SAVE_REPLY_REPORT = `
 INSERT INTO
-reply_report (reply_id_Fk , report_content , user_name_fk , reply_report_status)
+reply_report (reply_id_Fk , report_content , user_id_fk , reply_report_status)
 VALUES( ? , ? , ? , ?);
 `;
 
 const SAVE_BOARD_REPORT = `
 INSERT INTO
-board_report (board_id, report_content, user_name_fk, board_report_status)
+board_report (board_id, report_content, user_id_fk, board_report_status)
 VALUES( ? , ? , ? , ?);
 `;
 
