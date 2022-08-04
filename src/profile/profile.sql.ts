@@ -1,61 +1,48 @@
-const FINDBYID = `
-SELECT user_name
+const GET_USER_NAME = `
+SELECT user_name,name
 FROM user
 WHERE user_name = ?;`;
 
-const CHECKID = `
-SELECT COUNT(*) as count
-FROM user
-WHERE user_name = ?;
-`;
-
-const FOLLOW = `INSERT INTO 
+const SAVE_FOLLOW = `INSERT INTO 
 follow(follow_user_fk , followed_user_fk , follow_status) 
 VALUES( ? , ? , ? );
 `;
 
-const CHECKFOLLOW = `
+const GET_FOLOW_USER = `
 SELECT *
 FROM follow
 WHERE follow_user_fk = ? AND followed_user_fk = ?
 `;
 
-const UPDATEFOLLOW = `
+const UPDATE_FOLLOW = `
 UPDATE follow 
 SET follow_status = ? 
 WHERE follow_user_fk = ? AND followed_user_fk = ?;
 `;
 
 // 팔로잉 유저 개수
-const FOLLOWCOUNT = `
+const GET_FOLLOWING_COUNT = `
 SELECT COUNT(*) as count
 FROM follow
 WHERE followed_user_fk = ?;
 `;
 
 // 팔로워 유저 개수
-const FOLLOWEDCOUNT = `
+const GET_FOLLOWER_COUNT = `
 SELECT COUNT(*) as count
 FROM follow
 WHERE follow_user_fk = ?;
 `;
 
 // 게시글 개수
-const BOARDCOUNT = `
+const GET_BOARD_COUNT = `
 SELECT COUNT(*) as count
 FROM board
 WHERE user_name_fk = ?;
 `;
 
-// 게시글 개수
-const USERNAME = `
-SELECT name 
-FROM user
-WHERE user_name = ?;
-`;
-
 // 피드 가져오기
-const FEED = `
+const GET_FEED = `
 SELECT board_id , image_address
 FROM board b
 INNER JOIN (SELECT image_address FROM board_image ORDER BY board_id_fk ASC LIMIT 1) bi
@@ -65,7 +52,7 @@ ORDER BY board_id DESC
 LIMIT 9;
 `;
 
-const GETALLFEED = `
+const GET_ALL_FEED_FOLLOW = `
 SELECT * , (
     SELECT COUNT(*)
     FROM board_reply br
@@ -96,15 +83,13 @@ LIMIT 10;
 `;
 
 export {
-  FINDBYID,
-  CHECKID,
-  FOLLOW,
-  CHECKFOLLOW,
-  UPDATEFOLLOW,
-  FOLLOWCOUNT,
-  FOLLOWEDCOUNT,
-  BOARDCOUNT,
-  USERNAME,
-  FEED,
-  GETALLFEED,
+  GET_USER_NAME,
+  SAVE_FOLLOW,
+  GET_FOLOW_USER,
+  UPDATE_FOLLOW,
+  GET_FOLLOWING_COUNT,
+  GET_FOLLOWER_COUNT,
+  GET_BOARD_COUNT,
+  GET_FEED,
+  GET_ALL_FEED_FOLLOW,
 };

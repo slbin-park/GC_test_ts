@@ -11,51 +11,35 @@ import ProfileService from './profile.service';
 
 const ProfileController = {
   get_profile: async (req: Request, res: Response) => {
-    try {
-      const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
 
-      const response = await profileServiceInstance.profile(req.params.user_name);
-      res.status(200).send(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const response = await profileServiceInstance.Get_profile(req.params.user_name);
+    res.status(200).send(response);
   },
+
   follow_user: async (req: Request, res: Response) => {
-    try {
-      const profileServiceInstance: ProfileService = Container.get(ProfileService);
-      const response = await profileServiceInstance.Follow(
-        req.body.user_name,
-        req.params.follow_user_name
-      );
-      res.status(200).send(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Save_follow(
+      req.body.user_name,
+      req.params.follow_user_name
+    );
+    res.status(200).send(response);
   },
+
   get_feed: async (req: Request, res: Response) => {
-    try {
-      const profileServiceInstance: ProfileService = Container.get(ProfileService);
-      const response = await profileServiceInstance.feed(
-        req.params.user_name,
-        req.body.last_board_id
-      );
-      res.status(200).send(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Get_feed(
+      req.params.user_name,
+      req.body.last_board_id
+    );
+    res.status(200).send(response);
   },
+
   get_follow_feed: async (req: Request, res: Response) => {
-    try {
-      const profileServiceInstance: ProfileService = Container.get(ProfileService);
-      const response = await profileServiceInstance.follow_feed(
-        req.body.user_name,
-        req.body.last_board_id
-      );
-      console.log('요청했냐');
-      res.status(200).send(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const { user_name, last_board_id } = req.body;
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Get_feed_follow(user_name, last_board_id);
+    res.status(200).send(response);
   },
 };
 

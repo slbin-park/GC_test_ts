@@ -4,7 +4,7 @@
 // access 토큰 검증
 // 카카오껀지
 import '../../config/env';
-import AuthRepository from '../../auth/auth.dm';
+import AuthRepository from '../../auth/auth.dao';
 import { Container, Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import pool from '../../config/db';

@@ -1,12 +1,16 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import 'reflect-metadata';
-import AuthRepository from './auth.dm';
+import AuthRepository from './auth.dao';
 import '../config/env';
 import jwt from '../middlewares/auth/jwt';
 import pool from '../config/db';
-const bcrypt = require('bcrypt');
 
+import { response, errResponse } from '../config/response';
+import logger from '../config/winston';
+import baseResponse from '../config/baseResponse';
+
+const bcrypt = require('bcrypt');
 const axios = require('axios');
 const fetch = require('node-fetch');
 
@@ -38,17 +42,17 @@ class AuthService {
       let check;
       let access_token;
       let refresh_token;
-      if (user_data[0].length == 0) {
-        return '존재하지 않는 아이디';
+      if (user_data.length == 0) {
+        return response(baseResponse.USER_NOTHING);
       }
       // 자체 로그인일 경우 비밀번호 확인함
-      if (user_data[0][0].register == 'SELF') {
+      if (user_data[0].register == 'SELF') {
         // 해쉬 알고리즘으로 비밀번호 같은지 체크함
-        check = await bcrypt.compare(password, user_data[0][0].password);
+        check = await bcrypt.compare(password, user_data[0].password);
       }
       // 카카오 일 경우 유저 아이디만 확인함
-      if (user_data[0][0].register == 'KAKAO') {
-        check = social_id == user_data[0][0].social_id ? true : false;
+      if (user_data[0].register == 'KAKAO') {
+        check = social_id == user_data[0].social_id ? true : false;
       }
       // 로그인 성공시
       if (check) {
@@ -60,34 +64,28 @@ class AuthService {
 
         return { access_token, refresh_token };
       } else {
-        return { success: false };
+        return response(baseResponse.LOGIN_FAIL);
       }
       // console.log(user_data);
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(`App - login AuthService error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
   }
 
   async kakao_login() {
-    try {
-      console.log('kakao 로그인 실행');
-      const config: any = {
-        client_id: process.env.KAKAO_CLIENT_ID,
-        redirect_uri: KAKAO_REDIRECT_URI,
-        response_type: 'code',
-      };
+    const config: any = {
+      client_id: process.env.KAKAO_CLIENT_ID,
+      redirect_uri: KAKAO_REDIRECT_URI,
+      response_type: 'code',
+    };
 
-      const params = new URLSearchParams(config).toString();
+    const params = new URLSearchParams(config).toString();
 
-      const finalUrl = `${KAKAO_LOGIN_URL}?${params}`;
-      return finalUrl;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
+    const finalUrl = `${KAKAO_LOGIN_URL}?${params}`;
+    return finalUrl;
   }
 
   async kakao_login_callback(code: any) {
@@ -118,19 +116,21 @@ class AuthService {
       } else {
         return 'access_token 없음';
       }
-      console.log(res_data.id);
       // res_data 에서 userid 뽑아서 db에서 검색 후
       // 가입하지않았으면 login fail 넣어주고
       // 가입했으면 login success
       // access , refresh token 을 보내줌
 
-      return {
+      return response(baseResponse.SUCCESS, {
         id: res_data.id,
         access_token: json.access_token,
         refresh_token: json.refresh_token,
-      }; // 프론트엔드에서 확인하려고
-    } catch (err) {
-      console.log(err);
+      }); // 프론트엔드에서 확인하려고
+    } catch (err: any) {
+      logger.error(
+        `App - kakao_login_callback AuthService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     }
   }
 
@@ -145,8 +145,11 @@ class AuthService {
         },
       });
       return get_data.data;
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      logger.error(
+        `App - get_kakao_data AuthService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     }
   }
 
@@ -165,9 +168,6 @@ class AuthService {
       let kakao_token;
       kakao_token = await axios.post(finalUrl).catch((err: any) => {
         return { status: err.response.status, data: err.response.data };
-        // console.log(err.response.data);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
       });
       if (kakao_token != undefined) {
         if (kakao_token.refresh_token != undefined) {

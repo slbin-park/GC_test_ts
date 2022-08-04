@@ -1,4 +1,4 @@
-const response = ({ isSuccess, code, msg }: any, result: any) => {
+const response = ({ isSuccess, code, msg }: any, result?: any) => {
   return {
     isSuccess,
     code,

@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import '../config/env';
 import AuthController from './auth.controller';
-import { check_toekn, check_code } from '../middlewares/validations/authValidation';
+import * as Authavlidation from './authValidation';
 
 const router = express.Router();
 
@@ -11,9 +11,13 @@ router.post('/login', AuthController.login);
 
 router.get('/kakao', AuthController.kakao_login);
 
-router.get('/kakao/callback', check_code, AuthController.kakao_login_callback);
+router.get('/kakao/callback', Authavlidation.check_code, AuthController.kakao_login_callback);
 // 프론트에서 query.code 에 받은 코드 넣어서 보내야함
 
-router.post('/access_token', check_toekn, AuthController.kakao_get_access_token);
+router.post(
+  '/access-token',
+  Authavlidation.post_access_token_vali,
+  AuthController.kakao_get_access_token
+);
 
 export default router;

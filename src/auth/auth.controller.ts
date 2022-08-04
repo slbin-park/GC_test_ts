@@ -9,44 +9,29 @@ import AuthService from './auth.service';
 // 유효성 검사가 끝난 후 req가 넘어옴
 const AuthController = {
   login: async (req: Request, res: Response) => {
-    try {
-      const AuthServiceInstance: AuthService = Container.get(AuthService);
-      const response = await AuthServiceInstance.login(req.body.user_name, req.body.password);
-      res.send({ success: true, response });
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const AuthServiceInstance: AuthService = Container.get(AuthService);
+    const { user_name, password } = req.body;
+    const response = await AuthServiceInstance.login(user_name, password);
+    res.send({ success: true, response });
   },
 
   kakao_login: async (req: Request, res: Response) => {
-    try {
-      const AuthServiceInstance: AuthService = Container.get(AuthService);
-      const response = await AuthServiceInstance.kakao_login();
-      res.redirect(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const AuthServiceInstance: AuthService = Container.get(AuthService);
+    const response = await AuthServiceInstance.kakao_login();
+    res.redirect(response);
   },
 
   kakao_login_callback: async (req: Request, res: Response) => {
-    try {
-      const AuthServiceInstance: AuthService = Container.get(AuthService);
-      const response = await AuthServiceInstance.kakao_login_callback(req.query.code);
-      res.send(response);
-    } catch (err) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const AuthServiceInstance: AuthService = Container.get(AuthService);
+    const response = await AuthServiceInstance.kakao_login_callback(req.query.code);
+    res.send(response);
   },
 
   kakao_get_access_token: async (req: Request, res: Response) => {
-    try {
-      const AuthServiceInstance: AuthService = Container.get(AuthService);
-      const a = req.headers.Authorization;
-      const response = await AuthServiceInstance.kakao_get_access_token(req.headers.authorization);
-      res.send(response);
-    } catch (err: any) {
-      res.status(500).send({ success: 'false', err });
-    }
+    const AuthServiceInstance: AuthService = Container.get(AuthService);
+    const a = req.headers.Authorization;
+    const response = await AuthServiceInstance.kakao_get_access_token(req.headers.authorization);
+    res.send(response);
   },
 };
 

@@ -9,7 +9,7 @@ import { response, errResponse } from '../config/response';
 import logger from '../config/winston';
 import baseResponse from '../config/baseResponse';
 
-import UserRepository from './user.dm';
+import UserRepository from './user.dao';
 import jwt from '../middlewares/auth/jwt';
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -29,18 +29,38 @@ class UserService {
     this.userRepository = Container.get(UserRepository);
   }
 
-  async Save(user: any) {
+  async Save(
+    user_name: any,
+    phone_number: any,
+    name: any,
+    password: any,
+    birthday: any,
+    register: any,
+    user_status: any,
+    accept_date: any
+  ) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
-      const access_token = await jwt.create_access_token(user.user_name);
+      const access_token = await jwt.create_access_token(user_name);
       const refresh_token = await jwt.create_refresh_token();
-      user.refresh_token = refresh_token;
-      user.password = await bcrypt.hash(user.password, saltRounds);
-      await this.userRepository.save(conn, user);
+      password = await bcrypt.hash(password, saltRounds);
+      const SaveData = [
+        user_name,
+        phone_number,
+        name,
+        password,
+        birthday,
+        register,
+        user_status,
+        accept_date,
+        refresh_token,
+      ];
+      await this.userRepository.save(conn, SaveData);
+      // save 에 필요함
       await conn.commit();
       return response(baseResponse.SUCCESS, {
-        user_name: user.user_name,
+        user_name,
         access_token,
         refresh_token,
       });
@@ -53,18 +73,39 @@ class UserService {
     }
   }
 
-  async Save_Kakao(user: any) {
+  async Save_Kakao(
+    user_name: any,
+    phone_number: any,
+    name: any,
+    password: any,
+    birthday: any,
+    register: any,
+    user_status: any,
+    accept_date: any,
+    social_id: any
+  ) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
 
-      const access_token = await jwt.create_access_token(user.user_name);
+      const access_token = await jwt.create_access_token(user_name);
       const refresh_token = await jwt.create_refresh_token();
-      user.refresh_token = refresh_token;
-      await this.userRepository.save_kakao(conn, user);
+      const SaveUserKakaoData = [
+        user_name,
+        phone_number,
+        name,
+        password,
+        birthday,
+        register,
+        user_status,
+        accept_date,
+        social_id,
+        refresh_token,
+      ];
+      await this.userRepository.save_kakao(conn, SaveUserKakaoData);
       await conn.commit();
       return response(baseResponse.SUCCESS, {
-        user_name: user.user_name,
+        user_name,
         access_token,
         refresh_token,
       });

@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Container } from 'typedi';
 import 'reflect-metadata';
-import { User } from './dto/user.dto';
-import { Kakao_User } from './dto/kakao_user.dto';
 
 import UserService from './user.service';
 
@@ -13,15 +11,43 @@ const UserController = {
   post_user: async (req: Request, res: Response) => {
     const userServiceInstance: UserService = Container.get(UserService);
     let user, response;
+    const {
+      user_name,
+      phone_number,
+      name,
+      password,
+      birthday,
+      register,
+      user_status,
+      accept_date,
+      refresh_token,
+      social_id,
+    } = req.body;
     if (req.body.register == 'KAKAO') {
-      user = new Kakao_User(req.body);
-      response = await userServiceInstance.Save_Kakao(user);
+      response = await userServiceInstance.Save_Kakao(
+        user_name,
+        phone_number,
+        name,
+        password,
+        birthday,
+        register,
+        user_status,
+        accept_date,
+        social_id
+      );
     } else if (req.body.register == 'SELF') {
-      user = new User(req.body);
-      response = await userServiceInstance.Save(user);
-      console.log(response);
+      response = await userServiceInstance.Save(
+        user_name,
+        phone_number,
+        name,
+        password,
+        birthday,
+        register,
+        user_status,
+        accept_date
+      );
+      res.send(response);
     }
-    res.status(200).json(response);
   },
 
   get_user: async (req: Request, res: Response) => {
@@ -36,7 +62,8 @@ const UserController = {
     const response = await userServiceInstance.Find_Id(id);
     res.status(200).json(response);
   },
-  eidt_user_profile: async (req: Request, res: Response) => {
+  // 구현해야함 - 0804
+  update_user_profile: async (req: Request, res: Response) => {
     const { id } = req.params;
     const userServiceInstance: UserService = Container.get(UserService);
     const response = await userServiceInstance.Find_Id(id);

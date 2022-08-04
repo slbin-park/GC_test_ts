@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
-
+import baseResponse from '../config/baseResponse';
 // refresh_token이 있는지
-const check_toekn = (req: Request, res: Response, next: NextFunction) => {
+const post_access_token_vali = (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.headers);
   if (req.headers.authorization == undefined) {
-    res.send('리프레시토큰 없음');
+    res.send(baseResponse.REFRESH_TOKEN_NOTHING);
   } else {
     next();
   }
@@ -19,4 +19,4 @@ const check_code = (req: Request, res: Response, next: NextFunction) => {
     return res.redirect('/login');
   }
 };
-export { check_toekn, check_code };
+export { post_access_token_vali, check_code };

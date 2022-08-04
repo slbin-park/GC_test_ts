@@ -18,9 +18,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
@@ -30,9 +27,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         },
         "requestBody": {
@@ -41,39 +35,39 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "register": {
-                    "example": "any"
-                  },
-                  "refresh_token": {
-                    "example": "any"
-                  },
                   "social_id": {
+                    "example": "any"
+                  },
+                  "register": {
                     "example": "any"
                   },
                   "user_name": {
                     "example": "any"
                   },
-                  "password": {
-                    "example": "any"
-                  },
                   "phone_number": {
                     "example": "any"
                   },
+                  "password": {
+                    "example": "any"
+                  },
                   "birthday": {
+                    "example": "any"
+                  },
+                  "accept_date": {
+                    "example": "any"
+                  },
+                  "name": {
+                    "example": "any"
+                  },
+                  "user_status": {
+                    "example": "any"
+                  },
+                  "refresh_token": {
                     "example": "any"
                   }
                 }
               }
             }
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -94,9 +88,17 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -209,9 +211,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -336,6 +335,56 @@
         }
       }
     },
+    "/api/board/{board_id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "board_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "419": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_name": {
+                    "example": "any"
+                  },
+                  "board_content": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/board/{board_id}/report": {
       "post": {
         "description": "",
@@ -402,9 +451,6 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "401": {
             "description": "Unauthorized"
           },
@@ -425,12 +471,6 @@
                     "example": "any"
                   },
                   "reply_content": {
-                    "example": "any"
-                  },
-                  "board_content": {
-                    "example": "any"
-                  },
-                  "images": {
                     "example": "any"
                   }
                 }

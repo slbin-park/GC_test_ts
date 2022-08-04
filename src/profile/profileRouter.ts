@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { check_profile, check_follow } from '../middlewares/validations/profileValidation';
+import * as Profilevalidation from './profileValidation';
 import jwt from '../middlewares/auth/jwt';
 import '../config/env';
 import ProfileController from './profile.controller';
@@ -21,7 +21,7 @@ router.get('/user/:user_name', jwt.check_access_token, ProfileController.get_pro
 router.post(
   '/follow/:follow_user_name',
   jwt.check_access_token,
-  check_follow,
+  Profilevalidation.pose_follow_vali,
   ProfileController.follow_user
 );
 export default router;
