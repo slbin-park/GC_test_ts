@@ -14,7 +14,7 @@ const ProfileController = {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
 
     const response = await profileServiceInstance.Get_profile(req.params.user_id);
-    res.status(200).send(response);
+    res.send(response);
   },
 
   follow_user: async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ const ProfileController = {
       req.body.user_id,
       req.params.follow_user_id
     );
-    res.status(200).send(response);
+    res.send(response);
   },
 
   get_feed: async (req: Request, res: Response) => {
@@ -32,14 +32,26 @@ const ProfileController = {
       req.params.user_id,
       req.body.last_board_id
     );
-    res.status(200).send(response);
+    res.send(response);
   },
 
   get_follow_feed: async (req: Request, res: Response) => {
     const { user_id, last_board_id } = req.body;
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Get_feed_follow(user_id, last_board_id);
-    res.status(200).send(response);
+    res.send(response);
+  },
+
+  update_user_profile: async (req: Request, res: Response) => {
+    const { user_id, profileUrl, website, introduction } = req.body;
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Update_user_profile(
+      user_id,
+      profileUrl,
+      website,
+      introduction
+    );
+    res.send(response);
   },
 };
 

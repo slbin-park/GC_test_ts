@@ -82,6 +82,12 @@ ORDER BY board_id DESC
 LIMIT 10;
 `;
 
+const UPDATE_USER_PROFILE = `
+UPDATE user 
+SET profileUrl = ? , website = ? , introduction = ?
+WHERE user_id = ? ;
+`;
+
 export {
   GET_USER_ID,
   SAVE_FOLLOW,
@@ -92,4 +98,5 @@ export {
   GET_BOARD_COUNT,
   GET_FEED,
   GET_ALL_FEED_FOLLOW,
+  UPDATE_USER_PROFILE,
 };

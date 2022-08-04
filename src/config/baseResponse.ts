@@ -146,6 +146,12 @@ export = {
 
   SIGNUP_NAME_EMPTY: { isSuccess: false, code: 2030, msg: '이름을 입력해주세요.' },
 
+  PROFILE_URL_EMPTY: { isSuccess: false, code: 2031, msg: '프로필 URL을 입력해주세요' },
+
+  WEBSITE__EMPTY: { isSuccess: false, code: 2031, msg: '웹 사이트를 입력해주세요' },
+
+  INTRODUCTION__EMPTY: { isSuccess: false, code: 2031, msg: '소개를 입력해주세요' },
+
   // Response error
   REFRESH_TOKEN_NOTHING: {
     isSuccess: false,

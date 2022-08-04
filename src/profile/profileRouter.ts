@@ -17,11 +17,19 @@ router.get('/feed/:user_id', jwt.check_access_token, ProfileController.get_feed)
 // 프로필 정보 가져오기
 router.get('/user/:user_id', jwt.check_access_token, ProfileController.get_profile);
 
+// 프로필 수정
+router.put(
+  '/user',
+  jwt.check_access_token,
+  Profilevalidation.put_user_profile,
+  ProfileController.update_user_profile
+);
+
 // 팔로우 하기
 router.post(
   '/follow/:user_id',
   jwt.check_access_token,
-  Profilevalidation.pose_follow_vali,
+  Profilevalidation.post_follow_vali,
   ProfileController.follow_user
 );
 export default router;

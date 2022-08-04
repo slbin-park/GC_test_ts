@@ -9,9 +9,4 @@ router.get('/:id', UserController.get_user_id);
 
 router.post('/', Uservalidation.post_user_vali, UserController.post_user);
 
-router.put('/profile', (req: Request, res: Response) => {
-  console.log(`${req.method} 가 요청되었습니다.`);
-  res.send(`${req.method} 가 요청되었습니다.`);
-});
-
 export default router;
