@@ -4,6 +4,11 @@ import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
 
 import pool from '../config/db';
+
+import { response, errResponse } from '../config/response';
+import logger from '../config/winston';
+import baseResponse from '../config/baseResponse';
+
 import UserRepository from './user.dm';
 import jwt from '../middlewares/auth/jwt';
 const bcrypt = require('bcrypt');
@@ -28,22 +33,21 @@ class UserService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
-
-      let access_token;
-      let refresh_token;
-      let response;
-      access_token = await jwt.create_access_token(user.user_name);
-      refresh_token = await jwt.create_refresh_token();
+      const access_token = await jwt.create_access_token(user.user_name);
+      const refresh_token = await jwt.create_refresh_token();
       user.refresh_token = refresh_token;
       user.password = await bcrypt.hash(user.password, saltRounds);
-      response = await this.userRepository.save(conn, user);
-      console.log('서비스 실행');
+      await this.userRepository.save(conn, user);
       await conn.commit();
-      return { user_name: user.user_name, access_token, refresh_token, success: true };
+      return response(baseResponse.SUCCESS, {
+        user_name: user.user_name,
+        access_token,
+        refresh_token,
+      });
     } catch (err: any) {
       await conn.rollback();
-      console.log(err);
-      throw err;
+      logger.error(`App - SaveUser UserService error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -54,19 +58,20 @@ class UserService {
     try {
       await conn.beginTransaction();
 
-      let access_token;
-      let refresh_token;
-      access_token = await jwt.create_access_token(user.user_name);
-      refresh_token = await jwt.create_refresh_token();
+      const access_token = await jwt.create_access_token(user.user_name);
+      const refresh_token = await jwt.create_refresh_token();
       user.refresh_token = refresh_token;
-      const response = await this.userRepository.save_kakao(conn, user);
+      await this.userRepository.save_kakao(conn, user);
       await conn.commit();
-
-      return { user_name: user.user_name, access_token, refresh_token, success: true };
+      return response(baseResponse.SUCCESS, {
+        user_name: user.user_name,
+        access_token,
+        refresh_token,
+      });
     } catch (err: any) {
       await conn.rollback();
-      console.log(err);
-      throw err;
+      logger.error(`App - Save_Kakao UserService error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -75,13 +80,11 @@ class UserService {
   async Find() {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
-      const response = await this.userRepository.find(conn);
-      console.log(response);
-      await conn.commit();
-      return { response, success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+      const Find_response = await this.userRepository.find(conn);
+      return response(baseResponse.SUCCESS, Find_response);
+    } catch (err: any) {
+      logger.error(`App - Saveuser Service error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -90,12 +93,11 @@ class UserService {
   async Find_Id(id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
-      const response = await this.userRepository.findById(conn, id);
-      await conn.commit();
-      return { response, success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+      const Find_Id_response = await this.userRepository.findById(conn, id);
+      return response(baseResponse.SUCCESS, Find_Id_response);
+    } catch (err: any) {
+      logger.error(`App - Saveuser Service error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }

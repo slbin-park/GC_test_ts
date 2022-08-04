@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import '../config/env';
-import BoardController from '../board/board.controller';
+import BoardController from './board.controller';
 import jwt from '../middlewares/auth/jwt';
 import {
   check_reply,

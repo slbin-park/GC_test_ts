@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import UserController from '../user/user.controller';
+import UserController from './user.controller';
 import { check_req } from '../middlewares/validations/userValidation';
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/:id', UserController.get_user_id);
 
 router.post('/', check_req, UserController.post_user);
 
-router.put('/', (req: Request, res: Response) => {
+router.put('/profile', (req: Request, res: Response) => {
   console.log(`${req.method} 가 요청되었습니다.`);
   res.send(`${req.method} 가 요청되었습니다.`);
 });

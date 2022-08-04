@@ -43,6 +43,8 @@ const check_board_edit = (req: Request, res: Response, next: NextFunction) => {
   const { board_content } = req.body;
   if (board_content == undefined) {
     res.send('수정 내용 없음');
+  } else if (board_content.length > 1000) {
+    res.send('수정 내용 1000자 이상 불가능');
   } else {
     next();
   }

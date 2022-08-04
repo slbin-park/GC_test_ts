@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { check_profile, check_follow } from '../middlewares/validations/profileValidation';
 import jwt from '../middlewares/auth/jwt';
 import '../config/env';
-import ProfileController from '../profile/profile.controller';
+import ProfileController from './profile.controller';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import '../config/env';
-import AuthController from '../auth/auth.controller';
+import AuthController from './auth.controller';
 import { check_toekn, check_code } from '../middlewares/validations/authValidation';
 
 const router = express.Router();

@@ -5,6 +5,10 @@ import BoardRepository from './board.dao';
 import '../config/env';
 import pool from '../config/db';
 
+import { response, errResponse } from '../config/response';
+import logger from '../config/winston';
+import baseResponse from '../config/baseResponse';
+
 // datamanager 에서 데이틀 가져와
 // 컨트롤러로 반환해주는 역할
 
@@ -37,11 +41,12 @@ class BoardService {
       }
 
       await conn.commit();
-
-      return { msg: '게시글 등록 성공', success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      logger.error(
+        `App - Save_board BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -52,25 +57,25 @@ class BoardService {
     try {
       let success = true;
       let msg = '댓글 저장에 성공했습니다.';
-      let response = '';
       await conn.beginTransaction();
-
+      let save_reply;
       const { board_id, user_name, reply_content } = replyInfo;
       const reply_info = [board_id, user_name, reply_content];
       const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
-      if (check_board_id[0].length == 0) {
+      if (check_board_id.length == 0) {
         success = false;
         msg = '없는 게시글 입니다.';
       } else {
-        const save_reply = await this.boardRepository.save_reply(conn, reply_info);
-        response = save_reply[0];
+        save_reply = await this.boardRepository.save_reply(conn, reply_info);
       }
       await conn.commit();
 
-      return { success, response, msg };
-    } catch (err) {
-      console.log(err);
-      throw err;
+      return response(baseResponse.SUCCESS, save_reply);
+    } catch (err: any) {
+      logger.error(
+        `App - Save_reply BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -116,9 +121,11 @@ class BoardService {
       const save_board_like_info = [board_id, board_like_status, user_name];
       const response = await this.boardRepository.save_board_like(conn, save_board_like_info);
       return { response, success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Save_board_like BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -162,9 +169,11 @@ class BoardService {
         // 좋아요 누른적이 없는데 취소를 했을경우
         return { success: true, msg: '좋아요 누른적 없는 게시글' };
       }
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Cancel_baord_like BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -210,9 +219,11 @@ class BoardService {
         conn.commit();
         return { response: response[0], success: '댓글 좋아요 저장 성공' };
       }
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Save_reply_like BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -252,9 +263,11 @@ class BoardService {
       } else {
         return { success: '댓글 좋아요 누른적 없음' };
       }
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Cancel_reply_like BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -281,9 +294,11 @@ class BoardService {
         reply_report_info
       );
       return { response: save_reply_report, success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Save_reply_report BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -310,9 +325,11 @@ class BoardService {
         board_report_info
       );
       return { response: save_board_report, success: true };
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Save_board_report BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }
@@ -332,9 +349,11 @@ class BoardService {
         conn.commit();
         return { success: true, update_board: update_board[0], msg: '게시글 수정에 성공했습니다.' };
       }
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err: any) {
+      logger.error(
+        `App - Update_board BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
     } finally {
       conn.release();
     }

@@ -1,8 +1,8 @@
 import express from 'express';
-import user from './userRouter';
-import auth from './authRouter';
-import board from './boardRouter';
-import profile from './profileRouter';
+import user from '../user/userRouter';
+import auth from '../auth/authRouter';
+import board from '../board/boardRouter';
+import profile from '../profile/profileRouter';
 const router = express();
 
 router.use('/user', user);
