@@ -54,4 +54,33 @@ const post_user_vali = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { post_user_vali };
+const get_user_name = (req: Request, res: Response, next: NextFunction) => {
+  const { user_name } = req.body;
+  if (!user_name) {
+    res.send(baseResponse.SIGNUP_USERNAME_EMPTY);
+    return;
+  } else {
+    next();
+  }
+};
+
+const put_user_name = (req: Request, res: Response, next: NextFunction) => {
+  const { user_name } = req.body;
+  if (!user_name) {
+    res.send(baseResponse.SIGNUP_USERNAME_EMPTY);
+    return;
+  } else {
+    next();
+  }
+};
+const put_user_status = (req: Request, res: Response, next: NextFunction) => {
+  const { user_status } = req.body;
+  if (!user_status) {
+    res.send(baseResponse.CHANGE_USER_STATUS_EMPTY);
+  } else if (user_status != 'PRIVATE' && user_status != 'ACTIVE' && user_status != 'DELETE') {
+    res.send(baseResponse.USER_STATUS_WRONG);
+  } else {
+    next();
+  }
+};
+export { post_user_vali, get_user_name, put_user_name, put_user_status };

@@ -176,7 +176,36 @@ class AuthService {
         return kakao_token.access_token;
       }
     } catch (err: any) {
-      //   console.log(err);
+      logger.error(
+        `App - kakao_get_access_token AuthService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    }
+  }
+
+  async auto_login(refresh_token: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+
+    try {
+      console.log('실행');
+      const check_refresh_token: any = await jwt.check_refresh_token(refresh_token);
+      if (!check_refresh_token.success) {
+        return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
+      }
+      const get_user_data: any = await this.authRepository.get_by_refresh_token(
+        conn,
+        refresh_token
+      );
+      if (get_user_data.length == 0) {
+        return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
+      } else {
+        const access_token = await jwt.create_access_token(get_user_data.user_id);
+        return response(baseResponse.SUCCESS, { access_token });
+      }
+    } catch (err: any) {
+      conn.rollback();
+      logger.error(`App - auto_login AuthService error\n: ${err.message} \n${JSON.stringify(err)}`);
+      return errResponse(baseResponse.DB_ERROR);
     }
   }
 }

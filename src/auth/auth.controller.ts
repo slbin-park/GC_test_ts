@@ -33,6 +33,12 @@ const AuthController = {
     const response = await AuthServiceInstance.kakao_get_access_token(req.headers.authorization);
     res.send(response);
   },
+  auto_login: async (req: Request, res: Response) => {
+    const AuthServiceInstance: AuthService = Container.get(AuthService);
+    const refresh_token = req.headers.authorization?.split(' ')[1];
+    const response: any = await AuthServiceInstance.auto_login(refresh_token);
+    res.send(response);
+  },
 };
 
 export default AuthController;

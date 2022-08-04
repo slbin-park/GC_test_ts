@@ -18,6 +18,16 @@ class AuthRepository {
     const [get_user_date] = await conn.query(sql.GET_BY_USERNAME, id);
     return get_user_date;
   }
+
+  async get_by_user_name(conn: any, user_name: any) {
+    const [get_by_user_name] = await conn.query(sql.GET_BY_USERNAME, user_name);
+    return get_by_user_name;
+  }
+
+  async get_by_refresh_token(conn: any, refresh_token: any) {
+    const [get_by_refresh_token] = await conn.query(sql.GET_BY_REFRESH_TOKEN, refresh_token);
+    return get_by_refresh_token;
+  }
 }
 
 export default AuthRepository;

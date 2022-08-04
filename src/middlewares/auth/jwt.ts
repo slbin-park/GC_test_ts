@@ -60,11 +60,12 @@ const check_access_token = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-const check_refresh_token = (refresh_token: any) => {
+const check_refresh_token = async (refresh_token: any) => {
   try {
     const secret_key = process.env.JWT_REFRESH_SECRET;
+    const token = await jwt.verify(refresh_token, secret_key);
     return {
-      token: jwt.verify(refresh_token, secret_key),
+      token,
       success: true,
     };
   } catch (error: any) {

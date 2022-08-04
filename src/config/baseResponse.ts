@@ -150,7 +150,17 @@ export = {
 
   WEBSITE__EMPTY: { isSuccess: false, code: 2031, msg: '웹 사이트를 입력해주세요' },
 
-  INTRODUCTION__EMPTY: { isSuccess: false, code: 2031, msg: '소개를 입력해주세요' },
+  INTRODUCTION_EMPTY: { isSuccess: false, code: 2031, msg: '소개를 입력해주세요' },
+
+  CHANGE_USER_NAME_OVER: { isSuccess: false, code: 2032, msg: '14일 이내에 2번 변경하였습니다.' },
+
+  CHANGE_USER_STATUS_EMPTY: { isSuccess: false, code: 2033, msg: '유저 상태를 입력해주세요.' },
+
+  USER_STATUS_WRONG: {
+    isSuccess: false,
+    code: 2033,
+    msg: '유저 상태는 PRVIATE , ACTIVE , DELETE 만 가능합니다.',
+  },
 
   // Response error
   REFRESH_TOKEN_NOTHING: {
@@ -164,7 +174,7 @@ export = {
     msg: '아이디 혹은 비밀번호를 확인해주세요.',
   },
 
-  SIGNUP_REDUNDANT_EMAIL: { isSuccess: false, code: 3001, message: '중복된 이메일입니다.' },
+  SIGNUP_REDUNDANT_USER_NAME: { isSuccess: false, code: 3001, msg: '중복된 사용자 이름입니다.' },
   SIGNUP_REDUNDANT_NICKNAME: { isSuccess: false, code: 3002, message: '중복된 닉네임입니다.' },
 
   SIGNIN_EMAIL_WRONG: { isSuccess: false, code: 3003, message: '아이디가 잘못 되었습니다.' },

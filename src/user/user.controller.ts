@@ -52,21 +52,39 @@ const UserController = {
   get_user: async (req: Request, res: Response) => {
     const userServiceInstance: UserService = Container.get(UserService);
     const response = await userServiceInstance.Find();
-    res.status(200).json(response);
+    res.json(response);
   },
 
   get_user_id: async (req: Request, res: Response) => {
     const { id } = req.params;
     const userServiceInstance: UserService = Container.get(UserService);
     const response = await userServiceInstance.Find_Id(id);
-    res.status(200).json(response);
+    res.json(response);
   },
   // 구현해야함 - 0804
   update_user_profile: async (req: Request, res: Response) => {
     const { id } = req.params;
     const userServiceInstance: UserService = Container.get(UserService);
     const response = await userServiceInstance.Find_Id(id);
-    res.status(200).json(response);
+    res.json(response);
+  },
+  get_user_name: async (req: Request, res: Response) => {
+    const { user_name } = req.body;
+    const userServiceInstance: UserService = Container.get(UserService);
+    const response = await userServiceInstance.Find_user_name(user_name);
+    res.json(response);
+  },
+  update_user_name: async (req: Request, res: Response) => {
+    const { user_name, user_id } = req.body;
+    const userServiceInstance: UserService = Container.get(UserService);
+    const response = await userServiceInstance.Update_user_name(user_name, user_id);
+    res.json(response);
+  },
+  update_user_status: async (req: Request, res: Response) => {
+    const { user_id, user_status } = req.body;
+    const userServiceInstance: UserService = Container.get(UserService);
+    const response = await userServiceInstance.Update_user_status(user_id, user_status);
+    res.json(response);
   },
 };
 

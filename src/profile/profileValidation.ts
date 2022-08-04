@@ -19,7 +19,7 @@ const put_user_profile = (req: Request, res: Response, next: NextFunction) => {
   } else if (website == undefined) {
     res.send(baseResponse.PROFILE_URL_EMPTY);
   } else if (introduction == undefined) {
-    res.send(baseResponse.INTRODUCTION__EMPTY);
+    res.send(baseResponse.INTRODUCTION_EMPTY);
   } else {
     next();
   }
