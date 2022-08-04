@@ -1,5 +1,5 @@
 const GET_USER_ID = `
-SELECT user_name,name
+SELECT user_name,name,profileUrl,website,introduction
 FROM user
 WHERE user_id = ?;`;
 
@@ -53,7 +53,10 @@ LIMIT 9;
 `;
 
 const GET_ALL_FEED_FOLLOW = `
-SELECT * , (
+SELECT u.user_name , b.board_id , b.board_content ,
+u.user_id, u.profileUrl,
+IF(bl.board_like_status = 'ACTIVE', 'LIKE', 'UNLIKE') as likeOrNot,
+(
     SELECT COUNT(*)
     FROM board_reply br
     WHERE b.board_id = br.board_id_fk
@@ -63,23 +66,43 @@ SELECT * , (
     SELECT COUNT(*)
     FROM board_like bl
     WHERE b.board_id = bl.board_id_fk
-    ) as board_like_count
+    ) as board_like_count,
+    case
+               when timestampdiff(second, b.update_at, current_timestamp) < 60
+                   then concat(timestampdiff(second, b.update_at, current_timestamp), '초 전')
+               when timestampdiff(minute , b.update_at, current_timestamp) < 60
+                   then concat(timestampdiff(minute, b.update_at, current_timestamp), '분 전')
+               when timestampdiff(hour , b.update_at, current_timestamp) < 24
+                   then concat(timestampdiff(hour, b.update_at, current_timestamp), '시간 전')
+               when timestampdiff(day , b.update_at, current_timestamp) < 365
+                   then concat(timestampdiff(day, b.update_at, current_timestamp), '일 전')
+               else concat(MONTH(b.update_at) ,'월',DAY(b.update_at), '일')
+           end as uploadTime
 FROM board b
-INNER JOIN(
-SELECT board_id_fk,group_concat(image_address) as image_addresses
-FROM board_image bi1
-GROUP BY board_id_fk) bi
-ON b.board_id = bi.board_id_fk
+    LEFT JOIN user as u
+    ON b.user_id_fk = u.user_id
+    LEFT JOIN board_like bl
+    ON b.board_id = bl.board_id_fk
 WHERE b.user_id_fk IN (
     SELECT follow_user_fk
     FROM follow
     WHERE followed_user_fk = ?
     AND
-        follow_status = 'FOLLOW'
+    follow_status = 'FOLLOW'
     )
+
 AND b.board_id < ?
+AND b.board_status = 'ACTIVE'
 ORDER BY board_id DESC
 LIMIT 10;
+`;
+
+const GET_BOARD_IMG = `
+SELECT bi.image_id,bi.image_address
+FROM board b
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+WHERE b.board_id = ?
 `;
 
 const UPDATE_USER_PROFILE = `
@@ -99,4 +122,5 @@ export {
   GET_FEED,
   GET_ALL_FEED_FOLLOW,
   UPDATE_USER_PROFILE,
+  GET_BOARD_IMG,
 };

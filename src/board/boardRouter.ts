@@ -16,6 +16,9 @@ router.post('/:board_id/like', jwt.check_access_token, BoardController.save_boar
 // 게시글 좋아요 취소
 router.put('/:board_id/unlike', jwt.check_access_token, BoardController.cancel_board_like);
 
+// 게시글 삭제
+router.put('/:board_id/delete', jwt.check_access_token, BoardController.delete_board);
+
 // 게시글 수정
 router.put(
   '/:board_id',
@@ -31,6 +34,10 @@ router.post(
   BoardValidation.post_board_report_vali,
   BoardController.save_board_report
 );
+
+// ------------------댓글----------------------
+
+router.get('/reply/:board_id', jwt.check_access_token, BoardController.get_board_reply);
 
 // 댓글 작성
 router.post(

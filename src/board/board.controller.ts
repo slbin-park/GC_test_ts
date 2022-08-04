@@ -97,6 +97,19 @@ const BoardController = {
     );
     res.send({ response });
   },
+  delete_board: async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    const boardServiceInstance: BoardService = Container.get(BoardService);
+    const response = await boardServiceInstance.Update_board_status(req.params.board_id, user_id);
+    res.send({ response });
+  },
+
+  get_board_reply: async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    const boardServiceInstance: BoardService = Container.get(BoardService);
+    const response = await boardServiceInstance.Get_board_reply(req.params.board_id, user_id);
+    res.send({ response });
+  },
 };
 
 export default BoardController;

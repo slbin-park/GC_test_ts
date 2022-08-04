@@ -336,6 +336,48 @@ class BoardService {
       conn.release();
     }
   }
+
+  async Update_board_status(board_id: any, user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const board_status = 'DELETE';
+      const check_board_id = await this.boardRepository.get_by_id(conn, board_id);
+      if (check_board_id.length == 0) {
+        return response(baseResponse.BOARD_NOTHING);
+      } else if (check_board_id[0].user_id_fk != user_id) {
+        return response(baseResponse.BOARD_EDIT_NOT_SELF);
+      } else {
+        const delete_board_info = [board_status, board_id];
+        await this.boardRepository.update_board_status(conn, delete_board_info);
+        conn.commit();
+        return response(baseResponse.SUCCESS);
+      }
+    } catch (err: any) {
+      conn.rollback();
+      logger.error(
+        `App - Update_board_status BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
+
+  async Get_board_reply(board_id: any, user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const get_board_reply: any = await this.boardRepository.get_board_reply(conn, board_id);
+      console.log(get_board_reply);
+      return response(baseResponse.SUCCESS, get_board_reply);
+    } catch (err: any) {
+      logger.error(
+        `App - Get_board_reply BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
 }
 
 export default BoardService;

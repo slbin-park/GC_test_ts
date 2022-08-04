@@ -35,13 +35,21 @@ class ProfileService {
       }
       const following: any = await this.profileRepository.get_following_count(conn, user_id);
       const follower: any = await this.profileRepository.get_follower_count(conn, user_id);
-      const board: any = await this.profileRepository.get_board_count(conn, user_id);
+      const board_count: any = await this.profileRepository.get_board_count(conn, user_id);
+      const { user_name, name, profileUrl, website, introduction } = check_user[0];
+      const user_post: any = await this.profileRepository.get_feed(conn, user_id, 10000);
+
       return response(baseResponse.SUCCESS, {
-        following,
-        follower,
-        board,
-        name: check_user[0].name,
+        following_count: following[0].count,
+        follower_count: follower[0].count,
+        board_count: board_count[0].count,
         user_id,
+        user_name,
+        name,
+        profileUrl,
+        website,
+        introduction,
+        user_post,
       });
     } catch (err: any) {
       logger.error(
@@ -59,6 +67,7 @@ class ProfileService {
       await conn.beginTransaction();
       const follow_status = 'FOLLOW';
       // 대상유저가 존재하는 아이디 인지 체크
+      console.log(follow_user_id);
       const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_id);
       if (check_id.length == 0) {
         return response(baseResponse.USER_NOTHING);
@@ -115,12 +124,17 @@ class ProfileService {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
-      const res_Get_feed_follow: any = await this.profileRepository.get_follow_feed(
+      const board_data: any = await this.profileRepository.get_follow_feed(
         conn,
         user_id,
         last_board_id
       );
-      return response(baseResponse.SUCCESS, res_Get_feed_follow);
+      for (let board of board_data) {
+        const board_id = board.board_id;
+        const board_img = await this.profileRepository.get_follow_feed_img(conn, board_id);
+        board.imgs = board_img;
+      }
+      return response(baseResponse.SUCCESS, board_data);
     } catch (err: any) {
       logger.error(
         `App - Get_feed_follow ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`

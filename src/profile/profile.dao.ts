@@ -58,8 +58,14 @@ class ProfileRepository {
   }
 
   // 팔로우한 사람들 피드
-  async get_follow_feed(conn: any, user_id: any, last_board_id: any) {
+  async get_follow_feed(conn: any, user_id: any, last_board_id: any = 10000) {
     const [follow_feed_data] = await conn.query(sql.GET_ALL_FEED_FOLLOW, [user_id, last_board_id]);
+    return follow_feed_data;
+  }
+
+  // 피드 이미지 불러오기
+  async get_follow_feed_img(conn: any, img_info: any) {
+    const [follow_feed_data] = await conn.query(sql.GET_BOARD_IMG, img_info);
     return follow_feed_data;
   }
 

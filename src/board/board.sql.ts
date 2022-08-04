@@ -6,8 +6,8 @@ VALUES(  ? , ? , ? );
 
 const SAVE_IMAGE = `
 INSERT INTO
-board_image (board_id_fk , image_address)
-VALUES( ? , ? );`;
+board_image (board_id_fk , image_address,board_image_status)
+VALUES( ? , ? ,'ACTIVE');`;
 
 const GET_BY_ID = `
 SELECT *
@@ -85,6 +85,34 @@ SET board_content = ?
 WHERE board_id = ?
 `;
 
+const UPDATE_BOARD_STATUS = `
+UPDATE board
+SET board_status = ?
+WHERE board_id = ?
+`;
+
+const GET_BOARD_REPLY = `
+SELECT br.reply_id , br.user_id_fk , br.reply_content , u.user_name,
+       case
+               when timestampdiff(second, br.update_at, current_timestamp) < 60
+                   then concat(timestampdiff(second, br.update_at, current_timestamp), '초 전')
+               when timestampdiff(minute , br.update_at, current_timestamp) < 60
+                   then concat(timestampdiff(minute, br.update_at, current_timestamp), '분 전')
+               when timestampdiff(hour , br.update_at, current_timestamp) < 24
+                   then concat(timestampdiff(hour, br.update_at, current_timestamp), '시간 전')
+               when timestampdiff(day , br.update_at, current_timestamp) < 365
+                   then concat(timestampdiff(day, br.update_at, current_timestamp), '일 전')
+               else concat(MONTH(br.update_at) ,'월',DAY(br.update_at), '일')
+           end as uploadTime
+FROM board_reply br
+INNER JOIN
+user u
+ON br.user_id_fk = u.user_id
+WHERE board_id_fk = ?
+AND
+reply_status = 'VISIBLE';
+`;
+
 export {
   SAVE,
   SAVE_IMAGE,
@@ -100,4 +128,6 @@ export {
   SAVE_REPLY_REPORT,
   SAVE_BOARD_REPORT,
   UPDATE_BOARD,
+  UPDATE_BOARD_STATUS,
+  GET_BOARD_REPLY,
 };

@@ -19,10 +19,7 @@ const ProfileController = {
 
   follow_user: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
-    const response = await profileServiceInstance.Save_follow(
-      req.body.user_id,
-      req.params.follow_user_id
-    );
+    const response = await profileServiceInstance.Save_follow(req.body.user_id, req.params.user_id);
     res.send(response);
   },
 
