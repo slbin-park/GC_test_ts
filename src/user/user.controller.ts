@@ -69,7 +69,7 @@ const UserController = {
     res.json(response);
   },
   get_user_name: async (req: Request, res: Response) => {
-    const { user_name } = req.body;
+    const { user_name } = req.params;
     const userServiceInstance: UserService = Container.get(UserService);
     const response = await userServiceInstance.Find_user_name(user_name);
     res.json(response);

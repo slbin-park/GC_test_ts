@@ -17,6 +17,7 @@ paths:
         - /auth
       summary: 로그인
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -90,11 +91,11 @@ paths:
                     example: 아이디 혹은 비밀번호를 확인해주세요.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
-  /auth/auto-login:
+  /auth/access-token:
     get:
       tags:
         - /auth
-      summary: 자동 로그인
+      summary: '자동 로그인 , refresh 토큰으로 access 토큰 발급'
       parameters:
         - in: header
           name: authorization
@@ -147,12 +148,66 @@ paths:
                     example: Refresh_Token 이 없습니다.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  '/user/user-name/{user_name}':
+    get:
+      tags:
+        - /user
+      summary: 사용자 이름 중복 체크
+      parameters:
+        - in: path
+          name: user_name
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 사용자 이름 중복 체크 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2004':
+          description: 사용자 이름 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2004
+                  msg:
+                    example: 유저 아이디는 6~20자리를 입력해주세요.
+        '3001':
+          description: 사용자 이름 중복
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3001
+                  msg:
+                    example: 중복된 사용자 이름입니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   /user:
     post:
       tags:
         - /user
       summary: 회원가입
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -342,6 +397,169 @@ paths:
                     example: 중복된 사용자 이름입니다.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  /user/user-name:
+    put:
+      tags:
+        - /user
+      summary: 사용자 이름 변경
+      parameters:
+        - in: path
+          name: user_name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  example: 변경할 사용자 이름
+      responses:
+        '1000':
+          description: 사용자 이름 변경 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2003':
+          description: 사용자 이름 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2003
+                  msg:
+                    example: 사용자 이름을 입력해주세요.
+        '2034':
+          description: 14일 이내 2번 바꿈
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2034
+                  msg:
+                    example: 14일 이내 2번 변경하였습니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '3001':
+          description: 사용자 이름 중복
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3001
+                  msg:
+                    example: 중복된 사용자 이름입니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /user/user-status:
+    put:
+      tags:
+        - /user
+      summary: '사용자 상태 변경 (비공개 , 삭제)'
+      parameters:
+        - in: path
+          name: user_name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_status:
+                  example: 변경할 사용자 상태
+      responses:
+        '1000':
+          description: 사용자 상태 변경 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2035':
+          description: 사용자 이름 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2035
+                  msg:
+                    example: 유저 상태를 입력해주세요.
+        '2037':
+          description: 유저 상태 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2037
+                  msg:
+                    example: '유저 상태는 PRVIATE , ACTIVE , DELETE 만 가능합니다.'
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   /board:
     post:
       tags:
@@ -353,6 +571,7 @@ paths:
           type: string
           required: true
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -489,6 +708,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -711,6 +931,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -810,6 +1031,7 @@ paths:
           type: string
           required: true
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -908,6 +1130,7 @@ paths:
           schema:
             type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -968,6 +1191,111 @@ paths:
                     example: 2022
                   msg:
                     example: 이미 좋아요를 누른 댓글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/reply/{reply_id}/report':
+    post:
+      tags:
+        - /board/reply
+      summary: 댓글 신고 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: reply_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                report_content:
+                  example: 댓글 신고 내용
+      responses:
+        '1000':
+          description: 댓글 신고 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2013':
+          description: 신고 내용 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2013
+                  msg:
+                    example: 댓글 신고 내용을 입력해주세요.
+        '2021':
+          description: 없는 댓글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2021
+                  msg:
+                    example: 없는 댓글 입니다.
+        '2025':
+          description: 자신 댓글 신고
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2025
+                  msg:
+                    example: 자신의 댓글에는 신고할수 없습니다.
+        '2026':
+          description: 자신의 게시글 신고
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2026
+                  msg:
+                    example: 자신의 게시글에는 신고할수 없습니다.
         '3000':
           description: jwt 에러
           content:
@@ -1051,6 +1379,678 @@ paths:
                     example: 3000
                   msg:
                     example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/profile/feed/follow/{last_board_id}':
+    get:
+      tags:
+        - /profile
+      summary: 메인화면 피드 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: last_board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 유저 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_name:
+                          type: string
+                        board_id:
+                          type: string
+                        board_content:
+                          type: string
+                        user_id:
+                          type: string
+                        profileUrl:
+                          type: string
+                        likeOrNot:
+                          type: string
+                        reply_count:
+                          type: string
+                        board_like_count:
+                          type: string
+                        uploadTime:
+                          type: string
+                        imgs:
+                          type: array
+                          items:
+                            type: object
+                            propertis:
+                              image_id:
+                                type: string
+                              image_address:
+                                type: string
+                    example:
+                      - user_name: 사용자 이름
+                        board_id: 게시글 번호
+                        board_content: 게시글 내용
+                        user_id: 유저 고유 인덱스
+                        profileUrl: 유저 프로필 이미지 주소
+                        likeOrNot: 좋아요 누른 여부
+                        reply_count: 댓글 갯수
+                        board_like_count: 게시글 좋아요 갯수
+                        upladTime: '업로드 시간 EX) 1분전 , 10분전'
+                        imgs:
+                          - image_id: 이미지 고유 번호
+                            image_address: 이미지 주소
+                          - image_id: 이미지 고유번호
+                            image_address: 이미지 주소
+                      - user_name: slbin
+                        board_id: 1
+                        board_content: 게시글 내용입니다.
+                        user_id: 1
+                        profileUrl: www.naver.com
+                        likeOrNot: LIKE || UNLIKE
+                        reply_count: 100
+                        board_like_count: 100
+                        upladTime: 1분전
+                        imgs:
+                          - image_id: 1
+                            image_address: www.naver.com
+                          - image_id: 2
+                            image_address: www.google.com
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/profile/user/{user_id}':
+    get:
+      tags:
+        - /profile
+      summary: 유저 프로필 조회
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      responses:
+        '1000':
+          description: '유저 프로필 조회 성공 || 팔로우인 경우 , 공개 계정인 경우 응답'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        following_count:
+                          type: string
+                        follower_count:
+                          type: string
+                        board_count:
+                          type: string
+                        user_status:
+                          type: string
+                        user_id:
+                          type: string
+                        user_name:
+                          type: string
+                        name:
+                          type: string
+                        profileUrl:
+                          type: string
+                        website:
+                          type: string
+                        introduction:
+                          type: string
+                        user_post:
+                          type: array
+                          items:
+                            type: object
+                            propertis:
+                              board_id:
+                                type: string
+                              image_address:
+                                type: string
+                    example:
+                      - following_count: 팔로잉 개수
+                        follower_count: 팔로워 개수
+                        user_id: 유저 고유 인덱스
+                        board_count: 게시글 개수
+                        user_status: 유저 상태 PRIVATE | ACTIVE
+                        user_name: 사용자 이름
+                        name: 이름
+                        profileUrl: 프로필 이미지 url
+                        website: 웹사이트
+                        introduction: 설명
+                        user_post:
+                          - board_id: 게시글 고유 번호
+                            image_address: 게시글 이미지 주소
+                          - board_id: 게시글 이미지 고유번호
+                            image_address: 이미지 주소
+                      - following_count: 12
+                        follower_count: 13
+                        user_id: 1
+                        board_count: 123
+                        user_status: ACTIVE
+                        user_name: slbin
+                        name: 슬빈
+                        profileUrl: www.naver.com
+                        website: slbin.github.com
+                        introduction: 슬빈입니다
+                        user_post:
+                          - board_id: 1
+                            image_address: www.naver.com
+                          - board_id: 2
+                            image_address: www.google.com
+        '1001':
+          description: 유저 프로필 조회 성공 팔로우 안하고 비공개 계정일 경우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        following_count:
+                          type: string
+                        follower_count:
+                          type: string
+                        board_count:
+                          type: string
+                        user_status:
+                          type: string
+                        user_id:
+                          type: string
+                        user_name:
+                          type: string
+                        name:
+                          type: string
+                        profileUrl:
+                          type: string
+                        website:
+                          type: string
+                        introduction:
+                          type: string
+                    example:
+                      - following_count: 팔로잉 개수
+                        follower_count: 팔로워 개수
+                        user_id: 유저 고유 인덱스
+                        board_count: 게시글 개수
+                        user_status: 유저 상태 PRIVATE | ACTIVE
+                        user_name: 사용자 이름
+                        name: 이름
+                        profileUrl: 프로필 이미지 url
+                        website: 웹사이트
+                        introduction: 설명
+                      - following_count: 12
+                        follower_count: 13
+                        user_id: 1
+                        board_count: 123
+                        user_status: PRIVATE
+                        user_name: slbin
+                        name: 슬빈
+                        profileUrl: www.naver.com
+                        website: slbin.github.com
+                        introduction: 슬빈입니다
+        '3000':
+          $ref: '#/paths/~1profile~1follow~1list/get/responses/3000'
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/profile/feed/{user_id}/{last_board_id}':
+    get:
+      tags:
+        - /profile
+      summary: 프로필 피드 첫번째 요청 후 무한스크롤 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: last_board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 추가 피드 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        board_id:
+                          type: string
+                        image_address:
+                          type: string
+                    example:
+                      - board_id: 게시글 번호
+                        image_address: 이미지 주소
+                      - board_id: 1
+                        image_address: www.naver.com
+        '2029':
+          description: 없는 유저
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2029
+                  msg:
+                    example: 존재하지 않는 유저 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '3008':
+          description: 비공개 계정
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3008
+                  msg:
+                    example: 비공개 계정입니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /profile/user:
+    put:
+      tags:
+        - /profile
+      summary: 프로필 수정
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profileUrl:
+                  example: 프로필 이미지 주소
+                website:
+                  example: 웹 사이트
+                introduction:
+                  example: 자기 소개
+      responses:
+        '1000':
+          description: 프로필 수정 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2031':
+          description: 이미지 주소 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2031
+                  msg:
+                    example: 프로필 URL을 입력해주세요.
+        '2032':
+          description: 웹 주소 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2032
+                  msg:
+                    example: 웹 사이트를 입력해주세요.
+        '2033':
+          description: 설명 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2033
+                  msg:
+                    example: 소개를 입력해주세요.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /profile/follow/list:
+    get:
+      tags:
+        - /profile/follow
+      summary: 유저 프로필 조회
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      responses:
+        '1000':
+          description: 비공개 계정 팔로우 리스트 조회
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_post:
+                          type: array
+                          items:
+                            type: object
+                            propertis:
+                              user_id:
+                                type: string
+                              user_name:
+                                type: string
+                              profileUrl:
+                                type: string
+                    example:
+                      - user_post:
+                          - user_id: 사용자 고유 인덱스
+                            user_name: 사용자 이름
+                            profileUrl: 프로필 이미지 주소
+                          - board_id: 게시글 이미지 고유번호
+                            image_address: 이미지 주소
+                      - user_post:
+                          - user_id: 1
+                            user_name: www.naver.com
+                            profileUrl: ㅁㄴㅇ
+                          - user_id: 1
+                            user_name: www.naver.com
+                            profileUrl: ㅁㄴㅇ
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/profile/follow{user_id}':
+    post:
+      tags:
+        - /profile/follow
+      summary: 팔로우 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 팔로우 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2028':
+          description: 자신 팔로우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2028
+                  msg:
+                    example: 자신에게 팔로우는 불가능 합니다.
+        '2029':
+          description: 없는 유저 팔로우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2029
+                  msg:
+                    example: 존재하지 않는 유저입니다.
+        '2037':
+          description: 비공개 계정 이미 요청한 팔로우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2037
+                  msg:
+                    example: 이미 팔로우 요청했습니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/profile/unfollow{user_id}':
+    put:
+      tags:
+        - /profile/follow
+      summary: 팔로우 취소 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 팔로우 취소 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2028':
+          description: 자신 팔로우 취소
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2028
+                  msg:
+                    example: 자신에게 팔로우는 불가능 합니다.
+        '2029':
+          description: 없는 유저 팔로우 취소
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2029
+                  msg:
+                    example: 존재하지 않는 유저입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '3007':
+          description: 비공개 계정 이미 요청한 팔로우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3007
+                  msg:
+                    example: 팔로우 요청 기록이 없습니다.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
 security:

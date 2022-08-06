@@ -148,23 +148,23 @@ export = {
 
   PROFILE_URL_EMPTY: { isSuccess: false, code: 2031, msg: '프로필 URL을 입력해주세요' },
 
-  WEBSITE__EMPTY: { isSuccess: false, code: 2031, msg: '웹 사이트를 입력해주세요' },
+  WEBSITE__EMPTY: { isSuccess: false, code: 2032, msg: '웹 사이트를 입력해주세요' },
 
-  INTRODUCTION_EMPTY: { isSuccess: false, code: 2031, msg: '소개를 입력해주세요' },
+  INTRODUCTION_EMPTY: { isSuccess: false, code: 2033, msg: '소개를 입력해주세요' },
 
-  CHANGE_USER_NAME_OVER: { isSuccess: false, code: 2032, msg: '14일 이내에 2번 변경하였습니다.' },
+  CHANGE_USER_NAME_OVER: { isSuccess: false, code: 2034, msg: '14일 이내에 2번 변경하였습니다.' },
 
-  CHANGE_USER_STATUS_EMPTY: { isSuccess: false, code: 2033, msg: '유저 상태를 입력해주세요.' },
+  CHANGE_USER_STATUS_EMPTY: { isSuccess: false, code: 2035, msg: '유저 상태를 입력해주세요.' },
 
   USER_STATUS_WRONG: {
     isSuccess: false,
-    code: 2033,
+    code: 2036,
     msg: '유저 상태는 PRVIATE , ACTIVE , DELETE 만 가능합니다.',
   },
 
   FOLLOW_PRIVATE_ALREADY: {
     isSuccess: false,
-    code: 2034,
+    code: 2037,
     msg: '이미 팔로우를 요청했습니다.',
   },
 
@@ -201,7 +201,11 @@ export = {
     code: 3007,
     msg: '팔로우 요청 기록이 없습니다.',
   },
-
+  PRIVATE_USER: {
+    isSuccess: false,
+    code: 3008,
+    msg: '비공개 계정입니다.',
+  },
   //Connection, Transaction 등의 서버 오류
   DB_ERROR: { isSuccess: false, code: 4000, msg: '데이터 베이스 에러' },
   SERVER_ERROR: { isSuccess: false, code: 4001, memsgssage: '서버 에러' },

@@ -55,9 +55,12 @@ const post_user_vali = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const get_user_name = (req: Request, res: Response, next: NextFunction) => {
-  const { user_name } = req.body;
+  const { user_name } = req.params;
   if (!user_name) {
     res.send(baseResponse.SIGNUP_USERNAME_EMPTY);
+    return;
+  } else if (user_name.length <= 2 || user_name.length > 20) {
+    res.send(baseResponse.SIGNUP_USERNAME_LENGTH);
     return;
   } else {
     next();
@@ -73,6 +76,7 @@ const put_user_name = (req: Request, res: Response, next: NextFunction) => {
     next();
   }
 };
+
 const put_user_status = (req: Request, res: Response, next: NextFunction) => {
   const { user_status } = req.body;
   if (!user_status) {

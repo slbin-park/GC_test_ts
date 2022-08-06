@@ -17,7 +17,7 @@ const put_user_profile = (req: Request, res: Response, next: NextFunction) => {
   if (profileUrl == undefined) {
     res.send(baseResponse.PROFILE_URL_EMPTY);
   } else if (website == undefined) {
-    res.send(baseResponse.PROFILE_URL_EMPTY);
+    res.send(baseResponse.WEBSITE__EMPTY);
   } else if (introduction == undefined) {
     res.send(baseResponse.INTRODUCTION_EMPTY);
   } else {

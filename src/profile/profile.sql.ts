@@ -1,5 +1,5 @@
 const GET_USER_ID = `
-SELECT user_name,name,profileUrl,website,introduction,user_status
+SELECT user_id,user_name,name,profileUrl,website,introduction,user_status
 FROM user
 WHERE user_id = ?;`;
 
@@ -122,6 +122,15 @@ AND
 follow_status = 'SUBSCRIPTION'
 `;
 
+const GET_CHECK_FOLLOW_STATUS = `
+SELECT *
+FROM follow
+WHERE 
+followed_user_fk = ?
+AND
+follow_user_fk = ?
+`;
+
 export {
   GET_USER_ID,
   SAVE_FOLLOW,
@@ -135,4 +144,5 @@ export {
   UPDATE_USER_PROFILE,
   GET_BOARD_IMG,
   GET_FOLLOW_SUB_LIST_PRIVATE,
+  GET_CHECK_FOLLOW_STATUS,
 };

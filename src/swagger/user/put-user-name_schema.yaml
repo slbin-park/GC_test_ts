@@ -1,0 +1,81 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 사용자 이름 변경 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    u_n_empty:
+      description: 사용자 이름 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2003
+              msg:
+                example: 사용자 이름을 입력해주세요.
+    change_over:
+      description: 14일 이내 2번 바꿈
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2034
+              msg:
+                example: 14일 이내 2번 변경하였습니다.
+    r_user_name:
+      description: 사용자 이름 중복
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3001
+              msg:
+                example: 중복된 사용자 이름입니다.
+    ErrorResponse:
+      description: DB 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 4000
+              msg:
+                example: 데이터 베이스 에러
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

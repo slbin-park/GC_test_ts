@@ -1,0 +1,59 @@
+# follow reponse API
+components:
+  responses:
+    successResponse:
+      description: 비공개 계정 팔로우 리스트 조회
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_post:
+                      type: array
+                      items:
+                        type: object
+                        propertis:
+                          user_id:
+                            type: string
+                          user_name:
+                            type: string
+                          profileUrl:
+                            type: string
+                example:
+                  - user_post:
+                      - user_id: 사용자 고유 인덱스
+                        user_name: 사용자 이름
+                        profileUrl: 프로필 이미지 주소
+                      - board_id: 게시글 이미지 고유번호
+                        image_address: 이미지 주소
+                  - user_post:
+                      - user_id: 1
+                        user_name: www.naver.com
+                        profileUrl: ㅁㄴㅇ
+                      - user_id: 1
+                        user_name: www.naver.com
+                        profileUrl: ㅁㄴㅇ
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

@@ -1,0 +1,68 @@
+# unfollow reponse API
+components:
+  responses:
+    successResponse:
+      description: 프로필 수정 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    url_empty:
+      description: 이미지 주소 없음
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2031
+              msg:
+                example: 프로필 URL을 입력해주세요.
+    web_empty:
+      description: 웹 주소 없음
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2032
+              msg:
+                example: 웹 사이트를 입력해주세요.
+    intro_empty:
+      description: 설명 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2033
+              msg:
+                example: 소개를 입력해주세요.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

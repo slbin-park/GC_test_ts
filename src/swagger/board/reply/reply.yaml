@@ -9,6 +9,7 @@
         type: string
         required: true
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -48,6 +49,7 @@
         schema:
           type: string
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -161,39 +163,42 @@
 #       4000:
 #         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
 
-# /board/{board_id}/report:
-#   post:
-#     tags:
-#       - /board
-#     summary: 게시글 신고 요청
-#     parameters:
-#       - in: header
-#         name: authorization
-#         type: string
-#         required: true
-#       - in: path
-#         name: board_id
-#         required: true
-#         schema:
-#           type: string
-#     requestBody:
-#       content:
-#         application/json:
-#           schema:
-#             type: object
-#             properties:
-#               report_content:
-#                 example: 게시글 신고 내용
-#     responses:
-#       1000:
-#         $ref: './report_schema.yaml#/components/responses/successResponse'
-#       2017:
-#         $ref: './report_schema.yaml#/components/responses/board_nothing'
-#       2014:
-#         $ref: './report_schema.yaml#/components/responses/content_empty'
-#       2026:
-#         $ref: './report_schema.yaml#/components/responses/self_report'
-#       3000:
-#         $ref: './report_schema.yaml#/components/responses/jwt_error'
-#       4000:
-#         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+/board/reply/{reply_id}/report:
+  post:
+    tags:
+      - /board/reply
+    summary: 댓글 신고 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: reply_id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              report_content:
+                example: 댓글 신고 내용
+    responses:
+      1000:
+        $ref: './report_schema.yaml#/components/responses/successResponse'
+      2013:
+        $ref: './report_schema.yaml#/components/responses/empty_content'
+      2026:
+        $ref: './report_schema.yaml#/components/responses/self_report'
+      2021:
+        $ref: './report_schema.yaml#/components/responses/reply_nothing'
+      2025:
+        $ref: './report_schema.yaml#/components/responses/report_self'
+      3000:
+        $ref: './report_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../../openapi.yaml#/components/responses/ErrorResponse'

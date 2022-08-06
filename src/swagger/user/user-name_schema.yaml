@@ -1,0 +1,55 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 사용자 이름 중복 체크 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    user_name_length:
+      description: 사용자 이름 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2004
+              msg:
+                example: 유저 아이디는 6~20자리를 입력해주세요.
+    r_user_name:
+      description: 사용자 이름 중복
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3001
+              msg:
+                example: 중복된 사용자 이름입니다.
+    ErrorResponse:
+      description: DB 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 4000
+              msg:
+                example: 데이터 베이스 에러

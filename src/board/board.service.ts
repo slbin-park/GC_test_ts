@@ -260,7 +260,7 @@ class BoardService {
       const reply_report_status = 'ACTIVE';
       const check_reply_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
       if (check_reply_id.length == 0) {
-        return response(baseResponse.BOARD_NOTHING);
+        return response(baseResponse.REPLY_NOTHING);
       }
       // 자신이 단 댓글 신고 불가 로직
       // 신고를 여러번도 가능? 한듯

@@ -1,0 +1,90 @@
+# follow reponse API
+components:
+  responses:
+    successResponse:
+      description: 유저 로그인 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                    board_id:
+                      type: string
+                    board_content:
+                      type: string
+                    user_id:
+                      type: string
+                    profileUrl:
+                      type: string
+                    likeOrNot:
+                      type: string
+                    reply_count:
+                      type: string
+                    board_like_count:
+                      type: string
+                    uploadTime:
+                      type: string
+                    imgs:
+                      type: array
+                      items:
+                        type: object
+                        propertis:
+                          image_id:
+                            type: string
+                          image_address:
+                            type: string
+                example:
+                  - user_name: 사용자 이름
+                    board_id: 게시글 번호
+                    board_content: 게시글 내용
+                    user_id: 유저 고유 인덱스
+                    profileUrl: 유저 프로필 이미지 주소
+                    likeOrNot: 좋아요 누른 여부
+                    reply_count: 댓글 갯수
+                    board_like_count: 게시글 좋아요 갯수
+                    upladTime: 업로드 시간 EX) 1분전 , 10분전
+                    imgs:
+                      - image_id: 이미지 고유 번호
+                        image_address: 이미지 주소
+                      - image_id: 이미지 고유번호
+                        image_address: 이미지 주소
+                  - user_name: slbin
+                    board_id: 1
+                    board_content: 게시글 내용입니다.
+                    user_id: 1
+                    profileUrl: www.naver.com
+                    likeOrNot: LIKE || UNLIKE
+                    reply_count: 100
+                    board_like_count: 100
+                    upladTime: 1분전
+                    imgs:
+                      - image_id: 1
+                        image_address: www.naver.com
+                      - image_id: 2
+                        image_address: www.google.com
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

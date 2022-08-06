@@ -58,7 +58,7 @@ class ProfileRepository {
   }
 
   // 팔로우한 사람들 피드
-  async get_follow_feed(conn: any, user_id: any, last_board_id: any = 10000) {
+  async get_follow_feed(conn: any, user_id: any, last_board_id: any) {
     const [follow_feed_data] = await conn.query(sql.GET_ALL_FEED_FOLLOW, [user_id, last_board_id]);
     return follow_feed_data;
   }
@@ -77,6 +77,12 @@ class ProfileRepository {
   async get_follow_sub_list_private(conn: any, user_id: any) {
     const [res_follow_list] = await conn.query(sql.GET_FOLLOW_SUB_LIST_PRIVATE, user_id);
     return res_follow_list;
+  }
+
+  // 팔로우 상태 체크
+  async get_follow_status(conn: any, user_info: any) {
+    const [res_follow_status] = await conn.query(sql.GET_CHECK_FOLLOW_STATUS, user_info);
+    return res_follow_status;
   }
 }
 

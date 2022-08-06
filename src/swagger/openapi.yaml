@@ -16,13 +16,21 @@ paths:
   /auth/login:
     $ref: './auth/auth.yaml#/~1auth~1login'
   # GET
-  /auth/auto-login:
-    $ref: './auth/auth.yaml#/~1auth~1auto-login'
+  /auth/access-token:
+    $ref: './auth/auth.yaml#/~1auth~1access-token'
 
   # --------user----------
+  # GET
+  /user/user-name/{user_name}:
+    $ref: './user/user.yaml#/~1user~1user-name~1{user_name}'
   # POST
   /user:
     $ref: './user/user.yaml#/~1user'
+  # PUT
+  /user/user-name:
+    $ref: './user/user.yaml#/~1user~1user-name'
+  /user/user-status:
+    $ref: './user/user.yaml#/~1user~1user-status'
 
   # --------board----------
 
@@ -49,10 +57,37 @@ paths:
     $ref: './board/reply/reply.yaml#/~1board~1reply'
   /board/reply/{reply_id}/like:
     $ref: './board/reply/reply.yaml#/~1board~1reply~1{reply_id}~1like'
-
+  /board/reply/{reply_id}/report:
+    $ref: './board/reply/reply.yaml#/~1board~1reply~1{reply_id}~1report'
   # PUT
   /board/reply/{reply_id}/unlike:
     $ref: './board/reply/reply.yaml#/~1board~1reply~1{reply_id}~1unlike'
+
+  # --------profile----------
+
+  # GET
+  /profile/feed/follow/{last_board_id}:
+    $ref: './profile/profile.yaml#/~1profile~1feed~1follow~1{last_board_id}'
+  /profile/user/{user_id}:
+    $ref: './profile/profile.yaml#/~1profile~1user~1{user_id}'
+  /profile/feed/{user_id}/{last_board_id}:
+    $ref: './profile/profile.yaml#/~1profile~1feed~1{user_id}~1{last_board_id}'
+  # PUT
+  /profile/user:
+    $ref: './profile/profile.yaml#/~1profile~1user'
+
+  # --------profile/follow----------
+
+  # GET
+  /profile/follow/list:
+    $ref: './profile/profile.yaml#/~1profile~1follow~1list'
+  # POST
+  /profile/follow{user_id}:
+    $ref: './profile/profile.yaml#/~1profile~1follow~1{user_id}'
+  # PUT
+  /profile/unfollow{user_id}:
+    $ref: './profile/profile.yaml#/~1profile~1unfollow~1{user_id}'
+
 security:
   - bearerAuth: []
 components:

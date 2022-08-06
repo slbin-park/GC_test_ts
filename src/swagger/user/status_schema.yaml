@@ -1,0 +1,55 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 사용자 상태 변경 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    status_empty:
+      description: 사용자 이름 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2035
+              msg:
+                example: 유저 상태를 입력해주세요.
+    status_wrong:
+      description: 유저 상태 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2037
+              msg:
+                example: 유저 상태는 PRVIATE , ACTIVE , DELETE 만 가능합니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

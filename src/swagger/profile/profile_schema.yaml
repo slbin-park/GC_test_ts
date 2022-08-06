@@ -1,0 +1,153 @@
+# follow reponse API
+components:
+  responses:
+    successResponse:
+      description: 유저 프로필 조회 성공 || 팔로우인 경우 , 공개 계정인 경우 응답
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    following_count:
+                      type: string
+                    follower_count:
+                      type: string
+                    board_count:
+                      type: string
+                    user_status:
+                      type: string
+                    user_id:
+                      type: string
+                    user_name:
+                      type: string
+                    name:
+                      type: string
+                    profileUrl:
+                      type: string
+                    website:
+                      type: string
+                    introduction:
+                      type: string
+                    user_post:
+                      type: array
+                      items:
+                        type: object
+                        propertis:
+                          board_id:
+                            type: string
+                          image_address:
+                            type: string
+                example:
+                  - following_count: 팔로잉 개수
+                    follower_count: 팔로워 개수
+                    user_id: 유저 고유 인덱스
+                    board_count: 게시글 개수
+                    user_status: 유저 상태 PRIVATE | ACTIVE
+                    user_name: 사용자 이름
+                    name: 이름
+                    profileUrl: 프로필 이미지 url
+                    website: 웹사이트
+                    introduction: 설명
+                    user_post:
+                      - board_id: 게시글 고유 번호
+                        image_address: 게시글 이미지 주소
+                      - board_id: 게시글 이미지 고유번호
+                        image_address: 이미지 주소
+                  - following_count: 12
+                    follower_count: 13
+                    user_id: 1
+                    board_count: 123
+                    user_status: ACTIVE
+                    user_name: slbin
+                    name: 슬빈
+                    profileUrl: www.naver.com
+                    website: slbin.github.com
+                    introduction: 슬빈입니다
+                    user_post:
+                      - board_id: 1
+                        image_address: www.naver.com
+                      - board_id: 2
+                        image_address: www.google.com
+    successResponsePRIVATE:
+      description: 유저 프로필 조회 성공 팔로우 안하고 비공개 계정일 경우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    following_count:
+                      type: string
+                    follower_count:
+                      type: string
+                    board_count:
+                      type: string
+                    user_status:
+                      type: string
+                    user_id:
+                      type: string
+                    user_name:
+                      type: string
+                    name:
+                      type: string
+                    profileUrl:
+                      type: string
+                    website:
+                      type: string
+                    introduction:
+                      type: string
+                example:
+                  - following_count: 팔로잉 개수
+                    follower_count: 팔로워 개수
+                    user_id: 유저 고유 인덱스
+                    board_count: 게시글 개수
+                    user_status: 유저 상태 PRIVATE | ACTIVE
+                    user_name: 사용자 이름
+                    name: 이름
+                    profileUrl: 프로필 이미지 url
+                    website: 웹사이트
+                    introduction: 설명
+                  - following_count: 12
+                    follower_count: 13
+                    user_id: 1
+                    board_count: 123
+                    user_status: PRIVATE
+                    user_name: slbin
+                    name: 슬빈
+                    profileUrl: www.naver.com
+                    website: slbin.github.com
+                    introduction: 슬빈입니다
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

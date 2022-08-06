@@ -4,6 +4,7 @@
       - /user
     summary: 회원가입
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -50,5 +51,92 @@
         $ref: './user_schema.yaml#/components/responses/empty_accept_date'
       3001:
         $ref: './user_schema.yaml#/components/responses/user_name_already_use'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/user/user-name/{user_name}:
+  get:
+    tags:
+      - /user
+    summary: 사용자 이름 중복 체크
+    parameters:
+      - in: path
+        name: user_name
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './user-name_schema.yaml#/components/responses/successResponse'
+      2004:
+        $ref: './user-name_schema.yaml#/components/responses/user_name_length'
+      3001:
+        $ref: './user-name_schema.yaml#/components/responses/r_user_name'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/user/user-name:
+  put:
+    tags:
+      - /user
+    summary: 사용자 이름 변경
+    parameters:
+      - in: path
+        name: user_name
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user_name:
+                example: 변경할 사용자 이름
+    responses:
+      1000:
+        $ref: './put-user-name_schema.yaml#/components/responses/successResponse'
+      2003:
+        $ref: './put-user-name_schema.yaml#/components/responses/u_n_empty'
+      2034:
+        $ref: './put-user-name_schema.yaml#/components/responses/change_over'
+      3000:
+        $ref: './put-user-name_schema.yaml#/components/responses/jwt_error'
+      3001:
+        $ref: './put-user-name_schema.yaml#/components/responses/r_user_name'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/user/user-status:
+  put:
+    tags:
+      - /user
+    summary: 사용자 상태 변경 (비공개 , 삭제)
+    parameters:
+      - in: path
+        name: user_name
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user_status:
+                example: 변경할 사용자 상태
+    responses:
+      1000:
+        $ref: './status_schema.yaml#/components/responses/successResponse'
+      2035:
+        $ref: './status_schema.yaml#/components/responses/status_empty'
+      2037:
+        $ref: './status_schema.yaml#/components/responses/status_wrong'
+      3000:
+        $ref: './status_schema.yaml#/components/responses/jwt_error'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'

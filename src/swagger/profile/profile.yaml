@@ -1,0 +1,187 @@
+/profile/follow/{user_id}:
+  post:
+    tags:
+      - /profile/follow
+    summary: 팔로우 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './follow_schema.yaml#/components/responses/successResponse'
+      2028:
+        $ref: './follow_schema.yaml#/components/responses/follow_self'
+      2029:
+        $ref: './follow_schema.yaml#/components/responses/user_nothing'
+      2037:
+        $ref: './follow_schema.yaml#/components/responses/follow_sub'
+      3000:
+        $ref: './follow_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/unfollow/{user_id}:
+  put:
+    tags:
+      - /profile/follow
+    summary: 팔로우 취소 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './unfollow_schema.yaml#/components/responses/successResponse'
+      2028:
+        $ref: './unfollow_schema.yaml#/components/responses/follow_self'
+      2029:
+        $ref: './unfollow_schema.yaml#/components/responses/user_nothing'
+      3007:
+        $ref: './unfollow_schema.yaml#/components/responses/follow_nothing'
+      3000:
+        $ref: './unfollow_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/feed/follow/{last_board_id}:
+  get:
+    tags:
+      - /profile
+    summary: 메인화면 피드 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: last_board_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './feed-follow_schema.yaml#/components/responses/successResponse'
+      3000:
+        $ref: './feed-follow_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/user/{user_id}:
+  get:
+    tags:
+      - /profile
+    summary: 유저 프로필 조회
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+    responses:
+      1000:
+        $ref: './profile_schema.yaml#/components/responses/successResponse'
+      1001:
+        $ref: './profile_schema.yaml#/components/responses/successResponsePRIVATE'
+      3000:
+        $ref: './follow-list_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/follow/list:
+  get:
+    tags:
+      - /profile/follow
+    summary: 유저 프로필 조회
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+    responses:
+      1000:
+        $ref: './follow-list_schema.yaml#/components/responses/successResponse'
+      3000:
+        $ref: './follow-list_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/feed/{user_id}/{last_board_id}:
+  get:
+    tags:
+      - /profile
+    summary: 프로필 피드 첫번째 요청 후 무한스크롤 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: last_board_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './feed_schema.yaml#/components/responses/successResponse'
+      3008:
+        $ref: './feed_schema.yaml#/components/responses/successResponsePrivate'
+      2029:
+        $ref: './feed_schema.yaml#/components/responses/user_nothing'
+      3000:
+        $ref: './feed_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/user:
+  put:
+    tags:
+      - /profile
+    summary: 프로필 수정
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profileUrl:
+                example: 프로필 이미지 주소
+              website:
+                example: 웹 사이트
+              introduction:
+                example: 자기 소개
+    responses:
+      1000:
+        $ref: './put-profile_schema.yaml#/components/responses/successResponse'
+      2031:
+        $ref: './put-profile_schema.yaml#/components/responses/url_empty'
+      2032:
+        $ref: './put-profile_schema.yaml#/components/responses/web_empty'
+      2033:
+        $ref: './put-profile_schema.yaml#/components/responses/intro_empty'
+      3000:
+        $ref: './put-profile_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'

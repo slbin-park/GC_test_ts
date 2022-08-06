@@ -26,23 +26,67 @@ class ProfileService {
     this.profileRepository = Container.get(ProfileRepository);
   }
 
-  async Get_profile(user_id: any) {
+  async Get_profile(user_id: any, self_user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const check_user: any = await this.profileRepository.get_by_id(conn, user_id);
       if (check_user.length == 0) {
         return response(baseResponse.USER_NOTHING);
       }
+
       const following: any = await this.profileRepository.get_following_count(conn, user_id);
       const follower: any = await this.profileRepository.get_follower_count(conn, user_id);
       const board_count: any = await this.profileRepository.get_board_count(conn, user_id);
       const { user_name, name, profileUrl, website, introduction } = check_user[0];
+      const user_status = check_user[0].user_status;
+
+      // 비공개 계정 처리 로직
+      if (check_user[0].user_status == 'PRIVATE') {
+        if (check_user[0].user_id != self_user_id) {
+          const check_follow_status = await this.profileRepository.get_follow_status(conn, [
+            self_user_id,
+            user_id,
+          ]);
+          if (!check_follow_status) {
+            if (check_follow_status[0].follow_status != 'FOLLOW') {
+              return response(baseResponse.SUCCESS, {
+                following_count: following[0].count,
+                follower_count: follower[0].count,
+                board_count: board_count[0].count,
+                user_id,
+                user_name,
+                name,
+                profileUrl,
+                website,
+                introduction,
+                user_status,
+              });
+            }
+          } else {
+            if (check_follow_status[0].follow_status != 'FOLLOW') {
+              return response(baseResponse.SUCCESS, {
+                following_count: following[0].count,
+                follower_count: follower[0].count,
+                board_count: board_count[0].count,
+                user_id,
+                user_name,
+                name,
+                profileUrl,
+                website,
+                introduction,
+                user_status,
+              });
+            }
+          }
+        }
+      }
       const user_post: any = await this.profileRepository.get_feed(conn, user_id, 10000);
 
       return response(baseResponse.SUCCESS, {
         following_count: following[0].count,
         follower_count: follower[0].count,
         board_count: board_count[0].count,
+        user_status,
         user_id,
         user_name,
         name,
@@ -157,7 +201,7 @@ class ProfileService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const follow_list = await this.profileRepository.get_follow_sub_list_private(conn, user_id);
-      return response(baseResponse, follow_list);
+      return response(baseResponse.SUCCESS, follow_list);
     } catch (err: any) {
       logger.error(
         `App - Get_follow_list ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
@@ -168,15 +212,32 @@ class ProfileService {
     }
   }
 
-  async Get_feed(username: any, last_board_id: any) {
+  async Get_feed(user_id: any, last_board_id: any, self_user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
-      const res_Get_feed: any = await this.profileRepository.get_feed(
-        conn,
-        username,
-        last_board_id
-      );
+      const check_user: any = await this.profileRepository.get_by_id(conn, user_id);
+      const res_Get_feed: any = await this.profileRepository.get_feed(conn, user_id, last_board_id);
+      if (check_user.length == 0) {
+        return response(baseResponse.USER_NOTHING);
+      }
+      if (check_user[0].user_status == 'PRIVATE') {
+        if (check_user[0].user_id != self_user_id) {
+          const check_follow_status = await this.profileRepository.get_follow_status(conn, [
+            self_user_id,
+            user_id,
+          ]);
+          if (!check_follow_status) {
+            if (check_follow_status[0].follow_status != 'FOLLOW') {
+              return response(baseResponse.SUCCESS, res_Get_feed);
+            } else {
+              return response(baseResponse.PRIVATE_USER);
+            }
+          } else {
+            return response(baseResponse.PRIVATE_USER);
+          }
+        }
+      }
       return response(baseResponse.SUCCESS, res_Get_feed);
     } catch (err: any) {
       logger.error(

@@ -1,0 +1,68 @@
+# follow reponse API
+components:
+  responses:
+    successResponse:
+      description: 팔로우 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    follow_self:
+      description: 자신 팔로우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2028
+              msg:
+                example: 자신에게 팔로우는 불가능 합니다.
+    user_nothing:
+      description: 없는 유저 팔로우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2029
+              msg:
+                example: 존재하지 않는 유저입니다.
+    follow_sub:
+      description: 비공개 계정 이미 요청한 팔로우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2037
+              msg:
+                example: 이미 팔로우 요청했습니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

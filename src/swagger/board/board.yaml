@@ -9,6 +9,7 @@
         type: string
         required: true
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -25,6 +26,7 @@
         $ref: './board_schema.yaml#/components/responses/board_content_empty'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
 /board/{board_id}/like:
   post:
     tags:
@@ -123,6 +125,7 @@
         schema:
           type: string
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -162,6 +165,7 @@
         schema:
           type: string
     requestBody:
+      required: true
       content:
         application/json:
           schema:

@@ -4,6 +4,7 @@
       - /auth
     summary: 로그인
     requestBody:
+      required: true
       content:
         application/json:
           schema:
@@ -24,11 +25,11 @@
         $ref: './login_schema.yaml#/components/responses/login_fail'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'
-/auth/auto-login:
+/auth/access-token:
   get:
     tags:
       - /auth
-    summary: 자동 로그인
+    summary: 자동 로그인 , refresh 토큰으로 access 토큰 발급
     parameters:
       - in: header
         name: authorization
@@ -41,26 +42,5 @@
         $ref: './auto-login_schema.yaml#/components/responses/empty_refresh_token'
       3000:
         $ref: './auto-login_schema.yaml#/components/responses/jwt_error'
-      4000:
-        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
-/auth/access-token:
-  get:
-    tags:
-      - /auth
-    summary: access-token 재발급
-    parameters:
-      - in: header
-        name: authorization
-        type: string
-        required: true
-    responses:
-      1000:
-        $ref: './login_schema.yaml#/components/responses/successResponse'
-      2003:
-        $ref: './login_schema.yaml#/components/responses/empty_user_name'
-      2006:
-        $ref: './login_schema.yaml#/components/responses/empty_password'
-      3002:
-        $ref: './login_schema.yaml#/components/responses/login_fail'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'

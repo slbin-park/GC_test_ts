@@ -1,0 +1,81 @@
+# board-like reponse API
+components:
+  responses:
+    successResponse:
+      description: 댓글 신고 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    empty_content:
+      description: 신고 내용 없음
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2013
+              msg:
+                example: 댓글 신고 내용을 입력해주세요.
+    self_report:
+      description: 자신의 게시글 신고
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2026
+              msg:
+                example: 자신의 게시글에는 신고할수 없습니다.
+    reply_nothing:
+      description: 없는 댓글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2021
+              msg:
+                example: 없는 댓글 입니다.
+    report_self:
+      description: 자신 댓글 신고
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2025
+              msg:
+                example: 자신의 댓글에는 신고할수 없습니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

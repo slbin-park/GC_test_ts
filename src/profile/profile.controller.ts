@@ -13,7 +13,7 @@ const ProfileController = {
   get_profile: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
 
-    const response = await profileServiceInstance.Get_profile(req.params.user_id);
+    const response = await profileServiceInstance.Get_profile(req.params.user_id, req.body.user_id);
     res.send(response);
   },
 
@@ -43,13 +43,15 @@ const ProfileController = {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Get_feed(
       req.params.user_id,
-      req.body.last_board_id
+      req.params.last_board_id,
+      req.body.user_id
     );
     res.send(response);
   },
 
   get_follow_feed: async (req: Request, res: Response) => {
-    const { user_id, last_board_id } = req.body;
+    const { user_id } = req.body;
+    const { last_board_id } = req.params;
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Get_feed_follow(user_id, last_board_id);
     res.send(response);
