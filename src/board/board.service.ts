@@ -362,8 +362,11 @@ class BoardService {
   async Get_board_reply(board_id: any, user_id: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
+      const check_baord: any = await this.boardRepository.get_by_id(conn, board_id);
+      if (!check_baord.length) {
+        return response(baseResponse.BOARD_NOTHING);
+      }
       const get_board_reply: any = await this.boardRepository.get_board_reply(conn, board_id);
-      console.log(get_board_reply);
       return response(baseResponse.SUCCESS, get_board_reply);
     } catch (err: any) {
       logger.error(

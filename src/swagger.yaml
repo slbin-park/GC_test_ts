@@ -1020,6 +1020,93 @@ paths:
                     example: JWT 토큰 검증 실패
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  '/board/reply/{board_id}':
+    get:
+      tags:
+        - /board/reply
+      summary: 댓글 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 댓글 불러오기 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        reply_id:
+                          type: string
+                        user_id_fk:
+                          type: string
+                        reply_content:
+                          type: string
+                        user_name:
+                          type: string
+                        profileUrl:
+                          type: string
+                        uploadTime:
+                          type: string
+                    example:
+                      - reply_id: 댓글 고유 인덱스
+                        user_id_fk: 유저 고유 인덱스
+                        reply_content: 댓글 내용
+                        user_name: 사용자 이름
+                        profileUrl: 프로필 이미지 주소
+                        uploadTime: 업로드 시간
+                      - reply_id: 1
+                        user_id_fk: 1
+                        reply_content: 댓글입니다.
+                        user_name: slbin
+                        profileUrl: www.naver.com
+                        uploadTime: 1분전
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   /board/reply:
     post:
       tags:

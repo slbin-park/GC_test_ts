@@ -52,6 +52,9 @@ paths:
 
   # --------board/reply----------
 
+  # GET
+  /board/reply/{board_id}:
+    $ref: './board/reply/reply.yaml#/~1board~1reply~1{board_id}'
   # POST
   /board/reply:
     $ref: './board/reply/reply.yaml#/~1board~1reply'

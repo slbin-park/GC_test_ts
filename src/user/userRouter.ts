@@ -13,6 +13,7 @@ router.get('/user-name/:user_name', Uservalidation.get_user_name, UserController
 
 router.get('/:id', UserController.get_user_id);
 
+// 스웨거 끝
 router.put(
   '/user-name',
   jwt.check_access_token,
@@ -20,6 +21,7 @@ router.put(
   UserController.update_user_name
 );
 
+// 스웨거 끝
 router.put(
   '/user-status',
   jwt.check_access_token,

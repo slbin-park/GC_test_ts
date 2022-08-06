@@ -43,6 +43,7 @@ router.post(
 
 // ------------------댓글----------------------
 
+// 스웨거 끝
 router.get('/reply/:board_id', jwt.check_access_token, BoardController.get_board_reply);
 
 // 스웨거 끝
