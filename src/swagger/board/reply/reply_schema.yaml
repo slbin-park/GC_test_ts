@@ -1,8 +1,8 @@
-# auto-login reponse API
+# board reponse API
 components:
   responses:
     successResponse:
-      description: 자동 로그인 성공
+      description: 댓글 작성 성공
       content:
         application/json:
           schema:
@@ -19,8 +19,8 @@ components:
                 properties:
                   access_token:
                     example: access_token
-    empty_refresh_token:
-      description: 리프레시 토큰 공백
+    id_empty:
+      description: 게시글 아이디 공백
       content:
         application/json:
           schema:
@@ -29,9 +29,35 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 3001
+                example: 2011
               msg:
-                example: Refresh_Token 이 없습니다.
+                example: 게시글 번호를 입력해주세요.
+    content_empty:
+      description: 댓글 내용 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2012
+              msg:
+                example: 댓글을 입력해주세요.
+    board_nothing:
+      description: 없는 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2017
+              msg:
+                example: 없는 게시글 입니다.
     jwt_error:
       description: jwt 에러
       content:

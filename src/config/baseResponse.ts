@@ -59,13 +59,13 @@ export = {
   BOARD_EDIT_CONTENT_EMPTY: {
     isSuccess: false,
     code: 2015,
-    msg: '게시글 신고 내용을 입력해주세요.',
+    msg: '게시글 수정 내용을 입력해주세요.',
   },
 
   BOARD_EDIT_CONTENT_LEGNTH: {
     isSuccess: false,
     code: 2016,
-    msg: '게시글 신고 내용은 1000자 이하로 입력해주세요.',
+    msg: '게시글 내용은 1000자 이하로 입력해주세요.',
   },
 
   BOARD_NOTHING: {
@@ -181,19 +181,19 @@ export = {
   },
 
   SIGNUP_REDUNDANT_USER_NAME: { isSuccess: false, code: 3001, msg: '중복된 사용자 이름입니다.' },
-  SIGNUP_REDUNDANT_NICKNAME: { isSuccess: false, code: 3002, message: '중복된 닉네임입니다.' },
+  SIGNUP_REDUNDANT_NICKNAME: { isSuccess: false, code: 3002, msg: '중복된 닉네임입니다.' },
 
-  SIGNIN_EMAIL_WRONG: { isSuccess: false, code: 3003, message: '아이디가 잘못 되었습니다.' },
-  SIGNIN_PASSWORD_WRONG: { isSuccess: false, code: 3004, message: '비밀번호가 잘못 되었습니다.' },
+  SIGNIN_EMAIL_WRONG: { isSuccess: false, code: 3003, msg: '아이디가 잘못 되었습니다.' },
+  SIGNIN_PASSWORD_WRONG: { isSuccess: false, code: 3004, msg: '비밀번호가 잘못 되었습니다.' },
   SIGNIN_INACTIVE_ACCOUNT: {
     isSuccess: false,
     code: 3005,
-    message: '비활성화 된 계정입니다. 고객센터에 문의해주세요.',
+    msg: '비활성화 된 계정입니다. 고객센터에 문의해주세요.',
   },
   SIGNIN_WITHDRAWAL_ACCOUNT: {
     isSuccess: false,
     code: 3006,
-    message: '탈퇴 된 계정입니다. 고객센터에 문의해주세요.',
+    msg: '탈퇴 된 계정입니다. 고객센터에 문의해주세요.',
   },
 
   FOLLOW_NOTHING: {
@@ -204,5 +204,5 @@ export = {
 
   //Connection, Transaction 등의 서버 오류
   DB_ERROR: { isSuccess: false, code: 4000, msg: '데이터 베이스 에러' },
-  SERVER_ERROR: { isSuccess: false, code: 4001, message: '서버 에러' },
+  SERVER_ERROR: { isSuccess: false, code: 4001, memsgssage: '서버 에러' },
 };

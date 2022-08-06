@@ -222,10 +222,6 @@ class BoardService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const reply_like_status = 'UNLIKE';
-      const check_board_id: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
-      if (check_board_id.length == 0) {
-        return response(baseResponse.BOARD_NOTHING);
-      }
       // 자신이 댓글을 좋아요를 누른 기록이 있는지 확인
       const get_reply_like_info = [reply_id, user_id];
       const check_reply_like: any = await this.boardRepository.get_by_id_reply_like(

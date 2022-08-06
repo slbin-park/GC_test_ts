@@ -1,8 +1,8 @@
-# login reponse API
+# board reponse API
 components:
   responses:
     successResponse:
-      description: 유저 로그인 성공
+      description: 댓글 작성 성공
       content:
         application/json:
           schema:
@@ -14,17 +14,8 @@ components:
                 example: 1000
               msg:
                 example: 성공
-              result:
-                type: object
-                properties:
-                  user_id:
-                    example: 유저식별자
-                  access_token:
-                    example: access_token
-                  refresh_token:
-                    example: refresh_token
-    empty_user_name:
-      description: 사용자 이름 공백
+    reply_nothing:
+      description: 없는 댓글
       content:
         application/json:
           schema:
@@ -33,11 +24,11 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 2003
+                example: 2021
               msg:
-                example: 사용자 이름을 입력해주세요.
-    empty_password:
-      description: 비밀번호 공백
+                example: 없는 댓글 입니다.
+    id_empty:
+      description: 게시글 아이디 공백
       content:
         application/json:
           schema:
@@ -46,11 +37,11 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 2006
+                example: 2011
               msg:
-                example: 비밀번호를 입력해주세요.
-    login_fail:
-      description: 로그인 실패
+                example: 게시글 번호를 입력해주세요.
+    already_like:
+      description: 이미 좋아요 누름
       content:
         application/json:
           schema:
@@ -59,6 +50,19 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 3002
+                example: 2022
               msg:
-                example: 아이디 혹은 비밀번호를 확인해주세요.
+                example: 이미 좋아요를 누른 댓글 입니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

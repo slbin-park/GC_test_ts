@@ -1,8 +1,8 @@
-# auto-login reponse API
+# board-like reponse API
 components:
   responses:
     successResponse:
-      description: 자동 로그인 성공
+      description: 게시글 삭제 성공
       content:
         application/json:
           schema:
@@ -14,13 +14,8 @@ components:
                 example: 1000
               msg:
                 example: 성공
-              result:
-                type: object
-                properties:
-                  access_token:
-                    example: access_token
-    empty_refresh_token:
-      description: 리프레시 토큰 공백
+    board_nothing:
+      description: 없는 게시글
       content:
         application/json:
           schema:
@@ -29,9 +24,22 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 3001
+                example: 2017
               msg:
-                example: Refresh_Token 이 없습니다.
+                example: 없는 게시글 입니다.
+    board_edit_not_self:
+      description: 작성자가 아님
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2027
+              msg:
+                example: 게시글 작성자만 수정이 가능합니다.
     jwt_error:
       description: jwt 에러
       content:

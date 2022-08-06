@@ -92,7 +92,7 @@ WHERE board_id = ?
 `;
 
 const GET_BOARD_REPLY = `
-SELECT br.reply_id , br.user_id_fk , br.reply_content , u.user_name,
+SELECT br.reply_id , br.user_id_fk , br.reply_content , u.user_name, u.profileUrl,
        case
                when timestampdiff(second, br.update_at, current_timestamp) < 60
                    then concat(timestampdiff(second, br.update_at, current_timestamp), '초 전')

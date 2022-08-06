@@ -1,0 +1,99 @@
+# board-like reponse API
+components:
+  responses:
+    unsuccessResponse:
+      description: 게시글 좋아요 취소 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    successResponse:
+      description: 게시글 좋아요 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: object
+                properties:
+                  access_token:
+                    example: access_token
+    board_nothing:
+      description: 없는 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2017
+              msg:
+                example: 없는 게시글 입니다.
+    like_already:
+      description: 이미 좋아요 누른 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2018
+              msg:
+                example: 이미 좋아요를 누른 게시글 입니다.
+    unlike_already:
+      description: 이미 좋아요 취소한 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2019
+              msg:
+                example: 이미 좋아요 취소한 게시글 입니다.
+    like_nothing:
+      description: 좋아요 누른적 없는 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2020
+              msg:
+                example: 좋아요를 누른적이 없는 게시글 입니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

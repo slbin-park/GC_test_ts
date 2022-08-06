@@ -342,6 +342,717 @@ paths:
                     example: 중복된 사용자 이름입니다.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  /board:
+    post:
+      tags:
+        - /board
+      summary: 게시글 작성
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                board_content:
+                  example: 게시글 내용
+                images:
+                  example:
+                    - 이미지 주소1
+                    - 이미지 주소2
+      responses:
+        '1000':
+          description: 게시글 작성 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      access_token:
+                        example: access_token
+        '2010':
+          description: 게시글 내용 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2010
+                  msg:
+                    example: 게시글 내용을 입력해주세요.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}/like':
+    post:
+      tags:
+        - /board
+      summary: 게시글 좋아요 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 게시글 좋아요 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      access_token:
+                        example: access_token
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '2018':
+          description: 이미 좋아요 누른 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2018
+                  msg:
+                    example: 이미 좋아요를 누른 게시글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}/report':
+    post:
+      tags:
+        - /board
+      summary: 게시글 신고 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                report_content:
+                  example: 게시글 신고 내용
+      responses:
+        '1000':
+          description: 게시글 신고ㅓ 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2014':
+          description: 신고 내용 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2014
+                  msg:
+                    example: 게시글 신고 내용을 입력해주세요.
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '2026':
+          description: 자신의 게시글 신고
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2026
+                  msg:
+                    example: 자신의 게시글에는 신고할수 없습니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}/unlike':
+    put:
+      tags:
+        - /board
+      summary: 게시글 좋아요 취소 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 게시글 좋아요 취소 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2017':
+          $ref: '#/paths/~1board~1%7Bboard_id%7D~1like/post/responses/2017'
+        '2019':
+          description: 이미 좋아요 취소한 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2019
+                  msg:
+                    example: 이미 좋아요 취소한 게시글 입니다.
+        '2020':
+          description: 좋아요 누른적 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2020
+                  msg:
+                    example: 좋아요를 누른적이 없는 게시글 입니다.
+        '3000':
+          $ref: '#/paths/~1board~1%7Bboard_id%7D~1like/post/responses/3000'
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}/delete':
+    put:
+      tags:
+        - /board
+      summary: 게시글 삭제 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 게시글 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '2027':
+          description: 작성자가 아님
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2027
+                  msg:
+                    example: 게시글 작성자만 수정이 가능합니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}':
+    put:
+      tags:
+        - /board
+      summary: 게시글 수정 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                board_content:
+                  example: 수정할 게시글 내용
+      responses:
+        '1000':
+          description: 게시글 수정 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2015':
+          description: 수정 내용 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2015
+                  msg:
+                    example: 게시글 수정 내용을 입력해주세요.
+        '2016':
+          description: 게시글 유효성 검사
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2016
+                  msg:
+                    example: 게시글 수정 내용을 입력해주세요.
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '2027':
+          description: 작성자가 아님
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2027
+                  msg:
+                    example: 게시글 작성자만 수정이 가능합니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /board/reply:
+    post:
+      tags:
+        - /board/reply
+      summary: 댓글 작성
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reply_content:
+                  example: 댓글 내용
+                board_id:
+                  example: 게시글 아이디
+      responses:
+        '1000':
+          description: 댓글 작성 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      access_token:
+                        example: access_token
+        '2011':
+          description: 게시글 아이디 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2011
+                  msg:
+                    example: 게시글 번호를 입력해주세요.
+        '2012':
+          description: 댓글 내용 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2012
+                  msg:
+                    example: 댓글을 입력해주세요.
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/reply/{reply_id}/like':
+    post:
+      tags:
+        - /board/reply
+      summary: 댓글 좋아요 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: reply_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                board_id:
+                  example: 게시글 아이디
+      responses:
+        '1000':
+          description: 댓글 작성 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2011':
+          description: 게시글 아이디 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2011
+                  msg:
+                    example: 게시글 번호를 입력해주세요.
+        '2021':
+          description: 없는 댓글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2021
+                  msg:
+                    example: 없는 댓글 입니다.
+        '2022':
+          description: 이미 좋아요 누름
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2022
+                  msg:
+                    example: 이미 좋아요를 누른 댓글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/reply/{reply_id}/unlike':
+    put:
+      tags:
+        - /board/reply
+      summary: 댓글 좋아요 취소 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 댓글 작성 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2023':
+          description: 이미 좋아요 취소한 댓글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2023
+                  msg:
+                    example: 이미 좋아요를 취소한 댓글 입니다.
+        '2024':
+          description: 좋아요 누른적 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2024
+                  msg:
+                    example: 좋아요를 누르적이 없는 댓글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
 security:
   - bearerAuth: []
 components:
@@ -370,4 +1081,10 @@ components:
         application/json:
           schema:
             type: object
-            properties: null
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 4000
+              msg:
+                example: 데이터 베이스 에러

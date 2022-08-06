@@ -1,0 +1,81 @@
+# board-like reponse API
+components:
+  responses:
+    successResponse:
+      description: 게시글 수정 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    board_nothing:
+      description: 없는 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2017
+              msg:
+                example: 없는 게시글 입니다.
+    board_edit_not_self:
+      description: 작성자가 아님
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2027
+              msg:
+                example: 게시글 작성자만 수정이 가능합니다.
+    board_content_empty:
+      description: 수정 내용 없음
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2015
+              msg:
+                example: 게시글 수정 내용을 입력해주세요.
+    content_length:
+      description: 게시글 유효성 검사
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2016
+              msg:
+                example: 게시글 수정 내용을 입력해주세요.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

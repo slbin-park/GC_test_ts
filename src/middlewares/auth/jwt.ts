@@ -8,6 +8,9 @@ import AuthRepository from '../../auth/auth.dao';
 import { Container, Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import pool from '../../config/db';
+import { response } from '../../config/response';
+import baseResponse from '../../config/baseResponse';
+import logger from '../../config/winston';
 const jwt = require('jsonwebtoken');
 
 const create_access_token = (user_id: any) => {
@@ -49,14 +52,16 @@ const check_access_token = async (req: Request, res: Response, next: NextFunctio
     // body에 GET_USER_ID 을 넣어서 보내줌
     req.body.user_id = token.user_id;
     next();
-  } catch (error: any) {
-    console.log(error.name);
+  } catch (err: any) {
     // 유효기간이 초과된 경우
-    if (error.name === 'TokenExpiredError') {
-      res.status(419).send({ success: false, msg: '토큰이 만료되었습니다.' }); // 419 추가예정
+    if (err.name === 'TokenExpiredError') {
+      res.send(response(baseResponse.TOKEN_VERIFICATION_FAILURE)); // 419 추가예정
     }
     // 토큰의 비밀키가 일치하지 않는 경우
-    res.status(401).send({ success: false, msg: '유효하지 않은 토큰입니다.' }); // 401 추가예정
+    res.send(response(baseResponse.TOKEN_VERIFICATION_FAILURE)); // 419 추가예정
+    logger.error(
+      `App - Update_board BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+    );
   }
 };
 

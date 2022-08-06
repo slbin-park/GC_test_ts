@@ -11,12 +11,48 @@ servers:
   - url: http://localhost:8080/
     description: pro 서버
 paths:
+  # --------auth----------
+  # POST
   /auth/login:
     $ref: './auth/auth.yaml#/~1auth~1login'
+  # GET
   /auth/auto-login:
     $ref: './auth/auth.yaml#/~1auth~1auto-login'
+
+  # --------user----------
+  # POST
   /user:
     $ref: './user/user.yaml#/~1user'
+
+  # --------board----------
+
+  # POST
+  /board:
+    $ref: './board/board.yaml#/~1board'
+  /board/{board_id}/like:
+    $ref: './board/board.yaml#/~1board~1{board_id}~1like'
+  /board/{board_id}/report:
+    $ref: './board/board.yaml#/~1board~1{board_id}~1report'
+
+  # PUT
+  /board/{board_id}/unlike:
+    $ref: './board/board.yaml#/~1board~1{board_id}~1unlike'
+  /board/{board_id}/delete:
+    $ref: './board/board.yaml#/~1board~1{board_id}~1delete'
+  /board/{board_id}:
+    $ref: './board/board.yaml#/~1board~1{board_id}'
+
+  # --------board/reply----------
+
+  # POST
+  /board/reply:
+    $ref: './board/reply/reply.yaml#/~1board~1reply'
+  /board/reply/{reply_id}/like:
+    $ref: './board/reply/reply.yaml#/~1board~1reply~1{reply_id}~1like'
+
+  # PUT
+  /board/reply/{reply_id}/unlike:
+    $ref: './board/reply/reply.yaml#/~1board~1reply~1{reply_id}~1unlike'
 security:
   - bearerAuth: []
 components:
@@ -47,3 +83,9 @@ components:
           schema:
             type: object
             properties:
+              isSuccess:
+                example: false
+              code:
+                example: 4000
+              msg:
+                example: 데이터 베이스 에러

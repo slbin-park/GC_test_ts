@@ -47,7 +47,7 @@
   get:
     tags:
       - /auth
-    summary: access-token 발급
+    summary: access-token 재발급
     parameters:
       - in: header
         name: authorization

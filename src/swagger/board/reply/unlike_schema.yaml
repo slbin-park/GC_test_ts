@@ -1,8 +1,8 @@
-# auto-login reponse API
+# board reponse API
 components:
   responses:
     successResponse:
-      description: 자동 로그인 성공
+      description: 댓글 작성 성공
       content:
         application/json:
           schema:
@@ -14,13 +14,8 @@ components:
                 example: 1000
               msg:
                 example: 성공
-              result:
-                type: object
-                properties:
-                  access_token:
-                    example: access_token
-    empty_refresh_token:
-      description: 리프레시 토큰 공백
+    unlike_reply:
+      description: 이미 좋아요 취소한 댓글
       content:
         application/json:
           schema:
@@ -29,9 +24,22 @@ components:
               isSuccess:
                 example: false
               code:
-                example: 3001
+                example: 2023
               msg:
-                example: Refresh_Token 이 없습니다.
+                example: 이미 좋아요를 취소한 댓글 입니다.
+    like_nothing:
+      description: 좋아요 누른적 없음
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2024
+              msg:
+                example: 좋아요를 누르적이 없는 댓글 입니다.
     jwt_error:
       description: jwt 에러
       content:

@@ -1,0 +1,199 @@
+/board/reply:
+  post:
+    tags:
+      - /board/reply
+    summary: 댓글 작성
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reply_content:
+                example: 댓글 내용
+              board_id:
+                example: 게시글 아이디
+    responses:
+      1000:
+        $ref: './reply_schema.yaml#/components/responses/successResponse'
+      2017:
+        $ref: './reply_schema.yaml#/components/responses/board_nothing'
+      2011:
+        $ref: './reply_schema.yaml#/components/responses/id_empty'
+      2012:
+        $ref: './reply_schema.yaml#/components/responses/content_empty'
+      3000:
+        $ref: './reply_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+
+/board/reply/{reply_id}/like:
+  post:
+    tags:
+      - /board/reply
+    summary: 댓글 좋아요 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: reply_id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              board_id:
+                example: 게시글 아이디
+    responses:
+      1000:
+        $ref: './like_schema.yaml#/components/responses/successResponse'
+      2021:
+        $ref: './like_schema.yaml#/components/responses/reply_nothing'
+      2011:
+        $ref: './like_schema.yaml#/components/responses/id_empty'
+      2022:
+        $ref: './like_schema.yaml#/components/responses/already_like'
+      3000:
+        $ref: './like_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+
+/board/reply/{reply_id}/unlike:
+  put:
+    tags:
+      - /board/reply
+    summary: 댓글 좋아요 취소 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: board_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './unlike_schema.yaml#/components/responses/successResponse'
+      2023:
+        $ref: './unlike_schema.yaml#/components/responses/unlike_reply'
+      2024:
+        $ref: './unlike_schema.yaml#/components/responses/like_nothing'
+      3000:
+        $ref: './unlike_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+# /board/{board_id}/delete:
+#   put:
+#     tags:
+#       - /board
+#     summary: 게시글 삭제 요청
+#     parameters:
+#       - in: header
+#         name: authorization
+#         type: string
+#         required: true
+#       - in: path
+#         name: board_id
+#         required: true
+#         schema:
+#           type: string
+#     responses:
+#       1000:
+#         $ref: './board-delete_schema.yaml#/components/responses/successResponse'
+#       2017:
+#         $ref: './board-delete_schema.yaml#/components/responses/board_nothing'
+#       2027:
+#         $ref: './board-delete_schema.yaml#/components/responses/board_edit_not_self'
+#       3000:
+#         $ref: './board-delete_schema.yaml#/components/responses/jwt_error'
+#       4000:
+#         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+
+# /board/{board_id}:
+#   put:
+#     tags:
+#       - /board
+#     summary: 게시글 수정 요청
+#     parameters:
+#       - in: header
+#         name: authorization
+#         type: string
+#         required: true
+#       - in: path
+#         name: board_id
+#         required: true
+#         schema:
+#           type: string
+#     requestBody:
+#       content:
+#         application/json:
+#           schema:
+#             type: object
+#             properties:
+#               board_content:
+#                 example: 수정할 게시글 내용
+#     responses:
+#       1000:
+#         $ref: './edit_schema.yaml#/components/responses/successResponse'
+#       2017:
+#         $ref: './edit_schema.yaml#/components/responses/board_nothing'
+#       2027:
+#         $ref: './edit_schema.yaml#/components/responses/board_edit_not_self'
+#       2015:
+#         $ref: './edit_schema.yaml#/components/responses/board_content_empty'
+#       2016:
+#         $ref: './edit_schema.yaml#/components/responses/content_length'
+#       3000:
+#         $ref: './edit_schema.yaml#/components/responses/jwt_error'
+#       4000:
+#         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+
+# /board/{board_id}/report:
+#   post:
+#     tags:
+#       - /board
+#     summary: 게시글 신고 요청
+#     parameters:
+#       - in: header
+#         name: authorization
+#         type: string
+#         required: true
+#       - in: path
+#         name: board_id
+#         required: true
+#         schema:
+#           type: string
+#     requestBody:
+#       content:
+#         application/json:
+#           schema:
+#             type: object
+#             properties:
+#               report_content:
+#                 example: 게시글 신고 내용
+#     responses:
+#       1000:
+#         $ref: './report_schema.yaml#/components/responses/successResponse'
+#       2017:
+#         $ref: './report_schema.yaml#/components/responses/board_nothing'
+#       2014:
+#         $ref: './report_schema.yaml#/components/responses/content_empty'
+#       2026:
+#         $ref: './report_schema.yaml#/components/responses/self_report'
+#       3000:
+#         $ref: './report_schema.yaml#/components/responses/jwt_error'
+#       4000:
+#         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'

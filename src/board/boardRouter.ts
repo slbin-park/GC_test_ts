@@ -23,7 +23,7 @@ router.put('/:board_id/delete', jwt.check_access_token, BoardController.delete_b
 router.put(
   '/:board_id',
   jwt.check_access_token,
-  BoardValidation.post_board_edit_vali,
+  BoardValidation.put_board_edit_vali,
   BoardController.edit_board
 );
 
@@ -48,7 +48,12 @@ router.post(
 );
 
 // 댓글 좋아요 눌렀을경우
-router.post('/reply/:reply_id/like', jwt.check_access_token, BoardController.save_reply_like);
+router.post(
+  '/reply/:reply_id/like',
+  jwt.check_access_token,
+  BoardValidation.post_reply_like_vali,
+  BoardController.save_reply_like
+);
 
 // 댓글 좋아요 취소
 router.put('/reply/:reply_id/unlike', jwt.check_access_token, BoardController.cancel_reply_like);
@@ -60,5 +65,7 @@ router.post(
   BoardValidation.post_reply_report_vali,
   BoardController.save_reply_report
 );
+
+// 댓글 삭제 기능 추가하기
 
 export default router;
