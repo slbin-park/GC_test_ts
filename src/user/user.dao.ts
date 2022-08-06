@@ -42,6 +42,16 @@ class UserRepository {
     const [res_update_user_stauts] = await conn.query(sql.UPDATE_USER_STATUS, user_info);
     return res_update_user_stauts;
   }
+
+  async get_user_psword(conn: any, phone: any) {
+    const [res_user] = await conn.query(sql.GET_USER_PHONE, phone);
+    return res_user;
+  }
+
+  async update_user_password(conn: any, user_info: any) {
+    const [res_user_psword] = await conn.query(sql.GET_USER_PHONE, user_info);
+    return res_user_psword;
+  }
 }
 
 export default UserRepository;

@@ -162,3 +162,30 @@
         $ref: './get-reply_schema.yaml#/components/responses/jwt_error'
       4000:
         $ref: '../../openapi.yaml#/components/responses/ErrorResponse'
+
+/board/reply/{reply_id}/delete:
+  put:
+    tags:
+      - /board/reply
+    summary: 댓글 삭제 요청
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: reply_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './delete-reply_schema.yaml#/components/responses/successResponse'
+      2021:
+        $ref: './delete-reply_schema.yaml#/components/responses/reply_nothing'
+      2038:
+        $ref: './delete-reply_schema.yaml#/components/responses/can_self'
+      3000:
+        $ref: './delete-reply_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../../openapi.yaml#/components/responses/ErrorResponse'

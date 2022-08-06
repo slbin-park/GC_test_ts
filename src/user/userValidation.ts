@@ -87,4 +87,19 @@ const put_user_status = (req: Request, res: Response, next: NextFunction) => {
     next();
   }
 };
-export { post_user_vali, get_user_name, put_user_name, put_user_status };
+
+const put_user_psword = (req: Request, res: Response, next: NextFunction) => {
+  const { phone_number, password } = req.body;
+  const user_psword_regex = new RegExp(/[`~!@#$%^&*|\\\'\";:\/?]/gi);
+  if (!phone_number) {
+    res.send(baseResponse.SIGNUP_PHONENUMBER_EMPTY);
+  } else if (!password) {
+    res.send(baseResponse.SIGNUP_PASSWORD_EMPTY);
+  } else if (!user_psword_regex.test(password) || password.length <= 5 || password.length > 20) {
+    res.send(baseResponse.SIGNUP_PASSWORD_LENGTH);
+    return;
+  } else {
+    next();
+  }
+};
+export { post_user_vali, get_user_name, put_user_name, put_user_status, put_user_psword };

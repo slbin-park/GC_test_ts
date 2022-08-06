@@ -94,6 +94,11 @@ class BoardRepository {
     const [get_board_reply] = await conn.query(sql.GET_BOARD_REPLY, board_info);
     return get_board_reply;
   }
+
+  async update_reply_status(conn: any, reply_info: any) {
+    const [get_board_reply] = await conn.query(sql.UPDATE_REPLY_STATUS, reply_info);
+    return get_board_reply;
+  }
 }
 
 export default BoardRepository;

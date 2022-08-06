@@ -168,6 +168,12 @@ export = {
     msg: '이미 팔로우를 요청했습니다.',
   },
 
+  REPLY_DELETE_CAN_SELF: {
+    isSuccess: false,
+    code: 2038,
+    msg: '자신의 댓글만 삭제 할수있습니다.',
+  },
+
   // Response error
   REFRESH_TOKEN_NOTHING: {
     isSuccess: false,

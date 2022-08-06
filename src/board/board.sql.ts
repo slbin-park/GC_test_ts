@@ -91,6 +91,12 @@ SET board_status = ?
 WHERE board_id = ?
 `;
 
+const UPDATE_REPLY_STATUS = `
+UPDATE board_reply
+SET reply_status = ?
+WHERE reply_id = ?
+`;
+
 const GET_BOARD_REPLY = `
 SELECT br.reply_id , br.user_id_fk , br.reply_content , u.user_name, u.profileUrl,
        case
@@ -130,4 +136,5 @@ export {
   UPDATE_BOARD,
   UPDATE_BOARD_STATUS,
   GET_BOARD_REPLY,
+  UPDATE_REPLY_STATUS,
 };

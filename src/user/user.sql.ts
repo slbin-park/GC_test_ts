@@ -6,9 +6,21 @@ VALUES( ? , ? , ? , ? , ? , ? , 'ACTIVE' , ? , ? );`;
 const GET_USER_ALL = `
 SELECT user_id,user_name , phone_number , name , birthday , register , user_status, accept_date
 FROM user;`;
+
 const GET_USER_ID = `SELECT user_id,user_name , phone_number , name , birthday , register , user_status, accept_date
 FROM user
 WHERE user_id = ?;`;
+
+const GET_USER_PHONE = `SELECT *
+FROM user
+WHERE phone_number = ?;
+`;
+
+const UPDATE_USER_PSWORD = `
+UPDATE user
+SET password = ?
+WHERE user_phone_number = ?;
+`;
 
 const SAVE_USER_KAKAO = `
 INSERT INTO 
@@ -50,4 +62,6 @@ export {
   UPDATE_USER_NAME,
   SAVE_USER_NAME_CHANGE,
   UPDATE_USER_STATUS,
+  GET_USER_PHONE,
+  UPDATE_USER_PSWORD,
 };

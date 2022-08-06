@@ -140,3 +140,33 @@
         $ref: './status_schema.yaml#/components/responses/jwt_error'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/user/user-password:
+  put:
+    tags:
+      - /user
+    summary: 휴대폰 번호로 사용자 비밀번호 변경
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phone:
+                example: 휴대폰 번호
+              password:
+                example: 바꿀 비밀번호
+    responses:
+      1000:
+        $ref: './put-user-psword_schema.yaml#/components/responses/successResponse'
+      2005:
+        $ref: './put-user-psword_schema.yaml#/components/responses/phone_empty'
+      2007:
+        $ref: './put-user-psword_schema.yaml#/components/responses/psword_wrong'
+      2006:
+        $ref: './put-user-psword_schema.yaml#/components/responses/psword_empty'
+      2029:
+        $ref: './put-user-psword_schema.yaml#/components/responses/user_nothing'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'

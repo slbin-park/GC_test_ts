@@ -77,6 +77,7 @@ router.post(
   BoardController.save_reply_report
 );
 
-// 댓글 삭제 기능 추가하기
-router.put('/reply/:reply_id/delete', jwt.check_access_token);
+// 스웨거 끝
+// 댓글 삭제 기능
+router.put('/reply/:reply_id/delete', jwt.check_access_token, BoardController.delete_board_reply);
 export default router;

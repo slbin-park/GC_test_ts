@@ -13,6 +13,7 @@ router.get('/user-name/:user_name', Uservalidation.get_user_name, UserController
 
 router.get('/:id', UserController.get_user_id);
 
+// 사용자 이름 변경
 // 스웨거 끝
 router.put(
   '/user-name',
@@ -21,6 +22,7 @@ router.put(
   UserController.update_user_name
 );
 
+// 유저 상태 변경 비공개 , 삭제 , 액티브
 // 스웨거 끝
 router.put(
   '/user-status',
@@ -28,6 +30,9 @@ router.put(
   Uservalidation.put_user_status,
   UserController.update_user_status
 );
+
+// 스웨거 끝
+router.put('/user-password', Uservalidation.put_user_psword, UserController.update_user_psword);
 
 //회원가입
 // 스웨거 끝

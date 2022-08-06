@@ -377,6 +377,33 @@ class BoardService {
       conn.release();
     }
   }
+
+  async Delete_board_reply(reply_id: any, user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    const reply_status = 'INVISIBLE';
+    try {
+      const check_reply: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
+      console.log(check_reply);
+      if (!check_reply.length) {
+        return response(baseResponse.REPLY_NOTHING);
+      }
+      if (check_reply[0].user_id_fk != user_id) {
+        return response(baseResponse.REPLY_DELETE_CAN_SELF);
+      }
+      const delete_reply: any = await this.boardRepository.update_reply_status(conn, [
+        reply_status,
+        reply_id,
+      ]);
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      logger.error(
+        `App - Get_board_reply BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
 }
 
 export default BoardService;

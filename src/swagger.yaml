@@ -560,6 +560,90 @@ paths:
                     example: JWT 토큰 검증 실패
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  /user/user-password:
+    put:
+      tags:
+        - /user
+      summary: 휴대폰 번호로 사용자 비밀번호 변경
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  example: 휴대폰 번호
+                password:
+                  example: 바꿀 비밀번호
+      responses:
+        '1000':
+          description: 비밀번호 변경 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2005':
+          description: 휴대폰 번호 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2005
+                  msg:
+                    example: 휴대폰 번호를 입력해주세요.
+        '2006':
+          description: 비밀번호 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2006
+                  msg:
+                    example: 비밀번호를 입력해주세요.
+        '2007':
+          description: 비밀번호 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2007
+                  msg:
+                    example: 비밀번호는 6~20자리를 입력해주세요.
+        '2029':
+          description: 존재하지 않는 유저
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2029
+                  msg:
+                    example: 존재하지 않는 유저입니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   /board:
     post:
       tags:
@@ -1453,6 +1537,76 @@ paths:
                     example: 2024
                   msg:
                     example: 좋아요를 누르적이 없는 댓글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  '/board/reply/{reply_id}/delete':
+    put:
+      tags:
+        - /board/reply
+      summary: 댓글 삭제 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: reply_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '1000':
+          description: 댓글 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2021':
+          description: 없는 댓글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2021
+                  msg:
+                    example: 없는 댓글 입니다.
+        '2038':
+          description: 자신의 댓글만 삭제 가능
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2038
+                  msg:
+                    example: 자신의 댓글만 삭제 할수있습니다.
         '3000':
           description: jwt 에러
           content:

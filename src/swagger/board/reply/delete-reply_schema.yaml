@@ -1,0 +1,55 @@
+# board reponse API
+components:
+  responses:
+    successResponse:
+      description: 댓글 삭제 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    reply_nothing:
+      description: 없는 댓글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2021
+              msg:
+                example: 없는 댓글 입니다.
+    can_self:
+      description: 자신의 댓글만 삭제 가능
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2038
+              msg:
+                example: 자신의 댓글만 삭제 할수있습니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

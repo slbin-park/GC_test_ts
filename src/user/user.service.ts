@@ -217,6 +217,32 @@ class UserService {
       conn.release();
     }
   }
+
+  async Update_user_psword(phone: any, password: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const check_user_phone = await this.userRepository.get_user_psword(conn, phone);
+      console.log(check_user_phone);
+      if (!check_user_phone.length) {
+        return response(baseResponse.USER_NOTHING);
+      }
+      password = await bcrypt.hash(password, saltRounds);
+      const update_user_info = [password, phone];
+      const update_user_psword = await this.userRepository.update_user_password(
+        conn,
+        update_user_info
+      );
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      conn.rollback();
+      logger.error(
+        `App - Update_user_status Service error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
 }
 
 export default UserService;

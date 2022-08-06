@@ -86,6 +86,12 @@ const UserController = {
     const response = await userServiceInstance.Update_user_status(user_id, user_status);
     res.json(response);
   },
+  update_user_psword: async (req: Request, res: Response) => {
+    const { phone_number, password } = req.body;
+    const userServiceInstance: UserService = Container.get(UserService);
+    const response = await userServiceInstance.Update_user_psword(phone_number, password);
+    res.json(response);
+  },
 };
 
 export default UserController;

@@ -1,0 +1,68 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 비밀번호 변경 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    phone_empty:
+      description: 휴대폰 번호 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2005
+              msg:
+                example: 휴대폰 번호를 입력해주세요.
+    psword_wrong:
+      description: 비밀번호 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2007
+              msg:
+                example: 비밀번호는 6~20자리를 입력해주세요.
+    psword_empty:
+      description: 비밀번호 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2006
+              msg:
+                example: 비밀번호를 입력해주세요.
+    user_nothing:
+      description: 존재하지 않는 유저
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2029
+              msg:
+                example: 존재하지 않는 유저입니다.
