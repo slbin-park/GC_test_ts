@@ -12,7 +12,7 @@ const AuthController = {
     const AuthServiceInstance: AuthService = Container.get(AuthService);
     const { user_name, password } = req.body;
     const response = await AuthServiceInstance.login(user_name, password);
-    res.send({ success: true, response });
+    res.send(response);
   },
 
   kakao_login: async (req: Request, res: Response) => {

@@ -1,0 +1,49 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: GC API docs
+  description: GC TEST CHUNSIK 의 API 문서입니다
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/api
+    description: 테스트서버
+  - url: http://localhost:8080/
+    description: pro 서버
+paths:
+  /auth/login:
+    $ref: './auth/auth.yaml#/~1auth~1login'
+  /auth/auto-login:
+    $ref: './auth/auth.yaml#/~1auth~1auto-login'
+  /user:
+    $ref: './user/user.yaml#/~1user'
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, for documentation purposes only
+  responses:
+    successResponse:
+      description: 요청 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+
+    ErrorResponse:
+      description: DB 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:

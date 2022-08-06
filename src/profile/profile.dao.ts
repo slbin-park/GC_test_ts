@@ -73,6 +73,11 @@ class ProfileRepository {
     const [res_user_profile] = await conn.query(sql.UPDATE_USER_PROFILE, user_profile);
     return res_user_profile;
   }
+
+  async get_follow_sub_list_private(conn: any, user_id: any) {
+    const [res_follow_list] = await conn.query(sql.GET_FOLLOW_SUB_LIST_PRIVATE, user_id);
+    return res_follow_list;
+  }
 }
 
 export default ProfileRepository;

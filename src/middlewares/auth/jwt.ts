@@ -84,7 +84,7 @@ const save_refresh_token = async (id: string, refresh_token: any) => {
 
   try {
     const authRepository = Container.get(AuthRepository);
-    const refresh_info = [id, refresh_token];
+    const refresh_info = [refresh_token, id];
     const a = await authRepository.update_refresh_token(conn, refresh_info);
     conn.commit();
     return a;

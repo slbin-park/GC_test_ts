@@ -59,9 +59,14 @@ class AuthService {
         access_token = await jwt.create_access_token(user_data[0].user_id);
         refresh_token = await jwt.create_refresh_token();
         // 리프레시 토큰 디비에 저장
+        console.log(user_data[0].user_id);
         await jwt.save_refresh_token(user_data[0].user_id, refresh_token);
         await conn.commit();
-
+        return response(baseResponse.SUCCESS, {
+          access_token,
+          refresh_token,
+          user_id: user_data[0].user_id,
+        });
         return { access_token, refresh_token };
       } else {
         return response(baseResponse.LOGIN_FAIL);
@@ -189,6 +194,7 @@ class AuthService {
     try {
       console.log('실행');
       const check_refresh_token: any = await jwt.check_refresh_token(refresh_token);
+      console.log(check_refresh_token);
       if (!check_refresh_token.success) {
         return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
       }
@@ -196,6 +202,7 @@ class AuthService {
         conn,
         refresh_token
       );
+      console.log(get_user_data);
       if (get_user_data.length == 0) {
         return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
       } else {

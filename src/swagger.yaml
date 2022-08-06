@@ -1,0 +1,373 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: GC API docs
+  description: GC TEST CHUNSIK 의 API 문서입니다
+  license:
+    name: MIT
+servers:
+  - url: 'http://localhost:8080/api'
+    description: 테스트서버
+  - url: 'http://localhost:8080/'
+    description: pro 서버
+paths:
+  /auth/login:
+    post:
+      tags:
+        - /auth
+      summary: 로그인
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  example: 사용자 이름
+                password:
+                  example: 비밀번호
+      responses:
+        '1000':
+          description: 유저 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      user_id:
+                        example: 유저식별자
+                      access_token:
+                        example: access_token
+                      refresh_token:
+                        example: refresh_token
+        '2003':
+          description: 사용자 이름 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2003
+                  msg:
+                    example: 사용자 이름을 입력해주세요.
+        '2006':
+          description: 비밀번호 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2006
+                  msg:
+                    example: 비밀번호를 입력해주세요.
+        '3002':
+          description: 로그인 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3002
+                  msg:
+                    example: 아이디 혹은 비밀번호를 확인해주세요.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /auth/auto-login:
+    get:
+      tags:
+        - /auth
+      summary: 자동 로그인
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      responses:
+        '1000':
+          description: 자동 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      access_token:
+                        example: access_token
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '3001':
+          description: 리프레시 토큰 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3001
+                  msg:
+                    example: Refresh_Token 이 없습니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+  /user:
+    post:
+      tags:
+        - /user
+      summary: 회원가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                social_id:
+                  example: 1 (소셜가입일 경우에만 user_id 받아와서 사용)
+                register:
+                  example: SELF || KAKAO
+                user_name:
+                  example: 사용자 이름
+                phone_number:
+                  example: 휴대폰 번호
+                password:
+                  example: 비밀번호
+                birthday:
+                  example: 생일 EX) 1999-11-11
+                accept_date:
+                  example: 약관 동의 날짜 EX) 1999-11-11
+                name:
+                  example: 닉네임
+      responses:
+        '1000':
+          description: 유저 회원가입 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: object
+                    properties:
+                      user_id:
+                        exmaple: 유저 아이디
+                      access_token:
+                        example: access_token
+                      refresh_token:
+                        example: refresh_token
+        '2001':
+          description: 가입경로 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2001
+                  msg:
+                    example: 가입경로를 입력해주세요.
+        '2002':
+          description: 소셜 아이디 공백 - 소셜 로그인만
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2002
+                  msg:
+                    example: SocialId를 입력해주세요.
+        '2003':
+          description: 사용자 이름 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2003
+                  msg:
+                    example: 사용자 이름을 입력해주세요.
+        '2004':
+          description: 사용자 이름 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2004
+                  msg:
+                    example: 유저 아이디는 6~20자리를 입력해주세요.
+        '2005':
+          description: 사용자 이름 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2005
+                  msg:
+                    example: 휴대폰 번호를 입력해주세요.
+        '2006':
+          description: 비밀번호 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2006
+                  msg:
+                    example: 비밀번호를 입력해주세요.
+        '2007':
+          description: 비밀번호 유효성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2007
+                  msg:
+                    example: 비밀번호는 6~20자리를 입력해주세요.
+        '2008':
+          description: 생일 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2008
+                  msg:
+                    example: 생일을 입력해주세요.
+        '2009':
+          description: 약관 동의 날짜 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2009
+                  msg:
+                    example: 약관 동의 날짜를 입력해주세요.
+        '2030':
+          description: 이름 공백
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2030
+                  msg:
+                    example: 이름을 입력해주세요.
+        '3001':
+          description: 유저 아이디 중복
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3001
+                  msg:
+                    example: 중복된 사용자 이름입니다.
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    successResponse:
+      description: 요청 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    ErrorResponse:
+      description: DB 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: null

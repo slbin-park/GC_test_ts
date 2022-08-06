@@ -1,0 +1,47 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 자동 로그인 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: object
+                properties:
+                  access_token:
+                    example: access_token
+    empty_refresh_token:
+      description: 리프레시 토큰 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3001
+              msg:
+                example: Refresh_Token 이 없습니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

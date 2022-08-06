@@ -1,15 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import routing from './routes/router';
+import YAML from 'yamljs';
+import path from 'path';
 const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger/swagger-output');
 
 const app = express();
-
+const swaggerSpec: any = YAML.load(path.join(__dirname, './swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api', routing);
 
 export default app;

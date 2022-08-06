@@ -23,6 +23,22 @@ const ProfileController = {
     res.send(response);
   },
 
+  update_follow_user: async (req: Request, res: Response) => {
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Update_follow(
+      req.body.user_id,
+      req.params.user_id
+    );
+    res.send(response);
+  },
+
+  get_follow_sub_list: async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Get_follow_sub_list(user_id);
+    res.send(response);
+  },
+
   get_feed: async (req: Request, res: Response) => {
     const profileServiceInstance: ProfileService = Container.get(ProfileService);
     const response = await profileServiceInstance.Get_feed(

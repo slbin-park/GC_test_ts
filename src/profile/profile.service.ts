@@ -65,34 +65,102 @@ class ProfileService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       await conn.beginTransaction();
-      const follow_status = 'FOLLOW';
+      let follow_status = 'FOLLOW';
       // 대상유저가 존재하는 아이디 인지 체크
       console.log(follow_user_id);
       const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_id);
       if (check_id.length == 0) {
         return response(baseResponse.USER_NOTHING);
       }
-      // 팔로우 요청을 한적이 있는지 체크
-      // 비공개 로직을 위해 전체 데이터를 다 가져옴
-      // 요청한 적이 있으면 status를 FOLLOW로 바꿈
+      //팔로우 신청
       const check_follow: any = await this.profileRepository.get_follow(
         conn,
         user_id,
         follow_user_id
       );
 
+      // 팔로우 할때 체크
+
+      // 팔로우 요청을 한적이 있는지 체크
+      // 비공개 로직을 위해 전체 데이터를 다 가져옴
+      // 요청한 적이 있으면 status를 FOLLOW로 바꿈
       if (check_follow.length == 0) {
         //   팔로우 함
+        if (check_id[0].user_status == 'PRIVATE') {
+          follow_status = 'SUBSCRIPTION';
+        }
         await this.profileRepository.save_follow(conn, user_id, follow_user_id, follow_status);
       } else {
+        if (check_id[0].user_status == 'PRIVATE') {
+          return response(baseResponse.FOLLOW_PRIVATE_ALREADY);
+        }
         // 팔로우 한적이 있으면 업데이트
+        else {
+          await this.profileRepository.update_follow(conn, user_id, follow_user_id, follow_status);
+        }
+      }
+      await conn.commit();
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      conn.rollback();
+      logger.error(
+        `App - Save_follow ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
+
+  // 팔로우 취소
+  async Update_follow(user_id: any, follow_user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      await conn.beginTransaction();
+      let follow_status = 'UNFOLLOW';
+      // 대상유저가 존재하는 아이디 인지 체크
+      const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_id);
+      if (check_id.length == 0) {
+        return response(baseResponse.USER_NOTHING);
+      }
+      //팔로우 신청
+      const check_follow: any = await this.profileRepository.get_follow(
+        conn,
+        user_id,
+        follow_user_id
+      );
+
+      // 팔로우 할때 체크
+
+      // 팔로우 요청을 한적이 있는지 체크
+      // 비공개 로직을 위해 전체 데이터를 다 가져옴
+      // 요청한 적이 있으면 status를 FOLLOW로 바꿈
+      if (check_follow.length == 0) {
+        return response(baseResponse.FOLLOW_NOTHING);
+      } else {
         await this.profileRepository.update_follow(conn, user_id, follow_user_id, follow_status);
       }
       await conn.commit();
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(
-        `App - Save_follow ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
+        `App - Update_follow ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
+
+  // 팔로우 신청 리스트 조회
+  async Get_follow_sub_list(user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const follow_list = await this.profileRepository.get_follow_sub_list_private(conn, user_id);
+      return response(baseResponse, follow_list);
+    } catch (err: any) {
+      logger.error(
+        `App - Get_follow_list ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
       );
       return errResponse(baseResponse.DB_ERROR);
     } finally {

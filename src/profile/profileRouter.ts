@@ -32,4 +32,15 @@ router.post(
   Profilevalidation.post_follow_vali,
   ProfileController.follow_user
 );
+
+// 팔로우 취소 하기
+router.put(
+  '/unfollow/:user_id',
+  jwt.check_access_token,
+  Profilevalidation.post_follow_vali,
+  ProfileController.update_follow_user
+);
+
+// 팔로우 리스트 조회
+router.get('/follow/list', jwt.check_access_token, ProfileController.get_follow_sub_list);
 export default router;

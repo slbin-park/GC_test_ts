@@ -1,0 +1,182 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 유저 회원가입 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: object
+                properties:
+                  user_id:
+                    exmaple: 유저 아이디
+                  access_token:
+                    example: access_token
+                  refresh_token:
+                    example: refresh_token
+    empty_register:
+      description: 가입경로 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2001
+              msg:
+                example: 가입경로를 입력해주세요.
+    empty_social_id:
+      description: 소셜 아이디 공백 - 소셜 로그인만
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2002
+              msg:
+                example: SocialId를 입력해주세요.
+    empty_name:
+      description: 이름 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2030
+              msg:
+                example: 이름을 입력해주세요.
+    empty_user_name:
+      description: 사용자 이름 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2003
+              msg:
+                example: 사용자 이름을 입력해주세요.
+    user_name_length:
+      description: 사용자 이름 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2004
+              msg:
+                example: 유저 아이디는 6~20자리를 입력해주세요.
+    empty_phone:
+      description: 사용자 이름 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2005
+              msg:
+                example: 휴대폰 번호를 입력해주세요.
+    empty_password:
+      description: 비밀번호 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2006
+              msg:
+                example: 비밀번호를 입력해주세요.
+    length_password:
+      description: 비밀번호 유효성 실패
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2007
+              msg:
+                example: 비밀번호는 6~20자리를 입력해주세요.
+    empty_birthday:
+      description: 생일 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2008
+              msg:
+                example: 생일을 입력해주세요.
+    empty_accept_date:
+      description: 약관 동의 날짜 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2009
+              msg:
+                example: 약관 동의 날짜를 입력해주세요.
+    user_name_already_use:
+      description: 유저 아이디 중복
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3001
+              msg:
+                example: 중복된 사용자 이름입니다.
+
+    ErrorResponse:
+      description: DB 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 4000
+              msg:
+                example: 데이터 베이스 에러

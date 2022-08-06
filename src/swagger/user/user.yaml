@@ -1,0 +1,54 @@
+/user:
+  post:
+    tags:
+      - /user
+    summary: 회원가입
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              social_id:
+                example: 1 (소셜가입일 경우에만 user_id 받아와서 사용)
+              register:
+                example: SELF || KAKAO
+              user_name:
+                example: 사용자 이름
+              phone_number:
+                example: 휴대폰 번호
+              password:
+                example: 비밀번호
+              birthday:
+                example: 생일 EX) 1999-11-11
+              accept_date:
+                example: 약관 동의 날짜 EX) 1999-11-11
+              name:
+                example: 닉네임
+    responses:
+      1000:
+        $ref: './user_schema.yaml#/components/responses/successResponse'
+      2001:
+        $ref: './user_schema.yaml#/components/responses/empty_register'
+      2002:
+        $ref: './user_schema.yaml#/components/responses/empty_social_id'
+      2030:
+        $ref: './user_schema.yaml#/components/responses/empty_name'
+      2003:
+        $ref: './user_schema.yaml#/components/responses/empty_user_name'
+      2004:
+        $ref: './user_schema.yaml#/components/responses/user_name_length'
+      2005:
+        $ref: './user_schema.yaml#/components/responses/empty_phone'
+      2006:
+        $ref: './user_schema.yaml#/components/responses/empty_password'
+      2007:
+        $ref: './user_schema.yaml#/components/responses/length_password'
+      2008:
+        $ref: './user_schema.yaml#/components/responses/empty_birthday'
+      2009:
+        $ref: './user_schema.yaml#/components/responses/empty_accept_date'
+      3001:
+        $ref: './user_schema.yaml#/components/responses/user_name_already_use'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'

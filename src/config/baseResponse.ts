@@ -10,7 +10,7 @@ export = {
   //Request error
   SIGNUP_REGISTER_EMPTY: { isSuccess: false, code: 2001, msg: '가입경로를 입력해주세요.' },
   SIGNUP_SOCIALID_EMPTY: { isSuccess: false, code: 2002, msg: 'SocialId를 입력해주세요.' },
-  SIGNUP_USERNAME_EMPTY: { isSuccess: false, code: 2003, msg: '유저 아이디를 입력해주세요.' },
+  SIGNUP_USERNAME_EMPTY: { isSuccess: false, code: 2003, msg: '사용자 이름을 입력해주세요.' },
   SIGNUP_USERNAME_LENGTH: {
     isSuccess: false,
     code: 2004,
@@ -162,6 +162,12 @@ export = {
     msg: '유저 상태는 PRVIATE , ACTIVE , DELETE 만 가능합니다.',
   },
 
+  FOLLOW_PRIVATE_ALREADY: {
+    isSuccess: false,
+    code: 2034,
+    msg: '이미 팔로우를 요청했습니다.',
+  },
+
   // Response error
   REFRESH_TOKEN_NOTHING: {
     isSuccess: false,
@@ -190,7 +196,13 @@ export = {
     message: '탈퇴 된 계정입니다. 고객센터에 문의해주세요.',
   },
 
+  FOLLOW_NOTHING: {
+    isSuccess: false,
+    code: 3007,
+    msg: '팔로우 요청 기록이 없습니다.',
+  },
+
   //Connection, Transaction 등의 서버 오류
-  DB_ERROR: { isSuccess: false, code: 4000, message: '데이터 베이스 에러' },
+  DB_ERROR: { isSuccess: false, code: 4000, msg: '데이터 베이스 에러' },
   SERVER_ERROR: { isSuccess: false, code: 4001, message: '서버 에러' },
 };

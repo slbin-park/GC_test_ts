@@ -5,7 +5,7 @@ WHERE social_id = '?'`;
 const UPDATE_REFRESH_TOKEN = `
 UPDATE user 
 SET refresh_token = ? 
-WHERE user_name = ? ;
+WHERE user_id = ? ;
 `;
 
 const GET_BY_USERNAME = `

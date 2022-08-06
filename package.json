@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "api-docs": "swagger-cli bundle ./src/swagger/openapi.yaml --outfile src/swagger.yaml --type yaml",
+    "prestart": "npm run api-docs",
     "build": "tsc -P ./tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --inspect --watch 'src/**/*.ts' -- ./src/app.ts",
-    "start": "nodemon --exec ts-node src/app.ts",
-    "prestart": "node ./src/swagger/swagger.ts"
+    "start": "nodemon --exec ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/yamljs": "^0.2.31",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
@@ -24,10 +26,12 @@
     "node-fecth": "^0.0.1-security",
     "reflect-metadata": "^0.1.13",
     "swagger-autogen": "^2.21.5",
+    "swagger-cli": "^4.0.4",
     "swagger-ui-express": "^4.5.0",
     "typedi": "^0.10.0",
     "winston": "^3.8.1",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^4.7.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
