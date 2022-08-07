@@ -6,7 +6,7 @@ info:
   license:
     name: MIT
 servers:
-  - url: 'http://ec2-15-164-104-7.ap-northeast-2.compute.amazonaws.com:8080//api'
+  - url: 'http://ec2-15-164-104-7.ap-northeast-2.compute.amazonaws.com:8080/api'
     description: 테스트서버
   - url: 'http://localhost:8080/'
     description: pro 서버
