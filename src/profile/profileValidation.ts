@@ -4,7 +4,7 @@ import baseResponse from '../config/baseResponse';
 // refresh_token이 있는지
 const post_follow_vali = (req: Request, res: Response, next: NextFunction) => {
   const { user_id } = req.body;
-  const { follow_user_id } = req.params;
+  const follow_user_id = req.params.user_id;
   if (user_id == follow_user_id) {
     res.send(baseResponse.FOLLOW_NOT_SELF);
   } else {

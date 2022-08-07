@@ -72,9 +72,9 @@ const AdminController = {
   },
 
   delete_user_admin: async (req: Request, res: Response) => {
-    const { userid } = req.params;
+    const { user_id } = req.params;
     const userServiceInstance: AdminService = Container.get(AdminService);
-    const response = await userServiceInstance.Delete_user_admin(userid);
+    const response = await userServiceInstance.Delete_user_admin(user_id);
     res.send(response);
   },
 

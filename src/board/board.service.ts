@@ -91,8 +91,8 @@ class BoardService {
         await Log.save_board_log(board_id, 'READ');
         const reply_id: any = await this.boardRepository.save_reply(conn, reply_info);
         const insertId = reply_id.insertId;
-        await Log.save_reply_log(insertId, 'CREATE');
         await conn.commit();
+        await Log.save_reply_log(insertId, 'CREATE');
       }
 
       return response(baseResponse.SUCCESS);
@@ -430,7 +430,6 @@ class BoardService {
     const reply_status = 'INVISIBLE';
     try {
       const check_reply: any = await this.boardRepository.get_by_id_reply(conn, reply_id);
-      console.log(check_reply);
       if (!check_reply.length) {
         return response(baseResponse.REPLY_NOTHING);
       }

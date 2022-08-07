@@ -2230,7 +2230,7 @@ paths:
                     example: JWT 토큰 검증 실패
         '4000':
           $ref: '#/components/responses/ErrorResponse'
-  '/profile/follow{user_id}':
+  '/profile/follow/{user_id}':
     post:
       tags:
         - /profile/follow
@@ -2313,7 +2313,7 @@ paths:
                     example: JWT 토큰 검증 실패
         '4000':
           $ref: '#/components/responses/ErrorResponse'
-  '/profile/unfollow{user_id}':
+  '/profile/unfollow/{user_id}':
     put:
       tags:
         - /profile/follow

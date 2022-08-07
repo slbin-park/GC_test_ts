@@ -47,7 +47,7 @@ class ProfileService {
             self_user_id,
             user_id,
           ]);
-          if (!check_follow_status) {
+          if (check_follow_status.length != 0) {
             if (check_follow_status[0].follow_status != 'FOLLOW') {
               return response(baseResponse.SUCCESS, {
                 following_count: following[0].count,
@@ -63,20 +63,18 @@ class ProfileService {
               });
             }
           } else {
-            if (check_follow_status[0].follow_status != 'FOLLOW') {
-              return response(baseResponse.SUCCESS, {
-                following_count: following[0].count,
-                follower_count: follower[0].count,
-                board_count: board_count[0].count,
-                user_id,
-                user_name,
-                name,
-                profileUrl,
-                website,
-                introduction,
-                user_status,
-              });
-            }
+            return response(baseResponse.SUCCESS, {
+              following_count: following[0].count,
+              follower_count: follower[0].count,
+              board_count: board_count[0].count,
+              user_id,
+              user_name,
+              name,
+              profileUrl,
+              website,
+              introduction,
+              user_status,
+            });
           }
         }
       }
@@ -112,7 +110,6 @@ class ProfileService {
       await conn.beginTransaction();
       let follow_status = 'FOLLOW';
       // 대상유저가 존재하는 아이디 인지 체크
-      console.log(follow_user_id);
       const check_id: any = await this.profileRepository.get_by_id(conn, follow_user_id);
       if (check_id.length == 0) {
         return response(baseResponse.USER_NOTHING);
@@ -228,7 +225,7 @@ class ProfileService {
             self_user_id,
             user_id,
           ]);
-          if (!check_follow_status) {
+          if (check_follow_status.length != 0) {
             if (check_follow_status[0].follow_status != 'FOLLOW') {
               return response(baseResponse.SUCCESS, res_Get_feed);
             } else {

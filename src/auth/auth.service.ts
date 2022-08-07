@@ -60,7 +60,6 @@ class AuthService {
         access_token = await jwt.create_access_token(user_data[0].user_id);
         refresh_token = await jwt.create_refresh_token();
         // 리프레시 토큰 디비에 저장
-        console.log(user_data[0].user_id);
         await jwt.save_refresh_token(user_data[0].user_id, refresh_token);
         await conn.commit();
         await Log.save_user_log(user_data[0].user_id, 'UPDATE');
@@ -72,7 +71,6 @@ class AuthService {
       } else {
         return response(baseResponse.LOGIN_FAIL);
       }
-      // console.log(user_data);
     } catch (err: any) {
       logger.error(`App - login AuthService error\n: ${err.message} \n${JSON.stringify(err)}`);
       return errResponse(baseResponse.DB_ERROR);
@@ -201,7 +199,6 @@ class AuthService {
         conn,
         refresh_token
       );
-      console.log(get_user_data);
       if (get_user_data.length == 0) {
         return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
       } else {

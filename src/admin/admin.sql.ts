@@ -21,9 +21,24 @@ refresh_token = ? , social_id = ? , profileUrl = ? , website = ? , introduction 
 WHERE user_id = ?
 `;
 const DELETE_USER = `
-UPDATE user
-SET user_status = 'ADMINDELET'
-WHERE user_id = ?
+UPDATE user u
+LEFT JOIN board b
+ON u.user_id = b.user_id_fk
+LEFT JOIN board_reply br
+ON b.board_id = br.board_id_fk
+LEFT JOIN reply_like rl
+ON br.reply_id = rl.reply_id_fk
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+LEFT JOIN board_like bl
+ON b.board_id = bl.board_id_fk
+SET b.board_status = 'ADMINDELET',
+    bi.board_image_status = 'ADMINDELET',
+    bl.board_like_status = 'ADMINDELET',
+    br.reply_status = 'ADMINDELET',
+    rl.reply_status = 'ADMINDELET',
+    u.user_status = 'ADMINDELET'
+WHERE u.user_id = ?;
 `;
 
 // 피드 관련 처리

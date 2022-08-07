@@ -74,7 +74,6 @@ const check_refresh_token = async (refresh_token: any) => {
       success: true,
     };
   } catch (error: any) {
-    console.log(error.name);
     // 유효기간이 초과된 경우
     if (error.name === 'TokenExpiredError') {
       return { success: false, msg: '토큰이 만료되었습니다.' }; // 419 추가예정

@@ -174,6 +174,18 @@ export = {
     msg: '자신의 댓글만 삭제 할수있습니다.',
   },
 
+  MESSAGE_EMPTY: {
+    isSuccess: false,
+    code: 2039,
+    msg: '메세지를 입력해주세요.',
+  },
+
+  MESSAGE_LENGTH: {
+    isSuccess: false,
+    code: 2039,
+    msg: '메세지는 200자 이하로만 입력 가능합니다.',
+  },
+
   // Response error
   REFRESH_TOKEN_NOTHING: {
     isSuccess: false,

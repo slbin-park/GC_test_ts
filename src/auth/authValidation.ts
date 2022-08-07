@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import baseResponse from '../config/baseResponse';
 // refresh_token이 있는지
 const post_access_token_vali = (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.headers);
   if (req.headers.authorization == undefined) {
     res.send(baseResponse.REFRESH_TOKEN_NOTHING);
   } else {

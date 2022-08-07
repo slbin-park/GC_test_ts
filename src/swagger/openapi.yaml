@@ -92,10 +92,10 @@ paths:
   /profile/follow/list:
     $ref: './profile/profile.yaml#/~1profile~1follow~1list'
   # POST
-  /profile/follow{user_id}:
+  /profile/follow/{user_id}:
     $ref: './profile/profile.yaml#/~1profile~1follow~1{user_id}'
   # PUT
-  /profile/unfollow{user_id}:
+  /profile/unfollow/{user_id}:
     $ref: './profile/profile.yaml#/~1profile~1unfollow~1{user_id}'
   /profile/follow/accept/{follow_user_id}:
     $ref: './profile/profile.yaml#/~1profile~1follow~1accept~1{follow_user_id}'

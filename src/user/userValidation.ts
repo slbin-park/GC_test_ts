@@ -18,6 +18,7 @@ const post_user_vali = (req: Request, res: Response, next: NextFunction) => {
   }
   if (!name) {
     res.send(baseResponse.SIGNUP_NAME_EMPTY);
+    return;
   }
   if (!user_name) {
     res.send(baseResponse.SIGNUP_USERNAME_EMPTY);
