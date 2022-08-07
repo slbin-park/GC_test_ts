@@ -1,0 +1,42 @@
+components:
+  responses:
+    successResponse:
+      description: 유저 전체 피드 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                    board_id:
+                      type: string
+                    board_content:
+                      type: string
+                    user_id_fk:
+                      type: string
+                    board_status:
+                      type: string
+                    create_at:
+                      type: string
+                    update_at:
+                      type: string
+                example:
+                  - user_name: 사용자 이름
+                    board_id: 게시글 번호
+                    board_content: 게시글 내용
+                    user_id_fk: 유저 아이디
+                    board_status: 게시글 상태
+                    create_at: 생성일자
+                    update_at: 수정일자

@@ -91,6 +91,13 @@ const AdminController = {
     const response = await userServiceInstance.Get_feed_all_board_id(board_id);
     res.send(response);
   },
+
+  delete_board_admin: async (req: Request, res: Response) => {
+    const { board_id } = req.params;
+    const userServiceInstance: AdminService = Container.get(AdminService);
+    const response = await userServiceInstance.Delete_board_admin(board_id);
+    res.send(response);
+  },
   get_report_log: async (req: Request, res: Response) => {
     const response = await Log.get_report_log();
     res.send(response);

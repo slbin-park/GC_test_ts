@@ -293,6 +293,25 @@ class ProfileService {
       conn.release();
     }
   }
+
+  async Update_follow_accept(user_id: any, follow_user_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      await conn.commit();
+      const status = 'FOLLOW';
+      const info = [status, user_id, follow_user_id];
+      await this.profileRepository.update_follow(conn, follow_user_id, user_id, status);
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      conn.rollback();
+      logger.error(
+        `App - Save_follow ProfileService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
 }
 
 export default ProfileService;

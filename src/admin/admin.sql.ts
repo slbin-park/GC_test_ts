@@ -72,6 +72,24 @@ ON rl.user_id_fk = u.user_id
 WHERE br.board_id_fk = ?
 ORDER BY rl.create_at DESC;
 `;
+
+const DELETE_BOARD_ADMIN = `
+UPDATE board b
+LEFT JOIN board_reply br
+ON b.board_id = br.board_id_fk
+LEFT JOIN reply_like rl
+ON br.reply_id = rl.reply_id_fk
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+LEFT JOIN board_like bl
+ON b.board_id = bl.board_id_fk
+SET b.board_status = 'ADMINDELETE',
+    bi.board_image_status = 'ADMINDELETE',
+    bl.board_like_status = 'ADMINDELETE',
+    br.reply_status = 'ADMINDELETE',
+    rl.reply_status = 'ADMINDELETE'
+WHERE b.board_id = ?;
+`;
 export {
   SAVE_USER_DATA,
   GET_USER_DATA,
@@ -83,4 +101,5 @@ export {
   GET_BOARD_IMG,
   GET_REPLY_LIKE,
   DELETE_USER,
+  DELETE_BOARD_ADMIN,
 };

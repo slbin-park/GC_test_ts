@@ -103,6 +103,11 @@ class BoardRepository {
     const [get_board_reply] = await conn.query(sql.UPDATE_REPLY_STATUS, reply_info);
     return get_board_reply;
   }
+
+  async delete_board_all(conn: any, board_id: any) {
+    const [delete_board] = await conn.query(sql.DELETE_BOARD, board_id);
+    return delete_board;
+  }
 }
 
 export default BoardRepository;

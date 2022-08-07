@@ -43,6 +43,10 @@ class AdminRepository {
     const [user] = await conn.query(sql.GET_REPLY_LIKE, board_id);
     return user;
   }
+  async delete_feed_admin(conn: any, board_id: any) {
+    const [board] = await conn.query(sql.DELETE_BOARD_ADMIN, board_id);
+    return board;
+  }
 }
 
 export default AdminRepository;

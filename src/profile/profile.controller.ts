@@ -68,6 +68,14 @@ const ProfileController = {
     );
     res.send(response);
   },
+
+  update_follow_accept: async (req: Request, res: Response) => {
+    const { user_id } = req.body;
+    const { follow_user_id } = req.params;
+    const profileServiceInstance: ProfileService = Container.get(ProfileService);
+    const response = await profileServiceInstance.Update_follow_accept(user_id, follow_user_id);
+    res.send(response);
+  },
 };
 
 export default ProfileController;

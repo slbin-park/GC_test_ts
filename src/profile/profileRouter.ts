@@ -54,4 +54,12 @@ router.put(
 // 팔로우 리스트 조회
 // 스웨거 끝
 router.get('/follow/list', jwt.check_access_token, ProfileController.get_follow_sub_list);
+
+// 팔로우 리스트 조회
+// 스웨거 끝
+router.put(
+  '/follow/accept/:follow_user_id',
+  jwt.check_access_token,
+  ProfileController.update_follow_accept
+);
 export default router;

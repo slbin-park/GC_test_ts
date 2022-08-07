@@ -1,0 +1,148 @@
+/admin/user-data:
+  get:
+    tags:
+      - /admin
+    summary: 유저 데이터 전체 조회 query 여러개 가능
+    parameters:
+      - in: query
+        name: userid
+        schema:
+          type: integer
+        description: 유저 아이디로 검색
+      - in: query
+        name: username
+        schema:
+          type: integer
+        description: 사용자 이름으로 검색
+      - in: query
+        name: userstatus
+        schema:
+          type: integer
+        description: 유저 상태로 조회
+      - in: query
+        name: createat
+        schema:
+          type: integer
+        description: 생성일자로 검색
+    responses:
+      1000:
+        $ref: './user-data_schema.yaml#/components/responses/successResponse'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/admin/user-data/{user_id}:
+  get:
+    tags:
+      - /admin
+    summary: 특정 유저 데이터 조회
+    parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './user-data_schema.yaml#/components/responses/successResponse'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/admin/user/admin-delete/{user_id}:
+  put:
+    tags:
+      - /admin
+    summary: 특정 유저 삭제 처리
+    parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        description: 유저 전체 데이터 조회 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isSuccess:
+                  example: true
+                code:
+                  example: 1000
+                msg:
+                  example: 성공
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/admin/feed-data:
+  get:
+    tags:
+      - /admin
+    summary: 전체 피드 조회 , query 여러개 가능
+    parameters:
+      - in: query
+        name: userid
+        schema:
+          type: integer
+        description: 유저 아이디로 검색
+      - in: query
+        name: boardstatus
+        schema:
+          type: integer
+        description: 게시글 상태로 검색
+      - in: query
+        name: createat
+        schema:
+          type: integer
+        description: 생성일자로 검색
+    responses:
+      1000:
+        $ref: './feed_schema.yaml#/components/responses/successResponse'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/admin/feed-all/{board_id}:
+  get:
+    tags:
+      - /admin
+    summary: 특정 유저 피드 조회
+    parameters:
+      - in: path
+        name: board_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './feed_schema.yaml#/components/responses/successResponse'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/admin/feed/delete/{board_id}:
+  put:
+    tags:
+      - /admin
+    summary: 특정 피드 삭제 요청
+    parameters:
+      - in: path
+        name: board_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        description: 피드 삭제 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isSuccess:
+                  example: true
+                code:
+                  example: 1000
+                msg:
+                  example: 성공
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'

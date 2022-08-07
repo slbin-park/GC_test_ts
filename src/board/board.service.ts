@@ -387,8 +387,7 @@ class BoardService {
       } else if (check_board_id[0].user_id_fk != user_id) {
         return response(baseResponse.BOARD_EDIT_NOT_SELF);
       } else {
-        const delete_board_info = [board_status, board_id];
-        await this.boardRepository.update_board_status(conn, delete_board_info);
+        await this.boardRepository.delete_board_all(conn, board_id);
         conn.commit();
         await Log.save_board_log(board_id, board_status);
 

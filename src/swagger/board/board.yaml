@@ -39,6 +39,11 @@
         name: authorization
         type: string
         required: true
+      - in: path
+        name: board_id
+        required: true
+        schema:
+          type: string
     responses:
       1000:
         $ref: './get-board_schema.yaml#/components/responses/successResponse'

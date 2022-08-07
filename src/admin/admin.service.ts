@@ -115,6 +115,22 @@ class AdminService {
     }
   }
 
+  async Delete_board_admin(board_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      await this.adminRepository.delete_feed_admin(conn, board_id);
+      conn.commit();
+      return response(baseResponse.SUCCESS);
+    } catch (err: any) {
+      logger.error(
+        `App - Delete_board_admin AdminService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
+
   async Get_feed_data(user_id: any, board_status: any, create_at: any) {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {

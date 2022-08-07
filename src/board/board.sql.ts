@@ -132,6 +132,23 @@ ON b.board_id = bi.board_id_fk
 WHERE b.board_id = ?
 `;
 
+const DELETE_BOARD = `
+UPDATE board b
+LEFT JOIN board_reply br
+ON b.board_id = br.board_id_fk
+LEFT JOIN reply_like rl
+ON br.reply_id = rl.reply_id_fk
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+LEFT JOIN board_like bl
+ON b.board_id = bl.board_id_fk
+SET b.board_status = 'DELETE',
+    bi.board_image_status = 'DELETE',
+    bl.board_like_status = 'DELETE',
+    br.reply_status = 'DELETE',
+    rl.reply_status = 'DELETE'
+WHERE b.board_id = ?;
+`;
 export {
   SAVE,
   SAVE_IMAGE,
@@ -152,4 +169,5 @@ export {
   UPDATE_REPLY_STATUS,
   GET_BOARD_IMG,
   GET_BOARD_DATA,
+  DELETE_BOARD,
 };

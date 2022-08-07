@@ -103,7 +103,7 @@
   get:
     tags:
       - /profile/follow
-    summary: 유저 프로필 조회
+    summary: 비공개 계정 팔로우 리스트 조회
     parameters:
       - in: header
         name: authorization
@@ -183,5 +183,28 @@
         $ref: './put-profile_schema.yaml#/components/responses/intro_empty'
       3000:
         $ref: './put-profile_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
+/profile/follow/accept/{follow_user_id}:
+  put:
+    tags:
+      - /profile/follow
+    summary: 팔로우 요청 수락
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+      - in: path
+        name: follow_user_id
+        required: true
+        schema:
+          type: string
+    responses:
+      1000:
+        $ref: './follow-list_schema.yaml#/components/responses/successResponse'
+      3000:
+        $ref: './follow-list_schema.yaml#/components/responses/jwt_error'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'

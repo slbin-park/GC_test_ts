@@ -97,6 +97,25 @@ paths:
   # PUT
   /profile/unfollow{user_id}:
     $ref: './profile/profile.yaml#/~1profile~1unfollow~1{user_id}'
+  /profile/follow/accept/{follow_user_id}:
+    $ref: './profile/profile.yaml#/~1profile~1follow~1accept~1{follow_user_id}'
+
+  # --------admin----------
+
+  # GET
+  /admin/user-data:
+    $ref: './admin/admin.yaml#/~1admin~1user-data'
+  /admin/user-data/{user_id}:
+    $ref: './admin/admin.yaml#/~1admin~1user-data~1{user_id}'
+  /admin/feed-data:
+    $ref: './admin/admin.yaml#/~1admin~1feed-data'
+  /admin/feed-all/{board_id}:
+    $ref: './admin/admin.yaml#/~1admin~1feed-all~1{board_id}'
+  # PUT
+  /admin/user/admin-delete/{user_id}:
+    $ref: './admin/admin.yaml#/~1admin~1user~1admin-delete~1{user_id}'
+  /admin/feed/delete/{board_id}:
+    $ref: './admin/admin.yaml#/~1admin~1feed~1delete~1{board_id}'
 
 security:
   - bearerAuth: []

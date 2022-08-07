@@ -1,0 +1,68 @@
+components:
+  responses:
+    successResponse:
+      description: 유저 전체 데이터 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                    user_name:
+                      type: string
+                    phone_number:
+                      type: string
+                    name:
+                      type: string
+                    password:
+                      type: string
+                    birthday:
+                      type: string
+                    register:
+                      type: string
+                    user_status:
+                      type: string
+                    accept_date:
+                      type: string
+                    refresh_token:
+                      type: string
+                    create_at:
+                      type: string
+                    update_at:
+                      type: string
+                    social_id:
+                      type: string
+                    profileUrl:
+                      type: string
+                    website:
+                      type: string
+                    introduction:
+                example:
+                  - user_id: 유저 아이디
+                    user_name: 사용자 이름
+                    phone_number: 휴대폰 번호
+                    name: 이름
+                    password: 비밀번호
+                    birthday: 생일
+                    register: 가입경로
+                    user_status: 유저 상태
+                    accept_date: 동의 날짜
+                    refresh_token: 리프레시 토큰
+                    create_at: 생성일자
+                    update_at: 수정일자
+                    social_id: 소셜 아이디
+                    profileUrl: 프로필 이미지 주소
+                    website: 웹사이트
+                    introduction: 설명
