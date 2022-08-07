@@ -115,6 +115,10 @@
       - /user
     summary: 사용자 상태 변경 (비공개 , 삭제)
     parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
       - in: path
         name: user_name
         required: true

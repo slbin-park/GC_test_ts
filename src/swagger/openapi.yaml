@@ -117,6 +117,14 @@ paths:
   /admin/feed/delete/{board_id}:
     $ref: './admin/admin.yaml#/~1admin~1feed~1delete~1{board_id}'
 
+  # --------admin----------
+  # GET
+  /chat/message:
+    $ref: './chat/chat.yaml#/~1chat~1message'
+  # POST
+  /chat:
+    $ref: './chat/chat.yaml#/~1chat'
+
 security:
   - bearerAuth: []
 components:

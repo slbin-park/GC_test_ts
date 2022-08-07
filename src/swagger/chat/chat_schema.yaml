@@ -1,0 +1,81 @@
+# user reponse API
+components:
+  responses:
+    successResponse:
+      description: 채팅 저장 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+    chat_empty:
+      description: 메세지 공백
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2039
+              msg:
+                example: 메세지를 입력해주세요.
+    success_message:
+      description: 메세지 받아옴
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: object
+                properties:
+                  user_id_fk:
+                    type: String
+                  chatting_content:
+                    type: string
+                  upladTime:
+                    type: string
+                example:
+                  - user_id_fk: 사용자 아이디
+                    chatting_content: 채팅 메시지
+                    upladTime: 업로드 시간 EX) 오전 9:12
+    message_length:
+      description: 메세지 길이
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2040
+              msg:
+                example: 메세지는 200자 이하로만 입력 가능합니다.
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

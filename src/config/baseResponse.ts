@@ -182,7 +182,7 @@ export = {
 
   MESSAGE_LENGTH: {
     isSuccess: false,
-    code: 2039,
+    code: 2040,
     msg: '메세지는 200자 이하로만 입력 가능합니다.',
   },
 
