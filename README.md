@@ -54,11 +54,12 @@ REST API의 기본 구성 원리를 반드시 구글링하여 익힌 뒤에 Rout
 │ 	│   ├── user.Validation.js   	# validation을 처리하는 미들웨어
 │   ├── Swagger            			# swagger가 정리되어있는 폴더
 │   ├── admin           		# 관리자 페이지 관련 처리
+│   ├── chat           		# 채팅 관련 처리
 │   ├── auth           		# 인증 관련 처리
 │   ├── profile           		# 프로필 관련 처리
 │   ├── Middlewares       		# 미들웨어 파일 정리
 │   │   ├── adminlog       		# DB에 로그 처리
-│   ├── board           		# 피드 관련 처리
+│   ├── board           		# 피드(게시글) 관련 처리
 │   ├── routes           		# 처음 라우터 처리 폴더
 gitignore                     		# git 에 포함되지 않아야 하는 폴더, 파일들을 작성 해놓는 곳
 ├── * package-lock.json

@@ -3,6 +3,7 @@
 -- user Table Create SQL
 CREATE TABLE user
 (
+    `user_id`        INT             NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
     `user_name`      VARCHAR(45)     NOT NULL    COMMENT '사용자 이름', 
     `phone_number`   VARCHAR(20)     NOT NULL    COMMENT '휴대폰번호', 
     `name`           VARCHAR(20)     NOT NULL    COMMENT '이름', 
@@ -12,13 +13,12 @@ CREATE TABLE user
     `user_status`    VARCHAR(20)     NOT NULL    COMMENT '유저 상태', 
     `accept_date`    DATE            NULL        COMMENT '약관 동의 날짜', 
     `refresh_token`  TEXT            NULL        COMMENT '토큰 저장', 
-    `create_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
-    `update_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `social_id`      VARCHAR(45)     NULL        COMMENT '소셜 아이디', 
     `profileUrl`     TEXT            NULL        COMMENT '프로필 사진', 
-    `websit`         VARCHAR(45)     NULL        COMMENT '웹사이트', 
-    `inrtoduction`   VARCHAR(450)    NULL        COMMENT '소개', 
-    `user_id`        INT             NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
+    `website`        VARCHAR(45)     NULL        COMMENT '웹사이트', 
+    `introduction`   VARCHAR(450)    NULL        COMMENT '소개', 
+    `update_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `create_at`      TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
      PRIMARY KEY (user_id)
 );
 
@@ -138,10 +138,10 @@ CREATE TABLE reply_like
 (
     `reply_like_id`  INT            NOT NULL    AUTO_INCREMENT COMMENT '댓글 좋아요 아이디', 
     `reply_id_fk`    INT            NOT NULL    COMMENT '댓글 아이디', 
+    `user_id_fk`     INT            NOT NULL    COMMENT '좋아요 요청 아이디', 
     `reply_status`   VARCHAR(45)    NOT NULL    COMMENT '댓글 상태', 
     `create_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
-    `user_id_fk`     INT            NOT NULL    COMMENT '좋아요 요청 아이디', 
      PRIMARY KEY (reply_like_id)
 );
 
@@ -159,11 +159,12 @@ ALTER TABLE reply_like
 -- board_image Table Create SQL
 CREATE TABLE board_image
 (
-    `image_id`       INT          NOT NULL    AUTO_INCREMENT COMMENT '이미지 아이디', 
-    `board_id_fk`    INT          NOT NULL    COMMENT '게시글 아이디', 
-    `image_address`  TEXT         NOT NULL    COMMENT '이미지 주소', 
-    `create_at`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
-    `update_at`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `image_id`            INT            NOT NULL    AUTO_INCREMENT COMMENT '이미지 아이디', 
+    `board_id_fk`         INT            NOT NULL    COMMENT '게시글 아이디', 
+    `image_address`       TEXT           NOT NULL    COMMENT '이미지 주소', 
+    `create_at`           TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
+    `update_at`           TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
+    `board_image_status`  VARCHAR(45)    NOT NULL    COMMENT '이미지 상태', 
      PRIMARY KEY (image_id)
 );
 
@@ -178,12 +179,12 @@ ALTER TABLE board_image
 CREATE TABLE board_report
 (
     `board_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 신고 아이디', 
+    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저', 
     `board_id`             INT             NOT NULL    COMMENT '신고 게시글 아이디', 
     `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고사유', 
-    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저', 
+    `board_report_status`  VARCHAR(20)     NOT NULL    COMMENT '게시글 신고 상태', 
     `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
-    `board_report_status`  VARCHAR(20)     NOT NULL    COMMENT '게시글 신고 상태', 
      PRIMARY KEY (board_report_id)
 );
 
@@ -202,9 +203,9 @@ ALTER TABLE board_report
 CREATE TABLE reply_report
 (
     `reply_report_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 신고 아이디', 
+    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저 아이디', 
     `reply_id_fk`          INT             NOT NULL    COMMENT '신고 댓글 아이디', 
     `report_content`       VARCHAR(100)    NOT NULL    COMMENT '신고 사유', 
-    `user_id_fk`           INT             NOT NULL    COMMENT '신고 유저 아이디', 
     `create_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp COMMENT '만든 날짜', 
     `update_at`            TIMESTAMP       NOT NULL    DEFAULT current_timestamp on update current_timestamp COMMENT '수정 날짜', 
     `reply_report_status`  VARCHAR(20)     NOT NULL    COMMENT '댓글 신고 상태', 
@@ -225,15 +226,91 @@ ALTER TABLE reply_report
 -- change_user_name Table Create SQL
 CREATE TABLE change_user_name
 (
-    `id`                INT            NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
-    `update_timestamp`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp COMMENT '변경 날짜', 
-    `user_id_fk`        INT            NOT NULL    COMMENT '유저 아이디', 
-    `prev_user_name`    VARCHAR(45)    NOT NULL    COMMENT '변경전 이름', 
+    `user_id_fk`        INT          NOT NULL    COMMENT '유저 아이디', 
+    `id`                INT          NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
+    `update_timestamp`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp COMMENT '변경 날짜', 
      PRIMARY KEY (id)
 );
 
 ALTER TABLE change_user_name
     ADD CONSTRAINT FK_change_user_name_user_id_fk_user_user_id FOREIGN KEY (user_id_fk)
         REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- user_log Table Create SQL
+CREATE TABLE user_log
+(
+    `idx`            INT            NOT NULL    AUTO_INCREMENT COMMENT '식별자', 
+    `update_at`      TIMESTAMP      NULL        DEFAULT current_timestamp COMMENT '액션한 시간', 
+    `db_action`      VARCHAR(45)    NULL        COMMENT 'CRUD행동', 
+    `user_id`        INT            NULL        COMMENT '유저 식별자', 
+    `user_name`      TEXT           NULL        COMMENT '사용자 이름', 
+    `phone_number`   TEXT           NULL        COMMENT '휴대폰번호', 
+    `name`           TEXT           NULL        COMMENT '이름', 
+    `password`       TEXT           NULL        COMMENT '비밀번호', 
+    `birthday`       TEXT           NULL        COMMENT '생일', 
+    `register`       TEXT           NULL        COMMENT '로그인구분', 
+    `user_status`    TEXT           NULL        COMMENT '유저 상태', 
+    `accept_date`    TEXT           NULL        COMMENT '약관 동의 날짜', 
+    `refresh_token`  TEXT           NULL        COMMENT '토큰 저장', 
+    `social_id`      TEXT           NULL        COMMENT '소셜 아이디', 
+    `profileUrl`     TEXT           NULL        COMMENT '프로필 사진', 
+    `website`        TEXT           NULL        COMMENT '웹사이트', 
+    `introduction`   TEXT           NULL        COMMENT '소개', 
+     PRIMARY KEY (idx)
+);
+
+ALTER TABLE user_log COMMENT '유저 로그';
+
+
+-- board_log Table Create SQL
+CREATE TABLE board_log
+(
+    `idx`            INT            NOT NULL    AUTO_INCREMENT COMMENT '고유 인덱스', 
+    `update_at`      TIMESTAMP      NULL        DEFAULT current_timestamp COMMENT '액션한 시간', 
+    `db_action`      VARCHAR(45)    NULL        COMMENT 'CRUD행동', 
+    `board_id`       INT            NULL        COMMENT '게시글 아이디', 
+    `board_content`  TEXT           NULL        COMMENT '게시글 내용', 
+    `user_id_fk`     TEXT           NULL        COMMENT '사용자 이름', 
+    `board_status`   TEXT           NULL        COMMENT '게시글 상태', 
+     PRIMARY KEY (idx)
+);
+
+ALTER TABLE board_log COMMENT '게시글 로그';
+
+
+-- reply_log Table Create SQL
+CREATE TABLE reply_log
+(
+    `idx`            INT            NOT NULL    AUTO_INCREMENT COMMENT '고유 인덱스', 
+    `update_at`      TIMESTAMP      NULL        DEFAULT current_timestamp COMMENT '액션한 시간', 
+    `db_action`      VARCHAR(45)    NULL        COMMENT 'CRUD행동', 
+    `reply_id`       INT            NULL        COMMENT '댓글 아이디', 
+    `board_id_fk`    TEXT           NULL        COMMENT '게시글 아이디', 
+    `user_id_fk`     TEXT           NULL        COMMENT '작성자 아이디', 
+    `reply_content`  TEXT           NULL        COMMENT '댓글 내용', 
+    `reply_status`   TEXT           NULL        COMMENT '댓글 상태', 
+     PRIMARY KEY (idx)
+);
+
+ALTER TABLE reply_log COMMENT '게시글 댓글 테이블';
+
+
+-- report_log Table Create SQL
+CREATE TABLE report_log
+(
+    `idx`              INT            NOT NULL    AUTO_INCREMENT COMMENT '고유 인덱스', 
+    `update_at`        TIMESTAMP      NULL        DEFAULT current_timestamp COMMENT '액션한 시간', 
+    `db_action`        VARCHAR(45)    NULL        COMMENT 'CRUD행동', 
+    `report_category`  VARCHAR(45)    NULL        COMMENT '신고 종류', 
+    `report_id`        INT            NULL        COMMENT '신고 아이디', 
+    `user_id_fk`       INT            NULL        COMMENT '신고 유저 아이디', 
+    `report_idx`       INT            NULL        COMMENT '신고 댓글,게시글 아이디', 
+    `report_content`   TEXT           NULL        COMMENT '신고 사유', 
+    `report_status`    TEXT           NULL        COMMENT '신고 상태', 
+     PRIMARY KEY (idx)
+);
+
+ALTER TABLE report_log COMMENT '신고 로그';
 
 
