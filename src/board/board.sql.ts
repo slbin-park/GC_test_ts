@@ -119,6 +119,19 @@ AND
 reply_status = 'VISIBLE';
 `;
 
+const GET_BOARD_DATA = `
+SELECT *
+FROM board
+WHERE board_id = ?
+`;
+const GET_BOARD_IMG = `
+SELECT bi.image_id,bi.image_address
+FROM board b
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+WHERE b.board_id = ?
+`;
+
 export {
   SAVE,
   SAVE_IMAGE,
@@ -137,4 +150,6 @@ export {
   UPDATE_BOARD_STATUS,
   GET_BOARD_REPLY,
   UPDATE_REPLY_STATUS,
+  GET_BOARD_IMG,
+  GET_BOARD_DATA,
 };

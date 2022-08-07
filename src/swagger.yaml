@@ -644,6 +644,119 @@ paths:
                     example: 존재하지 않는 유저입니다.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  '/board/feed/{board_id}':
+    get:
+      tags:
+        - /board
+      summary: 게시글 불러오기
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+      responses:
+        '1000':
+          description: 게시글 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+                  result:
+                    type: array
+                    properties:
+                      board_id:
+                        type: string
+                      board_content:
+                        type: string
+                      user_id_fk:
+                        type: string
+                      board_status:
+                        type: string
+                      create_at:
+                        type: string
+                      update_at:
+                        type: string
+                    img:
+                      type: array
+                      items:
+                        type: object
+                        propertis:
+                          image_id:
+                            type: string
+                          image_address:
+                            type: string
+                    reply:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          reply_id:
+                            type: string
+                          user_id_fk:
+                            type: string
+                          reply_content:
+                            type: string
+                          user_name:
+                            type: string
+                          profileUrl:
+                            type: string
+                          uploadTime:
+                            type: string
+                    example:
+                      - board:
+                          board_id: 게시글 아이디
+                          board_content: 게시글 내용
+                          user_id_fk: 작성자 아이디
+                          board_status: 게시글 상태
+                          create_at: 만든 시간
+                          update_at: 수정 시간
+                          img:
+                            - image_id: 이미지 고유 번호
+                              image_address: 게시글 이미지 주소
+                            - image_id: 게시글 이미지 고유번호
+                              image_address: 이미지 주소
+                          reply:
+                            - reply_id: 댓글 아이디
+                              user_id_fk: 작성자 아이디
+                              reply_content: 댓글 내용
+                              user_name: 사용자 이름
+                              profileUrl: 프로필 주소
+                              uploadTime: 수정 시간
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   /board:
     post:
       tags:
@@ -881,6 +994,100 @@ paths:
                     example: JWT 토큰 검증 실패
         '4000':
           $ref: '#/components/responses/ErrorResponse'
+  '/board/{board_id}':
+    put:
+      tags:
+        - /board
+      summary: 게시글 수정 요청
+      parameters:
+        - in: header
+          name: authorization
+          type: string
+          required: true
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                board_content:
+                  example: 수정할 게시글 내용
+      responses:
+        '1000':
+          description: 게시글 수정 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: true
+                  code:
+                    example: 1000
+                  msg:
+                    example: 성공
+        '2015':
+          description: 수정 내용 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2015
+                  msg:
+                    example: 게시글 수정 내용을 입력해주세요.
+        '2016':
+          $ref: '#/paths/~1board/post/responses/2016'
+        '2017':
+          description: 없는 게시글
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2017
+                  msg:
+                    example: 없는 게시글 입니다.
+        '2027':
+          description: 작성자가 아님
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2027
+                  msg:
+                    example: 게시글 작성자만 수정이 가능합니다.
+        '3000':
+          description: jwt 에러
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 3000
+                  msg:
+                    example: JWT 토큰 검증 실패
+        '4000':
+          $ref: '#/components/responses/ErrorResponse'
   '/board/{board_id}/unlike':
     put:
       tags:
@@ -971,100 +1178,6 @@ paths:
                     example: 1000
                   msg:
                     example: 성공
-        '2017':
-          description: 없는 게시글
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: false
-                  code:
-                    example: 2017
-                  msg:
-                    example: 없는 게시글 입니다.
-        '2027':
-          description: 작성자가 아님
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: false
-                  code:
-                    example: 2027
-                  msg:
-                    example: 게시글 작성자만 수정이 가능합니다.
-        '3000':
-          description: jwt 에러
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: false
-                  code:
-                    example: 3000
-                  msg:
-                    example: JWT 토큰 검증 실패
-        '4000':
-          $ref: '#/components/responses/ErrorResponse'
-  '/board/{board_id}':
-    put:
-      tags:
-        - /board
-      summary: 게시글 수정 요청
-      parameters:
-        - in: header
-          name: authorization
-          type: string
-          required: true
-        - in: path
-          name: board_id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                board_content:
-                  example: 수정할 게시글 내용
-      responses:
-        '1000':
-          description: 게시글 수정 성공
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: true
-                  code:
-                    example: 1000
-                  msg:
-                    example: 성공
-        '2015':
-          description: 수정 내용 없음
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: false
-                  code:
-                    example: 2015
-                  msg:
-                    example: 게시글 수정 내용을 입력해주세요.
-        '2016':
-          $ref: '#/paths/~1board/post/responses/2016'
         '2017':
           description: 없는 게시글
           content:
@@ -1641,7 +1754,7 @@ paths:
             type: string
       responses:
         '1000':
-          description: 유저 로그인 성공
+          description: 프로필 조회 성공
           content:
             application/json:
               schema:

@@ -8,7 +8,7 @@ import pool from '../config/db';
 import { response, errResponse } from '../config/response';
 import logger from '../config/winston';
 import baseResponse from '../config/baseResponse';
-
+import * as Log from '../middlewares/adminlog/log.dao';
 import AuthRepository from '../auth/auth.dao';
 import UserRepository from './user.dao';
 import jwt from '../middlewares/auth/jwt';
@@ -64,9 +64,9 @@ class UserService {
       ];
       const user_id = await this.userRepository.save(conn, SaveData);
       const access_token = await jwt.create_access_token(user_id.insertId);
-
       // save 에 필요함
       await conn.commit();
+      await Log.save_user_log(user_id.insertId, 'CREATE');
       return response(baseResponse.SUCCESS, {
         user_id: user_id.insertId,
         access_token,
@@ -112,6 +112,7 @@ class UserService {
       const user_id = await this.userRepository.save_kakao(conn, SaveUserKakaoData);
       const access_token = await jwt.create_access_token(user_id.insertId);
       await conn.commit();
+      await Log.save_user_log(user_id.insertId, 'CREATE');
       return response(baseResponse.SUCCESS, {
         user_id: user_id.insertId,
         user_name,
@@ -186,7 +187,9 @@ class UserService {
       }
       await this.userRepository.update_user_name(conn, update_user_name_data);
       await this.userRepository.save_user_name_change(conn, user_id);
-      conn.commit();
+
+      await conn.commit();
+      await Log.save_user_log(user_id, 'UPDATE');
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       conn.rollback();
@@ -205,7 +208,13 @@ class UserService {
         conn,
         update_user_status_info
       );
-      conn.commit();
+      if (user_status == 'DELETE') {
+        await this.userRepository.delete_board(conn, user_id);
+        await this.userRepository.delete_follow(conn, user_id);
+      }
+
+      await conn.commit();
+      await Log.save_user_log(user_id, user_status);
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       conn.rollback();
@@ -222,7 +231,6 @@ class UserService {
     const conn = await pool.getConnection(async (conn: any) => conn);
     try {
       const check_user_phone = await this.userRepository.get_user_psword(conn, phone);
-      console.log(check_user_phone);
       if (!check_user_phone.length) {
         return response(baseResponse.USER_NOTHING);
       }
@@ -232,7 +240,8 @@ class UserService {
         conn,
         update_user_info
       );
-      conn.commit();
+      await conn.commit();
+      await Log.save_user_log(check_user_phone[0].user_id, 'UPDATE');
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       conn.rollback();

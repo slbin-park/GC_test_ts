@@ -9,6 +9,7 @@ import pool from '../config/db';
 import { response, errResponse } from '../config/response';
 import logger from '../config/winston';
 import baseResponse from '../config/baseResponse';
+import * as Log from '../middlewares/adminlog/log.dao';
 
 const bcrypt = require('bcrypt');
 const axios = require('axios');
@@ -62,12 +63,12 @@ class AuthService {
         console.log(user_data[0].user_id);
         await jwt.save_refresh_token(user_data[0].user_id, refresh_token);
         await conn.commit();
+        await Log.save_user_log(user_data[0].user_id, 'UPDATE');
         return response(baseResponse.SUCCESS, {
           access_token,
           refresh_token,
           user_id: user_data[0].user_id,
         });
-        return { access_token, refresh_token };
       } else {
         return response(baseResponse.LOGIN_FAIL);
       }
@@ -192,9 +193,7 @@ class AuthService {
     const conn = await pool.getConnection(async (conn: any) => conn);
 
     try {
-      console.log('실행');
       const check_refresh_token: any = await jwt.check_refresh_token(refresh_token);
-      console.log(check_refresh_token);
       if (!check_refresh_token.success) {
         return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
       }
@@ -206,7 +205,8 @@ class AuthService {
       if (get_user_data.length == 0) {
         return response(baseResponse.TOKEN_VERIFICATION_FAILURE);
       } else {
-        const access_token = await jwt.create_access_token(get_user_data.user_id);
+        const access_token = await jwt.create_access_token(get_user_data[0].user_id);
+        await Log.save_user_log(get_user_data[0].user_id, 'READ');
         return response(baseResponse.SUCCESS, { access_token });
       }
     } catch (err: any) {

@@ -53,6 +53,33 @@ SET user_status = ?
 WHERE user_id = ?
 `;
 
+const DELETE_BOARD = `
+UPDATE user u
+LEFT JOIN board b
+ON u.user_id = b.user_id_fk
+LEFT JOIN board_reply br
+ON b.board_id = br.board_id_fk
+LEFT JOIN reply_like rl
+ON br.reply_id = rl.reply_id_fk
+LEFT JOIN board_image bi
+ON b.board_id = bi.board_id_fk
+LEFT JOIN board_like bl
+ON b.board_id = bl.board_id_fk
+SET b.board_status = 'DELETE',
+    bi.board_image_status = 'DELETE',
+    bl.board_like_status = 'DELETE',
+    br.reply_status = 'DELETE',
+    rl.reply_status = 'DELETE',
+    u.user_status = 'DELETE'
+WHERE u.user_id = ?;
+`;
+
+const DELETE_FOLLOW = `
+UPDATE follow
+SET follow_status = 'DELETE'
+WHERE follow_user_fk = ?
+OR followed_user_fk = ? ;
+`;
 export {
   SAVE_USER,
   GET_USER_ALL,
@@ -64,4 +91,6 @@ export {
   UPDATE_USER_STATUS,
   GET_USER_PHONE,
   UPDATE_USER_PSWORD,
+  DELETE_BOARD,
+  DELETE_FOLLOW,
 };

@@ -5,8 +5,8 @@ import 'reflect-metadata';
 
 @Service()
 class ProfileRepository {
-  async get_by_id(conn: any, id: any) {
-    const [profile_data] = await conn.query(sql.GET_USER_ID, id);
+  async get_by_id(conn: any, user_id: any) {
+    const [profile_data] = await conn.query(sql.GET_USER_ID, user_id);
     return profile_data;
   }
 

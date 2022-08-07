@@ -1,0 +1,105 @@
+# get board_id reponse API
+components:
+  responses:
+    successResponse:
+      description: 게시글 조회 성공
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: true
+              code:
+                example: 1000
+              msg:
+                example: 성공
+              result:
+                type: array
+                properties:
+                  board_id:
+                    type: string
+                  board_content:
+                    type: string
+                  user_id_fk:
+                    type: string
+                  board_status:
+                    type: string
+                  create_at:
+                    type: string
+                  update_at:
+                    type: string
+                img:
+                  type: array
+                  items:
+                    type: object
+                    propertis:
+                      image_id:
+                        type: string
+                      image_address:
+                        type: string
+                reply:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      reply_id:
+                        type: string
+                      user_id_fk:
+                        type: string
+                      reply_content:
+                        type: string
+                      user_name:
+                        type: string
+                      profileUrl:
+                        type: string
+                      uploadTime:
+                        type: string
+                example:
+                  - board:
+                      board_id: 게시글 아이디
+                      board_content: 게시글 내용
+                      user_id_fk: 작성자 아이디
+                      board_status: 게시글 상태
+                      create_at: 만든 시간
+                      update_at: 수정 시간
+                      img:
+                        - image_id: 이미지 고유 번호
+                          image_address: 게시글 이미지 주소
+                        - image_id: 게시글 이미지 고유번호
+                          image_address: 이미지 주소
+                      reply:
+                        - reply_id: 댓글 아이디
+                          user_id_fk: 작성자 아이디
+                          reply_content: 댓글 내용
+                          user_name: 사용자 이름
+                          profileUrl: 프로필 주소
+                          uploadTime: 수정 시간
+
+    no_board:
+      description: 없는 게시글
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 2017
+              msg:
+                example: 없는 게시글 입니다.
+
+    jwt_error:
+      description: jwt 에러
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isSuccess:
+                example: false
+              code:
+                example: 3000
+              msg:
+                example: JWT 토큰 검증 실패

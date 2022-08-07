@@ -2,7 +2,7 @@
 components:
   responses:
     successResponse:
-      description: 유저 로그인 성공
+      description: 프로필 조회 성공
       content:
         application/json:
           schema:

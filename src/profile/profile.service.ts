@@ -3,9 +3,9 @@ import { Container, Service } from 'typedi';
 import 'reflect-metadata';
 // 서비스에 이걸 임포트 해야함
 import pool from '../config/db';
-import UserRepository from '../user/user.dao';
 import ProfileRepository from './profile.dao';
 
+import * as Log from '../middlewares/adminlog/log.dao';
 import { response, errResponse } from '../config/response';
 import logger from '../config/winston';
 import baseResponse from '../config/baseResponse';
@@ -81,7 +81,8 @@ class ProfileService {
         }
       }
       const user_post: any = await this.profileRepository.get_feed(conn, user_id, 10000);
-
+      await conn.commit();
+      await Log.save_user_log(user_id, 'READ');
       return response(baseResponse.SUCCESS, {
         following_count: following[0].count,
         follower_count: follower[0].count,
@@ -280,6 +281,8 @@ class ProfileService {
     try {
       const user_profile_info = [profileUrl, website, introduction, user_id];
       await this.profileRepository.update_user_profile(conn, user_profile_info);
+      await conn.commit();
+      await Log.save_user_log(user_id, 'UPDATE');
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(

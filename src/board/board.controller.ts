@@ -17,6 +17,12 @@ const BoardController = {
     );
     res.send(response);
   },
+  get_board: async (req: Request, res: Response) => {
+    const { board_id } = req.params;
+    const boardServiceInstance: BoardService = Container.get(BoardService);
+    const response = await boardServiceInstance.Get_board_id(board_id);
+    res.send(response);
+  },
 
   save_reply: async (req: Request, res: Response) => {
     const replyInfo = req.body;

@@ -10,7 +10,11 @@ class BoardRepository {
     const [save_board] = await conn.query(sql.SAVE, boardInfo);
     return save_board;
   }
-
+  // 게시글 데이터
+  async get_board_img(conn: any, board_id: any) {
+    const [get_board] = await conn.query(sql.GET_BOARD_IMG, board_id);
+    return get_board;
+  }
   // 피드 등록시 이미지 등록
   async save_image(conn: any, board_id: any, image_address: any) {
     const [save_image] = await conn.query(sql.SAVE_IMAGE, [board_id, image_address]);

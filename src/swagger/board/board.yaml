@@ -29,6 +29,26 @@
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'
 
+/board/feed/{board_id}:
+  get:
+    tags:
+      - /board
+    summary: 게시글 불러오기
+    parameters:
+      - in: header
+        name: authorization
+        type: string
+        required: true
+    responses:
+      1000:
+        $ref: './get-board_schema.yaml#/components/responses/successResponse'
+      2017:
+        $ref: './get-board_schema.yaml#/components/responses/no_board'
+      3000:
+        $ref: './get-board_schema.yaml#/components/responses/jwt_error'
+      4000:
+        $ref: '../openapi.yaml#/components/responses/ErrorResponse'
+
 /board/{board_id}/like:
   post:
     tags:

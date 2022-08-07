@@ -52,6 +52,15 @@ class UserRepository {
     const [res_user_psword] = await conn.query(sql.GET_USER_PHONE, user_info);
     return res_user_psword;
   }
+
+  async delete_board(conn: any, user_id: any) {
+    const [res_user_psword] = await conn.query(sql.DELETE_BOARD, user_id);
+    return res_user_psword;
+  }
+  async delete_follow(conn: any, user_id: any) {
+    const [res_follow] = await conn.query(sql.DELETE_FOLLOW, user_id);
+    return res_follow;
+  }
 }
 
 export default UserRepository;

@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import BoardRepository from './board.dao';
 import '../config/env';
 import pool from '../config/db';
-
+import * as Log from '../middlewares/adminlog/log.dao';
 import { response, errResponse } from '../config/response';
 import logger from '../config/winston';
 import baseResponse from '../config/baseResponse';
@@ -41,10 +41,35 @@ class BoardService {
       }
 
       await conn.commit();
+      await Log.save_board_log(insertId, 'CREATE');
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(
         `App - Save_board BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
+      );
+      return errResponse(baseResponse.DB_ERROR);
+    } finally {
+      conn.release();
+    }
+  }
+
+  async Get_board_id(board_id: any) {
+    const conn = await pool.getConnection(async (conn: any) => conn);
+    try {
+      const board = await this.boardRepository.get_by_id(conn, board_id);
+      if (!board.length) {
+        return response(baseResponse.BOARD_NOTHING);
+      }
+      const img = await this.boardRepository.get_board_img(conn, board_id);
+      const reply = await this.boardRepository.get_board_reply(conn, board_id);
+      board[0].img = img;
+      board[0].reply = reply;
+      await Log.save_board_log(board_id, 'READ');
+      await conn.commit();
+      return response(baseResponse.SUCCESS, { board: board[0] });
+    } catch (err: any) {
+      logger.error(
+        `App - Get_board_id BoardService error\n: ${err.message} \n${JSON.stringify(err)}`
       );
       return errResponse(baseResponse.DB_ERROR);
     } finally {
@@ -63,10 +88,12 @@ class BoardService {
       if (check_board_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
       } else {
-        await this.boardRepository.save_reply(conn, reply_info);
+        await Log.save_board_log(board_id, 'READ');
+        const reply_id: any = await this.boardRepository.save_reply(conn, reply_info);
+        const insertId = reply_id.insertId;
+        await Log.save_reply_log(insertId, 'CREATE');
+        await conn.commit();
       }
-
-      await conn.commit();
 
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
@@ -88,9 +115,12 @@ class BoardService {
       const board_like_status = 'LIKE';
       // 게시글이 있는지 체크함
       const check_board_id: any = await this.boardRepository.get_by_id(conn, board_id);
+
       if (check_board_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
       }
+      await Log.save_board_log(board_id, 'READ');
+
       // 문제점 자기가 눌렀는지 누가 눌렀는지 모름
       // FIX GET_USER_ID 도 같이 보내서 자기가 누른건지 확인함
       const board_like_info = [board_id, user_id];
@@ -136,6 +166,8 @@ class BoardService {
       if (check_board_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
       }
+      await Log.save_board_log(board_id, 'READ');
+
       // 자신이 좋아요를 누른 기록이 있는지 확인
       const get_board_like_info = [board_id, user_id];
       const check_board_like_id: any = await this.boardRepository.get_by_id_board_like(
@@ -269,7 +301,11 @@ class BoardService {
         return response(baseResponse.REPLY_REPORT_SELF);
       }
       const reply_report_info = [reply_id, report_content, user_id, reply_report_status];
-      await this.boardRepository.save_reply_report(conn, reply_report_info);
+      const check = await this.boardRepository.save_reply_report(conn, reply_report_info);
+      await conn.commit();
+
+      const insertId = check.insertId;
+      await Log.save_report_log(insertId, 'REPLY', 'SAVE');
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(
@@ -290,6 +326,8 @@ class BoardService {
       if (check_board_id.length == 0) {
         return response(baseResponse.BOARD_NOTHING);
       }
+      await Log.save_board_log(board_id, 'READ');
+
       // 자신이 단 댓글 신고 불가 로직
       // 신고를 여러번도 가능? 한듯
       // 좋아요 누른적이 있을경우에
@@ -297,7 +335,11 @@ class BoardService {
         return response(baseResponse.BOARD_REPORT_SELF);
       }
       const board_report_info = [board_id, report_content, user_id, report_status];
-      this.boardRepository.save_board_report(conn, board_report_info);
+      const check = await this.boardRepository.save_board_report(conn, board_report_info);
+      await conn.commit();
+      const insertId = check.insertId;
+      await Log.save_report_log(insertId, 'BOARD', 'SAVE');
+
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(
@@ -320,7 +362,9 @@ class BoardService {
       } else {
         const update_board_info = [board_content, board_id];
         await this.boardRepository.update_board(conn, update_board_info);
+
         conn.commit();
+        await Log.save_board_log(board_id, 'UPDATE');
         return response(baseResponse.SUCCESS);
       }
     } catch (err: any) {
@@ -346,6 +390,8 @@ class BoardService {
         const delete_board_info = [board_status, board_id];
         await this.boardRepository.update_board_status(conn, delete_board_info);
         conn.commit();
+        await Log.save_board_log(board_id, board_status);
+
         return response(baseResponse.SUCCESS);
       }
     } catch (err: any) {
@@ -367,6 +413,8 @@ class BoardService {
         return response(baseResponse.BOARD_NOTHING);
       }
       const get_board_reply: any = await this.boardRepository.get_board_reply(conn, board_id);
+      await Log.save_reply_log(board_id, 'READ');
+      await conn.commit();
       return response(baseResponse.SUCCESS, get_board_reply);
     } catch (err: any) {
       logger.error(
@@ -394,6 +442,8 @@ class BoardService {
         reply_status,
         reply_id,
       ]);
+      await Log.save_reply_log(reply_id, reply_status);
+
       conn.commit();
 
       return response(baseResponse.SUCCESS);

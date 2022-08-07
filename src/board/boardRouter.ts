@@ -5,7 +5,11 @@ import jwt from '../middlewares/auth/jwt';
 import * as BoardValidation from './boardValidation';
 const router = express.Router();
 
-// 스케쥴 관련 요청을 scrouter로 이동
+// ------------------피드(게시글)----------------------
+
+// 스웨거 하기
+// 게시글 불러오기
+router.get('/feed/:board_id', jwt.check_access_token, BoardController.get_board);
 
 // 스웨거 끝
 // 게시글 작성

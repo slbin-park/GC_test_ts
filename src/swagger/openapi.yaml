@@ -36,6 +36,9 @@ paths:
 
   # --------board----------
 
+  # GET
+  /board/feed/{board_id}:
+    $ref: './board/board.yaml#/~1board~1feed~1{board_id}'
   # POST
   /board:
     $ref: './board/board.yaml#/~1board'
@@ -45,12 +48,12 @@ paths:
     $ref: './board/board.yaml#/~1board~1{board_id}~1report'
 
   # PUT
+  /board/{board_id}:
+    $ref: './board/board.yaml#/~1board~1{board_id}'
   /board/{board_id}/unlike:
     $ref: './board/board.yaml#/~1board~1{board_id}~1unlike'
   /board/{board_id}/delete:
     $ref: './board/board.yaml#/~1board~1{board_id}~1delete'
-  /board/{board_id}:
-    $ref: './board/board.yaml#/~1board~1{board_id}'
 
   # --------board/reply----------
 
