@@ -12,6 +12,8 @@ const post_board_vali = (req: Request, res: Response, next: NextFunction) => {
   if (!board_content) {
     res.send(baseResponse.BOARD_CONTENT_EMPTY);
     return;
+  } else if (board_content.length > 1000) {
+    res.send(baseResponse.BOARD_EDIT_CONTENT_LEGNTH);
   }
   next();
 };

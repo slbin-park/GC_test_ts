@@ -699,6 +699,19 @@ paths:
                     example: 2010
                   msg:
                     example: 게시글 내용을 입력해주세요.
+        '2016':
+          description: 게시글 유효성 검사
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    example: false
+                  code:
+                    example: 2016
+                  msg:
+                    example: 게시글 내용은 1000자 이하로 입력해주세요.
         '4000':
           $ref: '#/components/responses/ErrorResponse'
   '/board/{board_id}/like':
@@ -1051,18 +1064,7 @@ paths:
                   msg:
                     example: 게시글 수정 내용을 입력해주세요.
         '2016':
-          description: 게시글 유효성 검사
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccess:
-                    example: false
-                  code:
-                    example: 2016
-                  msg:
-                    example: 게시글 수정 내용을 입력해주세요.
+          $ref: '#/paths/~1board/post/responses/2016'
         '2017':
           description: 없는 게시글
           content:

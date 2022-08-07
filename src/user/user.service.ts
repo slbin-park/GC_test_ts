@@ -232,6 +232,7 @@ class UserService {
         conn,
         update_user_info
       );
+      conn.commit();
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       conn.rollback();

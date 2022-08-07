@@ -394,6 +394,8 @@ class BoardService {
         reply_status,
         reply_id,
       ]);
+      conn.commit();
+
       return response(baseResponse.SUCCESS);
     } catch (err: any) {
       logger.error(

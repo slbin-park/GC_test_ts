@@ -65,7 +65,7 @@ components:
               code:
                 example: 2016
               msg:
-                example: 게시글 수정 내용을 입력해주세요.
+                example: 게시글 내용은 1000자 이하로 입력해주세요.
     jwt_error:
       description: jwt 에러
       content:

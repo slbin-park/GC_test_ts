@@ -24,6 +24,8 @@
         $ref: './board_schema.yaml#/components/responses/successResponse'
       2010:
         $ref: './board_schema.yaml#/components/responses/board_content_empty'
+      2016:
+        $ref: './edit_schema.yaml#/components/responses/content_length'
       4000:
         $ref: '../openapi.yaml#/components/responses/ErrorResponse'
 
