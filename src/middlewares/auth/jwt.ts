@@ -44,12 +44,14 @@ const create_refresh_token = () => {
 
 const check_access_token = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log('asdf');
     const access_token = req.headers.authorization?.split(' ')[1];
     const secret_key = process.env.JWT_ACCESS_SECRET;
     // check 가 true면 Access , false면 Refresh
     // const payload = jwt.decode(token, secret_key);
     const token = await jwt.verify(access_token, secret_key);
     // body에 GET_USER_ID 을 넣어서 보내줌
+    console.log(token);
     req.body.user_id = token.user_id;
     next();
   } catch (err: any) {
