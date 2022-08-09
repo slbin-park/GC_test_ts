@@ -9,7 +9,12 @@ router.get('/', UserController.get_user);
 
 // 유저 이름 중복 체크
 // 스웨거 끝
-router.get('/user-name/:user_name', Uservalidation.get_user_name, UserController.get_user_name);
+router.get(
+  '/user-name/:user_name',
+  jwt.check_access_token,
+  Uservalidation.get_user_name,
+  UserController.get_user_name
+);
 
 router.get('/:id', UserController.get_user_id);
 
@@ -32,7 +37,12 @@ router.put(
 );
 
 // 스웨거 끝
-router.put('/user-password', Uservalidation.put_user_psword, UserController.update_user_psword);
+router.put(
+  '/user-password',
+  jwt.check_access_token,
+  Uservalidation.put_user_psword,
+  UserController.update_user_psword
+);
 
 // 회원가입
 // 스웨거 끝

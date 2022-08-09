@@ -35,7 +35,7 @@ const router = express_1.default.Router();
 router.get('/', user_controller_1.default.get_user);
 // 유저 이름 중복 체크
 // 스웨거 끝
-router.get('/user-name/:user_name', Uservalidation.get_user_name, user_controller_1.default.get_user_name);
+router.get('/user-name/:user_name', jwt_1.default.check_access_token, Uservalidation.get_user_name, user_controller_1.default.get_user_name);
 router.get('/:id', user_controller_1.default.get_user_id);
 // 사용자 이름 변경
 // 스웨거 끝
@@ -44,7 +44,7 @@ router.put('/user-name', jwt_1.default.check_access_token, Uservalidation.put_us
 // 스웨거 끝
 router.put('/user-status', jwt_1.default.check_access_token, Uservalidation.put_user_status, user_controller_1.default.update_user_status);
 // 스웨거 끝
-router.put('/user-password', Uservalidation.put_user_psword, user_controller_1.default.update_user_psword);
+router.put('/user-password', jwt_1.default.check_access_token, Uservalidation.put_user_psword, user_controller_1.default.update_user_psword);
 // 회원가입
 // 스웨거 끝
 router.post('/', Uservalidation.post_user_vali, user_controller_1.default.post_user);
